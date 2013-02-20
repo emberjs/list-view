@@ -11,6 +11,7 @@ Ember.ListView = Ember.ContainerView.extend({
   init: function() {
     this.contentDidChange(); // Setup array observing
     this._super();
+    this._renderList();
   },
 
   style: Ember.computed(function() {
@@ -21,7 +22,7 @@ Ember.ListView = Ember.ContainerView.extend({
     // FIXME: Don't need to render the list inside didInsertElement unless
     // we're going to support the ListView inheriting it's height from a
     // containing element.
-    this._renderList();
+    // this._renderList();
 
     this.$().on('scroll', Ember.$.proxy(this.scroll, this));
   },
@@ -46,7 +47,7 @@ Ember.ListView = Ember.ContainerView.extend({
   },
 
   _createScrollingView: function() {
-    return Ember.View.create({
+    return Ember.View.createWithMixins({
       attributeBindings: ['style'],
 
       style: Ember.computed(function() {
@@ -56,8 +57,7 @@ Ember.ListView = Ember.ContainerView.extend({
   },
 
   _appendScrollingView: function() {
-    var childViews = get(this, 'childViews');
-    childViews.pushObject(this._createScrollingView());
+    this.pushObject(this._createScrollingView());
   },
 
   totalHeight: Ember.computed(function() {
@@ -69,8 +69,8 @@ Ember.ListView = Ember.ContainerView.extend({
 
     var itemViewClass = get(this, 'itemViewClass'),
         contentLength = get(this, 'content.length'),
-        childViews = get(this, 'childViews'),
-        childViewsLength = get(childViews, 'length') - 1, // account for scrollingView
+        childViews = this,
+        childViewsLength = get(this, 'length') - 1, // account for scrollingView
         startingIndex = this._startingIndex(),
         endingIndex = startingIndex + this._numOfChildViewsForHeight(),
         childView, attrs;
@@ -88,14 +88,13 @@ Ember.ListView = Ember.ContainerView.extend({
   },
 
   _reuseChildForContentIndex: function(childView, contentIndex) {
-    var content = get(this, 'content'),
-        attrs = Ember.$.extend({
-          context: content.objectAt(contentIndex),
-          contentIndex: contentIndex,
-          top: get(this, 'rowHeight') * contentIndex
-        }, this._propertiesForContentIndex(contentIndex));
+    var content = get(this, 'content');
 
-    childView.setProperties(attrs);
+    set(childView, 'context', content.objectAt(contentIndex));
+    set(childView, 'contentIndex', contentIndex);
+    set(childView, 'top', get(this, 'rowHeight') * contentIndex);
+
+    childView.setProperties(this._propertiesForContentIndex(contentIndex));
   },
 
   _serializeChildState: function(childView) {
@@ -119,7 +118,7 @@ Ember.ListView = Ember.ContainerView.extend({
     var itemViewClass = get(this, 'itemViewClass'),
         content = Ember.A(get(this, 'content')),
         contentLength = get(content, 'length'),
-        childViews = get(this, 'childViews'),
+        childViews = this,
         startingIndex = this._startingIndex(),
         endingIndex = startingIndex + this._numOfChildViews(),
         childView, attrs;

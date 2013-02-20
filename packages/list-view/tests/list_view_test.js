@@ -16,17 +16,17 @@ module("Ember.ListView", {
             "</style>").appendTo('head');
   },
   teardown: function() {
-    //css.remove();
+    css.remove();
 
     Ember.run(function() {
-      //if (view) { view.destroy(); }
+      if (view) { view.destroy(); }
     });
   }
 });
 
 function appendView() {
   Ember.run(function() {
-    view.append(); //appendTo('#qunit-fixture');
+    view.appendTo('#qunit-fixture');
   });
 }
 
@@ -52,7 +52,7 @@ test("should exist", function() {
 
 test("computing the number of child views to create", function() {
   var height = 500, rowHeight = 50;
-  view = Ember.ListView.create({height: height, rowHeight: rowHeight});
+  view = Ember.ListView.create({height: height, rowHeight: rowHeight, content: Ember.A()});
   equal(view._numOfChildViewsForHeight(), 11);
 });
 
@@ -184,9 +184,7 @@ test("item view state is maintained across scroll / content array manipulation",
           this.set('isSelected', false);
         },
         serialize: function() {
-          var props = this.getProperties('isSelected');
-          if (props.isSelected) { debugger; }
-          return props;
+          return this.getProperties('isSelected');
         }
       });
   view = Ember.ListView.create({
