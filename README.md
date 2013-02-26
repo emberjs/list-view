@@ -2,6 +2,12 @@
 
 An efficient incremental rendering list view for large lists.
 
+
+## Demo
+
+[Demo on JSBin](http://jsbin.com/igawaq/23/)
+
+
 ## Usage
 
 ### Template
