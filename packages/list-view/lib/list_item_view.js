@@ -1,7 +1,7 @@
 var get = Ember.get, set = Ember.set;
 
 Ember.ListItemView = Ember.View.extend({
-  classNames: ['list-item-view'],
+  classNames: ['ember-list-item-view'],
 
   // Attribute bindings are too slow
   _updateStyle: function() {

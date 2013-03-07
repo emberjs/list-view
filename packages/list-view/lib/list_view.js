@@ -3,7 +3,7 @@ require('list-view/list_item_view');
 var get = Ember.get, set = Ember.set;
 
 Ember.ListView = Ember.ContainerView.extend({
-  classNames: ['list-view'],
+  classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   scrollTop: 0,
   itemViewClass: Ember.ListItemView,

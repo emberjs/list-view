@@ -30,11 +30,11 @@ You can customize the row views by subclassing `Ember.ListItemView` and specifyi
 ### Required CSS
 
 ```
-.list-view {
+.ember-list-view {
   overflow: auto;
   position: relative;
 }
-.list-item-view {
+.ember-list-item-view {
   position: absolute;
 }
 ```
