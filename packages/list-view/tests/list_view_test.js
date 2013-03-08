@@ -3,11 +3,11 @@ var view, css;
 module("Ember.ListView", {
   setup: function() {
     css = Ember.$("<style>" +
-            ".list-view {" +
+            ".ember-list-view {" +
             "  overflow: auto;" +
             "  position: relative;" +
             "}" +
-            ".list-item-view {" +
+            ".ember-list-item-view {" +
             "  position: absolute;" +
             "}" +
             ".is-selected {" +
@@ -39,7 +39,7 @@ function generateContent(n) {
 }
 
 function itemPositions() {
-  return view.$('.list-item-view').toArray().map(function(e) {
+  return view.$('.ember-list-item-view').toArray().map(function(e) {
     return e.style.top;
   }).join(' ').replace(/px/g, "");
 }
@@ -74,9 +74,9 @@ test("should render a subset of the full content, based on the height, in the co
   equal(view.get('element').style.height, "500px", "The list view height is correct");
   equal(view.$(':last')[0].style.height, "5000px", "The scrollable view has the correct height");
 
-  equal(view.$('.list-item-view').length, 11, "The correct number of rows were rendered");
-  equal(view.$('.list-item-view:eq(0)').text(), "Item 1");
-  equal(view.$('.list-item-view:eq(10)').text(), "Item 11");
+  equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
+  equal(view.$('.ember-list-item-view:eq(0)').text(), "Item 1");
+  equal(view.$('.ember-list-item-view:eq(10)').text(), "Item 11");
 
   equal(itemPositions(), "0 50 100 150 200 250 300 350 400 450 500");
 });
@@ -97,9 +97,9 @@ test("should render correctly with an initial scrollTop", function() {
   });
   appendView();
 
-  equal(view.$('.list-item-view').length, 11, "The correct number of rows were rendered");
-  equal(view.$('.list-item-view:eq(0)').text(), "Item 10");
-  equal(view.$('.list-item-view:eq(10)').text(), "Item 20");
+  equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
+  equal(view.$('.ember-list-item-view:eq(0)').text(), "Item 10");
+  equal(view.$('.ember-list-item-view:eq(10)').text(), "Item 20");
 
   equal(itemPositions(), "450 500 550 600 650 700 750 800 850 900 950", "The rows are in the correct positions");
 });
@@ -123,7 +123,7 @@ test("should be programatically scrollable", function() {
     view.scrollTo(475);
   });
 
-  equal(view.$('.list-item-view').length, 11, "The correct number of rows were rendered");
+  equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
   equal(itemPositions(), "550 600 650 700 750 800 850 900 950 450 500", "The rows are in the correct positions");
 });
 
@@ -146,7 +146,7 @@ test("replacing the list content", function() {
     view.set('content', Ember.A([{name: 'The only item'}]));
   });
 
-  equal(view.$('.list-item-view').length, 1, "The rendered list was updated");
+  equal(view.$('.ember-list-item-view').length, 1, "The rendered list was updated");
   equal(view.$(':last')[0].style.height, "50px", "The scrollable view has the correct height");
 });
 
@@ -169,7 +169,7 @@ test("modifying the list content", function() {
     content.unshiftObject({name: "Item -1"});
   });
 
-  equal(view.$('.list-item-view:eq(0)').text(), "Item -1", "The item has been inserted in the list");
+  equal(view.$('.ember-list-item-view:eq(0)').text(), "Item -1", "The item has been inserted in the list");
   equal(view.$(':last')[0].style.height, "5050px", "The scrollable view has the correct height");
 });
 
