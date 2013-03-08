@@ -3,11 +3,15 @@ var get = Ember.get, set = Ember.set;
 Ember.ListItemView = Ember.View.extend({
   classNames: ['list-item-view'],
 
-  // Attribute bindings are too slow
   _updateStyle: function() {
     var e = get(this, 'element');
-    if (e) { // WHY?
-      e.style.top = get(this, 'top') + 'px';
+    if (e) { // FIXME
+      var top = get(this, 'top');
+      if (this._lastTop !== top) {
+        e.style.top = top + 'px';
+        // e.style.webkitTransform = 'translate3d(0, ' + top + 'px, 0)'
+        this._lastTop = top;
+      }
     }
   },
 
@@ -15,6 +19,16 @@ Ember.ListItemView = Ember.View.extend({
     this._updateStyle();
   },
 
-  serialize: function() {},
-  prepareForReuse: function() {}
+  _contextDidChange: Ember.observer(function() {
+    var element = get(this, 'element');
+    if (!element) { return; }
+    var buffer = Ember.RenderBuffer();
+    buffer = this.renderToBuffer(buffer);
+    element.innerHTML = buffer.innerString();
+    set(this, 'element', element);
+    this._updateStyle();
+  }, 'context'),
+
+  serialize: Ember.K,
+  prepareForReuse: Ember.K
 });

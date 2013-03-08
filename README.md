@@ -13,7 +13,9 @@ An efficient incremental rendering list view for large lists.
 ### Template
 
 ```
-{{view Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
+{{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
+	<!-- row content here -->
+{{/collection}}
 ```
 
 ### Subclassing

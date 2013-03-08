@@ -24,11 +24,15 @@ Ember.ListView = Ember.ContainerView.extend({
     // containing element.
     // this._renderList();
 
-    this.$().on('scroll', Ember.$.proxy(this.scroll, this));
+    var self = this,
+        element = get(this, 'element');
+    self._scroll = function(e) { self.scroll(e); };
+    element.addEventListener('scroll', this._scroll);
   },
 
   willDestroyElement: function() {
-    this.$().off('scroll', Ember.$.proxy(this.scroll, this));
+    var element = get(this, 'element');
+    element.removeEventListener('scroll', this._scroll);
   },
 
   // Browser fires the scroll event asynchronously
@@ -75,26 +79,39 @@ Ember.ListView = Ember.ContainerView.extend({
         endingIndex = startingIndex + this._numOfChildViewsForHeight(),
         childView, attrs;
 
+    if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) { return; }
+
     for (var contentIndex = startingIndex; contentIndex < endingIndex; contentIndex++) {
       childView = childViews.objectAt(contentIndex % childViewsLength);
       this._prepareChildForReuse(childView);
       this._reuseChildForContentIndex(childView, contentIndex);
     }
+
+    this._lastStartingIndex = startingIndex;
+    this._lastEndingIndex = endingIndex;
   },
 
   _prepareChildForReuse: function(childView) {
-      this._serializeChildState(childView);
-      childView.prepareForReuse();
+      if (childView.serialize !== Ember.K) {
+        this._serializeChildState(childView);
+      }
+      if (childView.prepareForReuse !== Ember.K) {
+        childView.prepareForReuse();
+      }
   },
 
   _reuseChildForContentIndex: function(childView, contentIndex) {
     var content = get(this, 'content');
 
-    set(childView, 'context', content.objectAt(contentIndex));
-    set(childView, 'contentIndex', contentIndex);
-    set(childView, 'top', get(this, 'rowHeight') * contentIndex);
+    var childsCurrentContentIndex = get(childView, 'contentIndex');
 
-    childView.setProperties(this._propertiesForContentIndex(contentIndex));
+    if (childsCurrentContentIndex !== contentIndex) {
+      set(childView, 'top', get(this, 'rowHeight') * contentIndex);
+      set(childView, 'context', content.objectAt(contentIndex));
+      set(childView, 'contentIndex', contentIndex);
+
+      childView.setProperties(this._propertiesForContentIndex(contentIndex));
+    }
   },
 
   _serializeChildState: function(childView) {
@@ -128,6 +145,9 @@ Ember.ListView = Ember.ContainerView.extend({
       this._reuseChildForContentIndex(childView, contentIndex);
       childViews.pushObject(childView);
     }
+
+    this._lastStartingIndex = startingIndex;
+    this._lastEndingIndex = endingIndex;
   },
 
   _numOfChildViews: function() {
