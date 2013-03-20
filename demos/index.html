@@ -7,7 +7,7 @@
       .ember-list-view {
         overflow: auto;
         position: relative;
-        width: 500px;
+        width: 100%;
       }
       .ember-list-item-view {
         position: absolute;
@@ -23,7 +23,8 @@
   <body>
     <script type="text/x-handlebars">
       {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
+      {{#collection Ember.ListView contentBinding="controller" height=800 rowHeight=50}}
+        <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
         {{name}}
         {{name}}
         {{name}}
@@ -35,11 +36,22 @@
     <script>
       App = Ember.Application.create();
 
+      var images = [
+        'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
+        'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg',
+        'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg',
+        'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
+        'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
+      ];
+
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
           for (var i = 0; i < 10000; i++) {
-            content.push({name: 'Item ' + i});
+            content.push({
+              name: 'Item ' + i,
+              imageSrc: images[i%images.length]
+            });
           }
           return content;
         }
