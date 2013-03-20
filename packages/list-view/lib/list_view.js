@@ -19,13 +19,9 @@ Ember.ListView = Ember.ContainerView.extend({
   }).property('height'),
 
   didInsertElement: function() {
-    // FIXME: Don't need to render the list inside didInsertElement unless
-    // we're going to support the ListView inheriting it's height from a
-    // containing element.
-    // this._renderList();
-
     var self = this,
         element = get(this, 'element');
+
     self._scroll = function(e) { self.scroll(e); };
     element.addEventListener('scroll', this._scroll);
   },
@@ -92,12 +88,7 @@ Ember.ListView = Ember.ContainerView.extend({
   },
 
   _prepareChildForReuse: function(childView) {
-      if (childView.serialize !== Ember.K) {
-        this._serializeChildState(childView);
-      }
-      if (childView.prepareForReuse !== Ember.K) {
-        childView.prepareForReuse();
-      }
+    childView.prepareForReuse();
   },
 
   _reuseChildForContentIndex: function(childView, contentIndex) {
@@ -109,26 +100,7 @@ Ember.ListView = Ember.ContainerView.extend({
       set(childView, 'top', get(this, 'rowHeight') * contentIndex);
       set(childView, 'context', content.objectAt(contentIndex));
       set(childView, 'contentIndex', contentIndex);
-
-      childView.setProperties(this._propertiesForContentIndex(contentIndex));
     }
-  },
-
-  _serializeChildState: function(childView) {
-    var contentIndex = childView.get('contentIndex'),
-        properties = childView.serialize();
-
-    this._setPropertiesForContentIndex(contentIndex, properties);
-  },
-
-  _propertiesForContentIndex: function(contentIndex) {
-    var serializedState = this._serializedState;
-    return serializedState && serializedState[contentIndex];
-  },
-
-  _setPropertiesForContentIndex: function(contentIndex, properties) {
-    var serializedState = this._serializedState = this._serializedState || {};
-    serializedState[contentIndex] = properties;
   },
 
   _createChildViews: function() {
