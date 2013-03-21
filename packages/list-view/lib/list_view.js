@@ -2,11 +2,11 @@ require('list-view/list_item_view');
 
 var get = Ember.get, set = Ember.set;
 
-Ember.ListView = Ember.ContainerView.extend({
+Ember.ListViewMixin = Ember.Mixin.create({
+  itemViewClass: Ember.ListItemView,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   scrollTop: 0,
-  itemViewClass: Ember.ListItemView,
 
   init: function() {
     this.contentDidChange(); // Setup array observing
@@ -24,11 +24,23 @@ Ember.ListView = Ember.ContainerView.extend({
 
     self._scroll = function(e) { self.scroll(e); };
     element.addEventListener('scroll', this._scroll);
+    self._touchMove = function(e) { self.touchMove(e); };
+    self._mouseWheel = function(e) { self.mouseWheel(e); };
+
+    element.addEventListener('scroll',     this._scroll);
+    element.addEventListener('touchmove',  this._touchMove);
+    element.addEventListener('mousewheel', this._mouseWheel);
   },
+
+  touchMove: Ember.K,
+  mouseWheel: Ember.K,
 
   willDestroyElement: function() {
     var element = get(this, 'element');
+
     element.removeEventListener('scroll', this._scroll);
+    element.removeEventListener('touchmove', this._touchMove);
+    element.removeEventListener('mousewheel', this._mouseWheel);
   },
 
   // Browser fires the scroll event asynchronously
@@ -167,5 +179,32 @@ Ember.ListView = Ember.ContainerView.extend({
     if (this.state === 'inDOM') {
       this._rerenderList();
     }
+  }
+});
+
+function createScrollingView(){
+  return Ember.View.createWithMixins({
+    attributeBindings: ['style'],
+
+    style: Ember.computed(function() {
+      return "height: " + get(this, 'parentView.totalHeight') + "px";
+    }).property('parentView.totalHeight')
+  });
+}
+
+Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
+Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
+  touchMove: function(e){
+    e.preventDefault();
+
+    console.log('Attempt touchmove');
+    // call scroller library
+  },
+
+  mouseWheel: function(e){
+    e.preventDefault();
+
+    console.log('Attempt mouseWheel');
+    // call scroller library
   }
 });
