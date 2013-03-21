@@ -7,6 +7,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   scrollTop: 0,
+  paddingCount: 1, // One row for padding
 
   init: function() {
     this.contentDidChange(); // Setup array observing
@@ -146,7 +147,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
   },
 
   _numOfChildViewsForHeight: function() {
-    return get(this, 'height') / get(this, 'rowHeight') + 1; // One row for padding
+    var height = get(this, 'height'),
+    rowHeight = get(this, 'rowHeight'),
+    paddingCount = get(this, 'paddingCount');
+
+    return height / rowHeight  + paddingCount;
   },
 
   _startingIndex: function() {
