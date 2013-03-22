@@ -23,16 +23,12 @@
     <script type="text/javascript" src="/demos/vendor/group-helper.js"></script>
     <script type="text/javascript" src="/modules/list-view.js"></script>
   </head>
-
   <body>
     <script type="text/x-handlebars">
-      {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=480 rowHeight=50}}
         <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
-        {{name}}
-        {{name}}
-        {{name}}
-        {{name}}
+      {{#group}}
+      {{#collection Ember.ListView contentBinding="controller" height=700 width=600 rowHeight=50 elementWidth=50}}
+        hi
       {{/collection}}
       {{/group}}
     </script>

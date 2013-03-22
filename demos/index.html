@@ -23,12 +23,8 @@
   <body>
     <script type="text/x-handlebars">
       {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=800 rowHeight=50}}
+      {{#collection Ember.ListView contentBinding="controller" height=700 width=400 rowHeight=50 elementWidth=100}}
         <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
-        {{name}}
-        {{name}}
-        {{name}}
-        {{name}}
       {{/collection}}
       {{/group}}
     </script>
