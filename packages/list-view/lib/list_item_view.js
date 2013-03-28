@@ -22,8 +22,13 @@ var applyTransform = (function(){
   }
 })();
 
+function samePosition(a, b) {
+  return a && b && a.x === b.x && a.y === b.y;
+}
+
 Ember.ListItemView = Ember.View.extend({
   classNames: ['ember-list-item-view'],
+  _position: null,
 
   _updateStyle: function() {
     var element, position;
@@ -32,8 +37,22 @@ Ember.ListItemView = Ember.View.extend({
     position = get(this, 'position');
 
     if (!element) { return; }
+
     applyTransform(element, position);
+
+    this._position = position;
   },
+
+  positionDidChange: Ember.observer(function(){
+    var position, _position;
+
+    position = get('position');
+    _position = this._position;
+
+    if (samePosition(position, _position)) { return; }
+
+    this._updateStyle();
+  }, 'position'),
 
   didInsertElement: function() {
     this._updateStyle();
@@ -54,5 +73,7 @@ Ember.ListItemView = Ember.View.extend({
     this._updateStyle();
   }, 'context'),
 
-  prepareForReuse: Ember.K
+  prepareForReuse: function() {
+    this._position = null;
+  }
 });

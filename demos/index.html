@@ -4,6 +4,11 @@
       html {
         font-family: sans-serif;
       }
+
+      .hidden {
+        display: none;
+      }
+
       .ember-list-view {
         overflow: auto;
         position: relative;
@@ -21,10 +26,11 @@
   </head>
 
   <body>
+    <img height="50px" width="50px" {{bindAttr src="imageSrc"}} class="hidden"/>
     <script type="text/x-handlebars">
       {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=700 width=400 rowHeight=50 elementWidth=100}}
-        <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
+      {{#collection Ember.ListView contentBinding="controller" height=700 width=400 rowHeight=50 elementWidth=200}}
+      {{name}}
       {{/collection}}
       {{/group}}
     </script>
