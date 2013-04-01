@@ -54,7 +54,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   // TODO: refactor
   scrollTo: function(scrollTop, options) {
-    var itemViewClass, contentLength, childViews, childViewsLength,
+    var contentLength, childViews, childViewsLength,
     startingIndex, endingIndex, childView, attrs, contentIndex,
     neededViews;
 
@@ -62,7 +62,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     set(this, 'scrollTop', scrollTop);
 
-    itemViewClass = get(this, 'itemViewClass');
     contentLength = get(this, 'content.length');
 
     childViews = this.listItemViews();
