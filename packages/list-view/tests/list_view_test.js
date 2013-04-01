@@ -629,14 +629,14 @@ test("elementWidth change with scroll", function(){
   positionSorted = sortElementsByPosition(view.$('.ember-list-item-view'));
 
   deepEqual(itemPositions(), [
-            { x:0,   y: 2000 },
-            { x:0,   y: 2050 },
-            { x:0 ,  y: 2100 },
-            { x:0,   y: 2150 },
-            { x:0,   y: 2200 }], "The rows are in the correct positions");
+            { x:0,   y: 1000 },
+            { x:0,   y: 1050 },
+            { x:0 ,  y: 1100 },
+            { x:0,   y: 1150 },
+            { x:0,   y: 1200 }], "The rows are in the correct positions");
 
   for(i = 0; i < 5; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i + 41));
+    equal(positionSorted[i].innerText, "Item " + (i + 21));
   }
 
   console.log(' ---- ');
