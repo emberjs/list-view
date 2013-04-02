@@ -94,10 +94,10 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     contentLength = get(this, 'content.length');
     rowHeight = get(this, 'rowHeight');
-    columnCount = this._columnCount();
+    columnCount = get(this, 'columnCount');
 
     return  (floor(contentLength / columnCount)) * rowHeight;
-  }).property('content.length', 'rowHeight'),
+  }).property('content.length', 'rowHeight', 'columnCount'),
 
   _prepareChildForReuse: function(childView) {
     childView.prepareForReuse();
@@ -128,7 +128,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     elementWidth = get(this, 'elementWidth') || 1;
     width = get(this, 'width') || 1;
-    columnCount = this._columnCount();
+    columnCount = get(this, 'columnCount');
     rowHeight = get(this, 'rowHeight');
 
     y = (rowHeight * floor(index/columnCount));
@@ -153,18 +153,18 @@ Ember.ListViewMixin = Ember.Mixin.create({
     }
   },
 
-  _columnCount: function(){
+  columnCount: Ember.computed('width', 'elementWidth', function() {
     var elementWidth, width;
 
     elementWidth = get(this, 'elementWidth');
-    width = get(this, 'width') || 1;
+    width = get(this, 'width');
 
-    if(elementWidth){
+    if (elementWidth) {
       return floor(width / elementWidth);
     } else {
       return 1;
     }
-  },
+  }),
 
   _numChildViewsForViewport: function() {
     var height, rowHeight, paddingCount, columnCount;
@@ -172,7 +172,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     height = get(this, 'height');
     rowHeight = get(this, 'rowHeight');
     paddingCount = get(this, 'paddingCount');
-    columnCount = this._columnCount();
+    columnCount = get(this, 'columnCount');
 
     return ((height / rowHeight) * columnCount) + (paddingCount * columnCount);
   },
@@ -182,7 +182,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     scrollTop = get(this, 'scrollTop');
     rowHeight = get(this, 'rowHeight');
-    columnCount = this._columnCount();
+    columnCount = get(this, 'columnCount');
 
     return floor(scrollTop / rowHeight) * columnCount;
   },
