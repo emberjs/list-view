@@ -481,7 +481,7 @@ test("height change after with scroll", function(){
 
 test("elementWidth change", function(){
   var i,
-      positionSorted, 
+      positionSorted,
       content = generateContent(100),
       height = 200,
       width = 200,
@@ -569,7 +569,7 @@ test("elementWidth change", function(){
 
 test("elementWidth change with scroll", function(){
   var i,
-      positionSorted, 
+      positionSorted,
       content = generateContent(100),
       height = 200,
       width = 200,
@@ -591,8 +591,6 @@ test("elementWidth change with scroll", function(){
   });
 
   appendView();
-
-  console.log(' ---- ');
 
   Ember.run(function(){
     view.scrollTo(1000);
@@ -617,8 +615,6 @@ test("elementWidth change with scroll", function(){
     equal(positionSorted[i].innerText, "Item " + (i + 41));
   }
 
-  console.log(' ---- ');
-
   window.STOP = true;
   Ember.run(function() {
     view.set('width', 100);
@@ -639,7 +635,6 @@ test("elementWidth change with scroll", function(){
     equal(positionSorted[i].innerText, "Item " + (i + 21));
   }
 
-  console.log(' ---- ');
   Ember.run(function() {
     view.set('width', 200);
   });
@@ -662,5 +657,4 @@ test("elementWidth change with scroll", function(){
   for(i = 0; i < 10; i++) {
     equal(positionSorted[i].innerText, "Item " + (i + 41));
   }
-  console.log(' ---- ');
 });
