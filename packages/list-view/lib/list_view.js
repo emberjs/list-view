@@ -1,7 +1,8 @@
 require('list-view/list_item_view');
 
 var get = Ember.get, set = Ember.set,
-min = Math.min, floor = Math.floor;
+min = Math.min, floor = Math.floor,
+ceil = Math.ceil;
 
 Ember.ListViewMixin = Ember.Mixin.create({
   itemViewClass: Ember.ListItemView,
@@ -94,10 +95,10 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     contentLength = get(this, 'content.length');
     rowHeight = get(this, 'rowHeight');
-    columnCount = get(this, 'columnCount');
+    columnCount = this._columnCount();
 
-    return  (floor(contentLength / columnCount)) * rowHeight;
-  }).property('content.length', 'rowHeight', 'columnCount'),
+    return (ceil(contentLength / columnCount)) * rowHeight;
+  }).property('content.length', 'rowHeight'),
 
   _prepareChildForReuse: function(childView) {
     childView.prepareForReuse();
@@ -128,7 +129,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     elementWidth = get(this, 'elementWidth') || 1;
     width = get(this, 'width') || 1;
-    columnCount = get(this, 'columnCount');
+    columnCount = this._columnCount();
     rowHeight = get(this, 'rowHeight');
 
     y = (rowHeight * floor(index/columnCount));
@@ -153,18 +154,18 @@ Ember.ListViewMixin = Ember.Mixin.create({
     }
   },
 
-  columnCount: Ember.computed('width', 'elementWidth', function() {
+  _columnCount: function(){
     var elementWidth, width;
 
     elementWidth = get(this, 'elementWidth');
-    width = get(this, 'width');
+    width = get(this, 'width') || 1;
 
-    if (elementWidth) {
+    if(elementWidth){
       return floor(width / elementWidth);
     } else {
       return 1;
     }
-  }),
+  },
 
   _numChildViewsForViewport: function() {
     var height, rowHeight, paddingCount, columnCount;
@@ -172,7 +173,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     height = get(this, 'height');
     rowHeight = get(this, 'rowHeight');
     paddingCount = get(this, 'paddingCount');
-    columnCount = get(this, 'columnCount');
+    columnCount = this._columnCount();
 
     return ((height / rowHeight) * columnCount) + (paddingCount * columnCount);
   },
@@ -182,7 +183,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     scrollTop = get(this, 'scrollTop');
     rowHeight = get(this, 'rowHeight');
-    columnCount = get(this, 'columnCount');
+    columnCount = this._columnCount();
 
     return floor(scrollTop / rowHeight) * columnCount;
   },

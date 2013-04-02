@@ -118,6 +118,63 @@ test("should exist", function() {
   ok(view);
 });
 
+test("totalHeight: single column", function(){
+  var height = 500, rowHeight = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content:generateContent(20)
+    });
+  });
+
+  equal(view.get('totalHeight'), 1000);
+});
+
+test("totalHeight: even", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: generateContent(20),
+      width: width,
+      elementWidth: elementWidth
+    });
+  });
+
+  equal(view.get('totalHeight'), 500);
+});
+
+test("totalHeight: odd", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: generateContent(21),
+      width: width,
+      elementWidth: elementWidth
+    });
+  });
+
+  equal(view.get('totalHeight'), 550);
+});
+
+test("computing the number of child views to create", function() {
+  var height = 500, rowHeight = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({height: height, rowHeight: rowHeight, content: Ember.A()});
+  });
+
+  equal(view._numChildViewsForViewport(), 11);
+
+});
+
 test("computing the number of child views to create", function() {
   var height = 500, rowHeight = 50;
 
