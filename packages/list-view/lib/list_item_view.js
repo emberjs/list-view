@@ -66,7 +66,8 @@ Ember.ListItemView = Ember.View.extend({
 
     buffer = Ember.RenderBuffer();
     buffer = this.renderToBuffer(buffer);
-    element.innerHTML = buffer.innerString();
+
+    element.innerHTML = buffer.innerString ? buffer.innerString() : buffer.childBuffers.join('');
 
     set(this, 'element', element);
 
