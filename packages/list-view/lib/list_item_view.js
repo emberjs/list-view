@@ -31,12 +31,14 @@ Ember.ListItemView = Ember.View.extend({
   _position: null,
 
   _updateStyle: function() {
-    var element, position;
+    var element, position, _position;
 
     element = get(this, 'element');
     position = get(this, 'position');
+    _position = this._position;
 
     if (!element) { return; }
+    if (samePosition(position, _position)) { return; }
 
     applyTransform(element, position);
 
@@ -44,13 +46,6 @@ Ember.ListItemView = Ember.View.extend({
   },
 
   positionDidChange: Ember.observer(function(){
-    var position, _position;
-
-    position = get('position');
-    _position = this._position;
-
-    if (samePosition(position, _position)) { return; }
-
     this._updateStyle();
   }, 'position'),
 
@@ -69,9 +64,10 @@ Ember.ListItemView = Ember.View.extend({
 
     element.innerHTML = buffer.innerString ? buffer.innerString() : buffer.childBuffers.join('');
 
+    this._position = null;
     set(this, 'element', element);
 
-    this._updateStyle();
+    this._updateStyle({ force: true });
   }, 'context'),
 
   prepareForReuse: function() {
