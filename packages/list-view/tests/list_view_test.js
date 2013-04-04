@@ -715,3 +715,92 @@ test("elementWidth change with scroll", function(){
     equal(positionSorted[i].innerText, "Item " + (i + 41));
   }
 });
+
+
+
+test("recycleing complex views", function(){
+  var content = generateContent(100),
+      height = 50,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        innerViewClass: Ember.View.extend({
+          didInsertElement: function(){
+            innerViewInsertionCount++;
+          },
+          willDestroyElement: function(){
+            innerViewDestroyCount++;
+          }
+        }),
+        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+      });
+
+  var listViewInsertionCount, listViewDestroyionCount,
+  innerViewInsertionCount, innerViewDestroyCount;
+
+  listViewInsertionCount = 0;
+  listViewDestroyionCount = 0;
+
+  innerViewInsertionCount = 0;
+  innerViewDestroyCount = 0;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyionCount++;
+      }
+    });
+  });
+
+  equal(listViewInsertionCount, 0);
+  equal(listViewDestroyionCount, 0);
+
+  appendView();
+
+  equal(listViewInsertionCount, 1);
+  equal(listViewDestroyionCount, 0);
+
+  equal(innerViewInsertionCount, 2);
+  equal(innerViewDestroyCount, 0);
+
+  equal(view.$('.ember-list-item-view').length, 2, "The correct number of rows were rendered");
+
+  var positionSorted = sortElementsByPosition(view.$('.ember-list-item-view'));
+
+  Ember.run(function(){
+    view.set('height', 200);
+  });
+
+  equal(innerViewInsertionCount, 5);
+  equal(innerViewDestroyCount, 0);
+
+  Ember.run(function(){
+    view.set('height', 50);
+  });
+
+  equal(innerViewInsertionCount, 5);
+  equal(innerViewDestroyCount, 3);
+
+  innerViewInsertionCount = 0;
+  innerViewDestroyCount = 0;
+
+  window.STOP = true;
+  Ember.run(function() {
+    view.scrollTo(100);
+  });
+  window.STOP = false;
+  console.log('bro');
+
+  equal(innerViewInsertionCount, 1);
+  equal(innerViewDestroyCount, 1);
+
+  equal(listViewInsertionCount, 1);
+  equal(listViewDestroyionCount, 0);
+});
