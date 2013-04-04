@@ -67,7 +67,7 @@ Ember.ListItemView = Ember.View.extend({
     this._position = null;
     set(this, 'element', element);
 
-    this._updateStyle({ force: true });
+    this._updateStyle();
   }, 'context'),
 
   prepareForReuse: function() {
