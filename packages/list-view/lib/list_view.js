@@ -160,7 +160,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     elementWidth = get(this, 'elementWidth');
     width = get(this, 'width');
 
-    if (elementWidth){
+    if (elementWidth) {
       return floor(width / elementWidth);
     } else {
       return 1;
