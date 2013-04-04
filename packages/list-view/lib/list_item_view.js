@@ -30,6 +30,8 @@ Ember.ListItemView = Ember.View.extend({
   classNames: ['ember-list-item-view'],
   _position: null,
 
+  applyTransform: applyTransform,
+
   _updateStyle: function() {
     var element, position, _position;
 
@@ -40,7 +42,7 @@ Ember.ListItemView = Ember.View.extend({
     if (!element) { return; }
     if (samePosition(position, _position)) { return; }
 
-    applyTransform(element, position);
+    this.applyTransform(element, position);
 
     this._position = position;
   },
