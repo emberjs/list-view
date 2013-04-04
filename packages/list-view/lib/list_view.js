@@ -323,6 +323,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 function createScrollingView(){
   return Ember.View.createWithMixins({
     attributeBindings: ['style'],
+    classNames: ['ember-list-scrolling-view'],
 
     style: Ember.computed(function() {
       return "height: " + get(this, 'parentView.totalHeight') + "px";
