@@ -22,6 +22,21 @@ var applyTransform = (function(){
   }
 })();
 
+var backportedInnerString = function(buffer) {
+  var content = [], childBuffers = buffer.childBuffers;
+
+  Ember.ArrayPolyfills.forEach.call(childBuffers, function(buffer) {
+    var stringy = typeof buffer === 'string';
+    if (stringy) {
+      content.push(buffer);
+    } else {
+      buffer.array(content);
+    }
+  });
+
+  return content.join('');
+};
+
 function samePosition(a, b) {
   return a && b && a.x === b.x && a.y === b.y;
 }
@@ -64,7 +79,7 @@ Ember.ListItemView = Ember.View.extend({
     buffer = Ember.RenderBuffer();
     buffer = this.renderToBuffer(buffer);
 
-    element.innerHTML = buffer.innerString ? buffer.innerString() : buffer.childBuffers.join('');
+    element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
 
     this._position = null;
     set(this, 'element', element);
