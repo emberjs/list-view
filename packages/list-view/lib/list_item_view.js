@@ -69,23 +69,54 @@ Ember.ListItemView = Ember.View.extend({
   didInsertElement: function() {
     this._updateStyle();
   },
-
   _contextDidChange: Ember.observer(function() {
     var element, buffer;
 
     element = get(this, 'element');
     if (!element) { return; }
+    console.log('c');
 
     buffer = Ember.RenderBuffer();
     buffer = this.renderToBuffer(buffer);
 
+    this.invokeRecursively(function(view){
+      if (view.willInsertElement) {
+        view.willInsertElement();
+      }
+    });
+
     element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
 
-    this._position = null;
     set(this, 'element', element);
+
+    this.transitionTo('inDOM', this.get('children'));
+
+    this.invokeRecursively(function(view){
+      if (view.didInsertElement) {
+        view.didInsertElement();
+      }
+    });
+
+    this._position = null;
 
     this._updateStyle();
   }, 'context'),
+  // _contextDidChange: Ember.observer(function() {
+  //   var element, buffer;
+
+  //   element = get(this, 'element');
+  //   if (!element) { return; }
+
+  //   buffer = Ember.RenderBuffer();
+  //   buffer = this.renderToBuffer(buffer);
+
+  //   element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
+
+  //   this._position = null;
+  //   set(this, 'element', element);
+
+  //   this._updateStyle();
+  // }, 'context'),
 
   prepareForReuse: function() {
     this._position = null;

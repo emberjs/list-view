@@ -28,10 +28,10 @@
   <body>
     <img height="50px" width="50px" {{bindAttr src="imageSrc"}} class="hidden"/>
     <script type="text/x-handlebars">
-      {{#group}}
       {{#collection Ember.ListView contentBinding="controller" height=700 width=400 rowHeight=50 elementWidth=200}}
-      {{name}}
+      {{name}}{{view App.AppleView nameBinding="name"}}
       {{/collection}}
+      {{#group}}
       {{/group}}
     </script>
 
@@ -45,6 +45,10 @@
         'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
         'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
       ];
+
+      App.AppleView = Ember.View.extend({
+        template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
+      });
 
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {

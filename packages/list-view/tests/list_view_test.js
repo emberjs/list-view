@@ -793,8 +793,9 @@ test("recycleing complex views", function(){
 
   window.STOP = true;
   Ember.run(function() {
-    view.scrollTo(100);
+    view.scrollTo(50);
   });
+
   window.STOP = false;
   console.log('bro');
 
