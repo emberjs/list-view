@@ -218,6 +218,46 @@ test("item view state is maintained across scroll / content array manipulation",
   equal(view.get('childViews.0.isSelected'), true, "View state was retained after content array manipulation");
 });
 
+
+test("A property of an item can be changed", function() {
+  var content = generateContent(100),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
+  });
+  appendView();
+  
+  //Change name
+  Ember.run(function() {
+    content.set('0.name', 'First change');
+  });
+  
+  equal(view.$('.ember-list-item-view:eq(0)').text(), "First change", "The item's name has been updated");
+  
+  //Scroll down, change name, and scroll back up
+  Ember.run(function() {
+    view.scrollTo(600);
+  });
+  
+  Ember.run(function() {
+    content.set('0.name', 'Second change');
+  });
+  
+  Ember.run(function() {
+    view.scrollTo(0);
+  });
+    
+  equal(view.$('.ember-list-item-view:eq(0)').text(), "Second change", "The item's name has been updated");
+  
+});
+
 // TODO:
 // - selection?
 // - view state serialization
