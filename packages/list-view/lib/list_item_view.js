@@ -41,6 +41,18 @@ function samePosition(a, b) {
   return a && b && a.x === b.x && a.y === b.y;
 }
 
+function willInsertElementIfNeeded(view) {
+  if (view.willInsertElement) {
+    view.willInsertElement();
+  }
+}
+
+function didInsertElementIfNeeded(view) {
+  if (view.didInsertElement) {
+    view.didInsertElement();
+  }
+}
+
 Ember.ListItemView = Ember.View.extend({
   classNames: ['ember-list-item-view'],
   _position: null,
@@ -69,54 +81,33 @@ Ember.ListItemView = Ember.View.extend({
   didInsertElement: function() {
     this._updateStyle();
   },
+
+  // this will eventually go away once rerender becomes
+  // less wasteful. (and buggy)
   _contextDidChange: Ember.observer(function() {
     var element, buffer;
 
     element = get(this, 'element');
     if (!element) { return; }
-    console.log('c');
+
+    this.triggerRecursively('willClearRender');
+    this.clearRenderedChildren();
 
     buffer = Ember.RenderBuffer();
     buffer = this.renderToBuffer(buffer);
 
-    this.invokeRecursively(function(view){
-      if (view.willInsertElement) {
-        view.willInsertElement();
-      }
-    });
+    this.invokeRecursively(willInsertElementIfNeeded);
 
     element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
 
     set(this, 'element', element);
 
-    this.transitionTo('inDOM', this.get('children'));
+    this.transitionTo('inDOM', get(this, 'children'));
 
-    this.invokeRecursively(function(view){
-      if (view.didInsertElement) {
-        view.didInsertElement();
-      }
-    });
-
-    this._position = null;
+    this.invokeRecursively(didInsertElementIfNeeded);
 
     this._updateStyle();
   }, 'context'),
-  // _contextDidChange: Ember.observer(function() {
-  //   var element, buffer;
-
-  //   element = get(this, 'element');
-  //   if (!element) { return; }
-
-  //   buffer = Ember.RenderBuffer();
-  //   buffer = this.renderToBuffer(buffer);
-
-  //   element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
-
-  //   this._position = null;
-  //   set(this, 'element', element);
-
-  //   this._updateStyle();
-  // }, 'context'),
 
   prepareForReuse: function() {
     this._position = null;
