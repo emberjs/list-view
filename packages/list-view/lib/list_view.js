@@ -179,13 +179,19 @@ Ember.ListViewMixin = Ember.Mixin.create({
   },
 
   _startingIndex: function() {
-    var scrollTop, rowHeight, columnCount;
+    var scrollTop, rowHeight, columnCount, calculatedStartingIndex,
+    contentLength, largestStartingIndex;
 
+    contentLength = get(this, 'content.length');
     scrollTop = get(this, 'scrollTop');
     rowHeight = get(this, 'rowHeight');
     columnCount = get(this, 'columnCount');
 
-    return floor(scrollTop / rowHeight) * columnCount;
+    calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
+
+    largestStartingIndex = (contentLength || 1) - 1;
+
+    return min(calculatedStartingIndex, largestStartingIndex);
   },
 
   contentWillChange: Ember.beforeObserver(function() {

@@ -164,6 +164,59 @@ test("totalHeight: odd", function(){
   equal(view.get('totalHeight'), 550);
 });
 
+
+test("_startingIndex: base case", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: generateContent(5),
+      width: width,
+      elementWidth: elementWidth,
+      scrollTop: 0
+    });
+  });
+
+  equal(view._startingIndex(), 0);
+});
+
+test("_startingIndex: scroll but within content length", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: generateContent(5),
+      width: width,
+      elementWidth: elementWidth,
+      scrollTop: 100
+    });
+  });
+
+  equal(view._startingIndex(), 4);
+});
+
+test("_startingIndex: scroll but beyond content length", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: generateContent(5),
+      width: width,
+      elementWidth: elementWidth,
+      scrollTop: 1000
+    });
+  });
+
+  equal(view._startingIndex(), 4);
+});
+
+
 test("computing the number of child views to create", function() {
   var height = 500, rowHeight = 50;
 
@@ -467,7 +520,7 @@ test("height change", function(){
 });
 
 test("height and width change after with scroll", function(){
-  var content = generateContent(100),
+  var content = generateContent(8),
       height = 150,
       rowHeight = 50,
       elementWidth = 50,
@@ -496,14 +549,14 @@ test("height and width change after with scroll", function(){
   equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
 
   deepEqual(itemPositions(), [
-            { x:  0, y: 1000 },
-            { x: 50, y: 1000 },
-            { x:  0, y: 1050 },
-            { x: 50, y: 1050 },
-            { x:  0, y: 1100 },
-            { x: 50, y: 1100 },
-            { x:  0, y: 1150 },
-            { x: 50, y: 1150 }], "The rows are in the correct positions");
+            { x:  0, y:    0 },
+            { x: 50, y:    0 },
+            { x:  0, y:   50 },
+            { x: 50, y:   50 },
+            { x:  0, y:  100 },
+            { x: 50, y:  100 },
+            { x:  0, y:  150 },
+            { x: 50, y:  150 }], "The rows are in the correct positions");
 
   Ember.run(function() {
     view.set('height', 100);
@@ -513,9 +566,9 @@ test("height and width change after with scroll", function(){
   equal(view.$('.ember-list-item-view').length, 3, "The correct number of rows were rendered");
 
   deepEqual(itemPositions(), [
-            { x:  0, y: 1000 },
-            { x:  0, y: 1050 },
-            { x:  0, y: 1100 }], "The rows are in the correct positions");
+            { x:  0, y:    0 },
+            { x:  0, y:   50 },
+            { x:  0, y:  100 }], "The rows are in the correct positions");
 
   Ember.run(function() {
     view.set('height', 150);
@@ -523,14 +576,14 @@ test("height and width change after with scroll", function(){
   });
 
   deepEqual(itemPositions(), [
-            { x:  0, y: 1000 },
-            { x: 50, y: 1000 },
-            { x:  0, y: 1050 },
-            { x: 50, y: 1050 },
-            { x:  0, y: 1100 },
-            { x: 50, y: 1100 },
-            { x:  0, y: 1150 },
-            { x: 50, y: 1150 }], "The rows are in the correct positions");
+            { x:  0, y:    0 },
+            { x: 50, y:    0 },
+            { x:  0, y:   50 },
+            { x: 50, y:   50 },
+            { x:  0, y:  100 },
+            { x: 50, y:  100 },
+            { x:  0, y:  150 },
+            { x: 50, y:  150 }], "The rows are in the correct positions");
 
   equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
 });
