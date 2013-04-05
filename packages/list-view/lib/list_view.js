@@ -175,7 +175,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     paddingCount = get(this, 'paddingCount');
     columnCount = get(this, 'columnCount');
 
-    return ((height / rowHeight) * columnCount) + (paddingCount * columnCount);
+    return (ceil(height / rowHeight) * columnCount) + (paddingCount * columnCount);
   },
 
   _startingIndex: function() {
