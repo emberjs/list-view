@@ -466,10 +466,12 @@ test("height change", function(){
   deepEqual(itemPositions().map(yPosition), [0, 50, 100], "The rows are in the correct positions" );
 });
 
-test("height change after with scroll", function(){
+test("height and width change after with scroll", function(){
   var content = generateContent(100),
-      height = 500,
+      height = 150,
       rowHeight = 50,
+      elementWidth = 50,
+      width = 100,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
@@ -477,8 +479,10 @@ test("height change after with scroll", function(){
   Ember.run(function(){
     view = Ember.ListView.create({
       content: content,
+      width: width,
       height: height,
       rowHeight: rowHeight,
+      elementWidth: elementWidth,
       itemViewClass: itemViewClass
     });
   });
@@ -489,51 +493,46 @@ test("height change after with scroll", function(){
     view.scrollTo(1000);
   });
 
-  equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
+  equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
 
-  deepEqual(itemPositions().map(yPosition), [
-    1000,
-    1050,
-    1100,
-    1150,
-    1200,
-    1250,
-    1300,
-    1350,
-    1400,
-    1450,
-    1500], "The rows are in the correct positions");
+  deepEqual(itemPositions(), [
+            { x:  0, y: 1000 },
+            { x: 50, y: 1000 },
+            { x:  0, y: 1050 },
+            { x: 50, y: 1050 },
+            { x:  0, y: 1100 },
+            { x: 50, y: 1100 },
+            { x:  0, y: 1150 },
+            { x: 50, y: 1150 }], "The rows are in the correct positions");
 
   Ember.run(function() {
     view.set('height', 100);
+    view.set('width',   50);
   });
 
   equal(view.$('.ember-list-item-view').length, 3, "The correct number of rows were rendered");
 
-  deepEqual(itemPositions().map(yPosition), [
-    1000,
-    1050,
-    1100], "The rows are in the correct positions");
+  deepEqual(itemPositions(), [
+            { x:  0, y: 1000 },
+            { x:  0, y: 1050 },
+            { x:  0, y: 1100 }], "The rows are in the correct positions");
 
   Ember.run(function() {
-    view.set('height', 500);
+    view.set('height', 150);
+    view.set('width',  100);
   });
 
-  equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
+  deepEqual(itemPositions(), [
+            { x:  0, y: 1000 },
+            { x: 50, y: 1000 },
+            { x:  0, y: 1050 },
+            { x: 50, y: 1050 },
+            { x:  0, y: 1100 },
+            { x: 50, y: 1100 },
+            { x:  0, y: 1150 },
+            { x: 50, y: 1150 }], "The rows are in the correct positions");
 
-  deepEqual(itemPositions().map(yPosition), [
-    1000,
-    1050,
-    1100,
-    1150,
-    1200,
-    1250,
-    1300,
-    1350,
-    1400,
-    1450,
-    1500], "The rows are in the correct positions");
-
+  equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
 });
 
 test("elementWidth change", function(){
