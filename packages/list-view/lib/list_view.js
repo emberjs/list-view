@@ -9,6 +9,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   scrollTop: 0,
+  _lastEndingIndex: 0,
   paddingCount: 1, // One row for padding
 
   init: function() {
@@ -113,6 +114,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
     options = options || {};
     this._prepareChildForReuse(childView);
 
+    Ember.assert('ContentIndex out of bounds: contentIndex: ' + contentIndex + '  content.legnth: ' + get(this, 'content.length'), contentIndex < get(this, 'content.length'));
+
     if (childsCurrentContentIndex !== contentIndex || options.force) {
       position = this.positionForIndex(contentIndex);
 
@@ -155,16 +158,20 @@ Ember.ListViewMixin = Ember.Mixin.create({
   },
 
   columnCount: Ember.computed('width', 'elementWidth', function() {
-    var elementWidth, width;
+    var elementWidth, width, count;
 
     elementWidth = get(this, 'elementWidth');
     width = get(this, 'width');
 
     if (elementWidth) {
-      return floor(width / elementWidth);
+      count = floor(width / elementWidth);
     } else {
-      return 1;
+      count = 1;
     }
+
+    this._lastColumnCount = count;
+
+    return count;
   }),
 
   _numChildViewsForViewport: function() {
@@ -259,7 +266,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     numberOfChildViews = childViews.length;
 
     delta =  numberOfChildViewsNeeded - numberOfChildViews;
-    index = this._lastEndingIndex || startingIndex;
+    index = this._lastEndingIndex;
 
     if (delta === 0) {
       // no change

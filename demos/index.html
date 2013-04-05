@@ -28,7 +28,7 @@
   <body>
     <img height="50px" width="50px" {{bindAttr src="imageSrc"}} class="hidden"/>
     <script type="text/x-handlebars">
-      {{#collection Ember.ListView contentBinding="controller" height=700 width=400 rowHeight=50 elementWidth=200}}
+      {{#collection Ember.ListView contentBinding="controller" height=200 width=200 rowHeight=50 elementWidth=200}}
       {{name}}{{view App.AppleView nameBinding="name"}}
       {{/collection}}
       {{#group}}
@@ -53,7 +53,7 @@
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
-          for (var i = 0; i < 10000; i++) {
+          for (var i = 0; i < 20; i++) {
             content.push({
               name: 'Item ' + i,
               imageSrc: images[i%images.length]
