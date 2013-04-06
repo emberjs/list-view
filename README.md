@@ -46,3 +46,9 @@ You can customize the row views by subclassing `Ember.ListItemView` and specifyi
 `Ember.ListView` will create enough rows to fill the visible area (as defined by the `height` property). It reacts to scroll events and reuses/repositions the rows as scrolled.
 
 Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js) for more information.
+
+## Running unit tests
+
+bundle
+bundle exec rackup
+open http://localhost:9292 in a browser
