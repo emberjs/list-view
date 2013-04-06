@@ -340,13 +340,19 @@ function createScrollingView(){
   });
 }
 
+function notifyMutationListeners() {
+  if (Ember.View.notifyMutationListeners) {
+    Ember.run.once(Ember.View, 'notifyMutationListeners');
+  }
+}
+
 Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   init: function(){
     this._super();
     // overwrite the view's domManager.prepend to prepend inside the wrapper div
     this.domManager.prepend = function(view, html) {
       view.$('.ember-list-container').prepend(html);
-      // Ember.run.once(Ember.View, 'notifyMutationListeners');
+      notifyMutationListeners();
     };
   },
 

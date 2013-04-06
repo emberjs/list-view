@@ -772,7 +772,6 @@ test("recycling complex views", function(){
 
   equal(view.$('.ember-list-item-view').length, 2, "The correct number of rows were rendered");
 
-  console.log("scrollTo 50");
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
@@ -788,7 +787,6 @@ test("recycling complex views", function(){
   equal(listViewInsertionCount, 1, "expected number of listView's didInsertElement");
   equal(listViewDestroyCount, 0, "expected number of listView's willDestroyElement");
 
-  console.log("scrollTo 0");
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
