@@ -4,6 +4,13 @@ var get = Ember.get, set = Ember.set,
 min = Math.min, max = Math.max, floor = Math.floor,
 ceil = Math.ceil;
 
+function addContentArrayObserver() {
+  var content = get(this, 'content');
+  if (content) {
+    content.addArrayObserver(this);
+  }
+}
+
 Ember.ListViewMixin = Ember.Mixin.create({
   itemViewClass: Ember.ListItemView,
   classNames: ['ember-list-view'],
@@ -14,7 +21,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   init: function() {
     this._super();
-    this.contentDidChange(); // Setup array observing
+    addContentArrayObserver.call(this);
+    this._syncChildViews();
   },
 
   style: Ember.computed(function() {
@@ -208,16 +216,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
   }, 'content'),
 
   contentDidChange: Ember.observer(function() {
-    var content;
-    content = get(this, 'content');
-
-    if (content) {
-      content.addArrayObserver(this);
-    }
-
+    addContentArrayObserver.call(this);
     Ember.run.once(this, '_syncChildViews');
   }, 'content'),
-
 
   heightDidChange: Ember.observer(function(){
     Ember.run.once(this, '_syncChildViews');

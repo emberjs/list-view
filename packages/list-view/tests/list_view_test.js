@@ -111,9 +111,7 @@ function itemPositions() {
 }
 
 test("should exist", function() {
-  Ember.run(function(){
-    view = Ember.ListView.create();
-  });
+  view = Ember.ListView.create();
   appendView();
   ok(view);
 });
@@ -121,12 +119,10 @@ test("should exist", function() {
 test("totalHeight: single column", function(){
   var height = 500, rowHeight = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content:generateContent(20)
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content:generateContent(20)
   });
 
   equal(view.get('totalHeight'), 1000);
@@ -135,14 +131,12 @@ test("totalHeight: single column", function(){
 test("totalHeight: even", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content: generateContent(20),
-      width: width,
-      elementWidth: elementWidth
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: generateContent(20),
+    width: width,
+    elementWidth: elementWidth
   });
 
   equal(view.get('totalHeight'), 500);
@@ -151,14 +145,12 @@ test("totalHeight: even", function(){
 test("totalHeight: odd", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content: generateContent(21),
-      width: width,
-      elementWidth: elementWidth
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: generateContent(21),
+    width: width,
+    elementWidth: elementWidth
   });
 
   equal(view.get('totalHeight'), 550);
@@ -168,15 +160,13 @@ test("totalHeight: odd", function(){
 test("_startingIndex: base case", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content: generateContent(5),
-      width: width,
-      elementWidth: elementWidth,
-      scrollTop: 0
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: generateContent(5),
+    width: width,
+    elementWidth: elementWidth,
+    scrollTop: 0
   });
 
   equal(view._startingIndex(), 0);
@@ -185,15 +175,13 @@ test("_startingIndex: base case", function(){
 test("_startingIndex: scroll but within content length", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content: generateContent(5),
-      width: width,
-      elementWidth: elementWidth,
-      scrollTop: 100
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: generateContent(5),
+    width: width,
+    elementWidth: elementWidth,
+    scrollTop: 100
   });
 
   equal(view._startingIndex(), 4);
@@ -202,15 +190,13 @@ test("_startingIndex: scroll but within content length", function(){
 test("_startingIndex: scroll but beyond content length", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: height,
-      rowHeight: rowHeight,
-      content: generateContent(5),
-      width: width,
-      elementWidth: elementWidth,
-      scrollTop: 1000
-    });
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: generateContent(5),
+    width: width,
+    elementWidth: elementWidth,
+    scrollTop: 1000
   });
 
   equal(view._startingIndex(), 4);
@@ -218,27 +204,22 @@ test("_startingIndex: scroll but beyond content length", function(){
 
 
 test("computing the number of child views to create with scrollTop zero", function() {
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: 500,
-      rowHeight: 50,
-      content: Ember.A()
-    });
+  view = Ember.ListView.create({
+    height: 500,
+    rowHeight: 50,
+    content: Ember.A()
   });
 
   equal(view._numChildViewsForViewport(), 11);
 });
 
 test("computing the number of child views to create after when scroll down a bit", function() {
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      height: 500,
-      rowHeight: 50,
-      scrollTop: 51,
-      content: Ember.A()
-    });
+  view = Ember.ListView.create({
+    height: 500,
+    rowHeight: 50,
+    scrollTop: 51,
+    content: Ember.A()
   });
-
   equal(view._numChildViewsForViewport(), 11);
 });
 
@@ -250,13 +231,11 @@ test("should render a subset of the full content, based on the height, in the co
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -281,14 +260,12 @@ test("should render correctly with an initial scrollTop", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass,
-      scrollTop: 475
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 475
   });
 
   appendView();
@@ -311,13 +288,11 @@ test("should be programatically scrollable", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -338,13 +313,11 @@ test("replacing the list content", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -365,13 +338,11 @@ test("adding to the front of the list content", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -393,13 +364,11 @@ test("inserting in the middle of visible content", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -421,13 +390,11 @@ test("clearing the content", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -448,13 +415,11 @@ test("deleting the first element", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -487,13 +452,11 @@ test("height change", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -534,15 +497,13 @@ test("height and width change after with scroll", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      width: width,
-      height: height,
-      rowHeight: rowHeight,
-      elementWidth: elementWidth,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    width: width,
+    height: height,
+    rowHeight: rowHeight,
+    elementWidth: elementWidth,
+    itemViewClass: itemViewClass
   });
 
   appendView();
@@ -596,15 +557,13 @@ test("elementWidth change", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      width: width,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass,
-      elementWidth: elementWidth
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    elementWidth: elementWidth
   });
 
   appendView();
@@ -683,15 +642,13 @@ test("elementWidth change with scroll", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      width: width,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass,
-      elementWidth: elementWidth
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    elementWidth: elementWidth
   });
 
   appendView();
@@ -788,20 +745,18 @@ test("recycling complex views", function(){
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass,
-      scrollTop: 0,
-      didInsertElement: function() {
-        listViewInsertionCount++;
-      },
-      willDestroyElement: function() {
-        listViewDestroyCount++;
-      }
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0,
+    didInsertElement: function() {
+      listViewInsertionCount++;
+    },
+    willDestroyElement: function() {
+      listViewDestroyCount++;
+    }
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement");
@@ -859,13 +814,11 @@ test("A property of an item can be changed", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
   });
   appendView();
 
@@ -894,12 +847,10 @@ test("A property of an item can be changed", function() {
 });
 
 test("The list view is wrapped in an extra div to support JS-emulated scrolling", function() {
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: Ember.A({}),
-      height: 100,
-      rowHeight: 50
-    });
+  view = Ember.ListView.create({
+    content: Ember.A({}),
+    height: 100,
+    rowHeight: 50
   });
   appendView();
   equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
@@ -908,22 +859,14 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
 });
 
 test("When scrolled to the very bottom, the 'padding' list items should be empty", function() {
-  var content = generateContent(4),
-      height = 150,
-      rowHeight = 50,
-      itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Name: {{name}}")
-      });
-
-  Ember.run(function(){
-    view = Ember.ListView.create({
-      content: content,
-      height: height,
-      rowHeight: rowHeight,
-      itemViewClass: itemViewClass
-    });
+  view = Ember.ListView.create({
+    content: generateContent(4),
+    height: 150,
+    rowHeight: 50,
+    itemViewClass: Ember.ListItemView.extend({
+      template: Ember.Handlebars.compile("Name: {{name}}")
+    })
   });
-
   appendView();
   Ember.run(function(){
     view.scrollTo(51);
