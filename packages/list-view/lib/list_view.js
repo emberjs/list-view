@@ -1,7 +1,7 @@
 require('list-view/list_item_view');
 
 var get = Ember.get, set = Ember.set,
-min = Math.min, floor = Math.floor,
+min = Math.min, max = Math.max, floor = Math.floor,
 ceil = Math.ceil;
 
 Ember.ListViewMixin = Ember.Mixin.create({
@@ -58,29 +58,27 @@ Ember.ListViewMixin = Ember.Mixin.create({
   scrollTo: function(scrollTop, options) {
     var contentLength, childViews, childViewsLength,
     startingIndex, endingIndex, childView, attrs, contentIndex,
-    neededViews;
+    visibleEndingIndex, maxContentIndex, contentIndexEnd;
 
     options = options || { };
 
     set(this, 'scrollTop', scrollTop);
-
     contentLength = get(this, 'content.length');
-
+    maxContentIndex = max(contentLength - 1, 0);
     childViews = this.listItemViews();
     childViewsLength =  childViews.length;
 
     startingIndex = this._startingIndex();
-    neededViews = startingIndex + this._numChildViewsForViewport();
+    visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
 
-    endingIndex = min(contentLength, neededViews);
+    endingIndex = min(maxContentIndex, visibleEndingIndex);
 
     if (!options.force && startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
       return;
     }
-
-    for (contentIndex = startingIndex; contentIndex < endingIndex; contentIndex++) {
+    contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
+    for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
       childView = childViews[contentIndex % childViewsLength];
-
       this._reuseChildForContentIndex(childView, contentIndex, options);
     }
 
@@ -113,8 +111,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     options = options || {};
     this._prepareChildForReuse(childView);
-
-    Ember.assert('ContentIndex out of bounds: contentIndex: ' + contentIndex + '  content.legnth: ' + get(this, 'content.length'), contentIndex < get(this, 'content.length'));
 
     if (childsCurrentContentIndex !== contentIndex || options.force) {
       position = this.positionForIndex(contentIndex);
@@ -187,7 +183,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   _startingIndex: function() {
     var scrollTop, rowHeight, columnCount, calculatedStartingIndex,
-    contentLength, largestStartingIndex;
+        contentLength, largestStartingIndex;
 
     contentLength = get(this, 'content.length');
     scrollTop = get(this, 'scrollTop');
@@ -196,7 +192,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
 
-    largestStartingIndex = (contentLength || 1) - 1;
+    largestStartingIndex = max(contentLength - 1, 0);
 
     return min(calculatedStartingIndex, largestStartingIndex);
   },
@@ -266,18 +262,17 @@ Ember.ListViewMixin = Ember.Mixin.create({
     numberOfChildViews = childViews.length;
 
     delta =  numberOfChildViewsNeeded - numberOfChildViews;
-    index = this._lastEndingIndex;
 
     if (delta === 0) {
       // no change
-    } else if (delta > 0) {
-      contentIndex = startingIndex + index;
+    } else if (delta > 0) { // slots were added
+      contentIndex = this._lastEndingIndex;
 
       for (count = 0; count < delta; count++, contentIndex++) {
         this._addItemView(contentIndex);
       }
 
-    } else {
+    } else { // slots were removed
 
       // TODO: extract// or just hide these...
       childViews.
@@ -291,7 +286,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     this.scrollTo(get(this, 'scrollTop'), { force: true });
 
     this._lastStartingIndex = startingIndex;
-    this._lastEndingIndex   = startingIndex + delta;
+    this._lastEndingIndex   = this._lastEndingIndex + delta;
 
     this.childViewsDidSync();
   },

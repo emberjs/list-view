@@ -217,22 +217,26 @@ test("_startingIndex: scroll but beyond content length", function(){
 });
 
 
-test("computing the number of child views to create", function() {
-  var height = 500, rowHeight = 50;
-
+test("computing the number of child views to create with scrollTop zero", function() {
   Ember.run(function(){
-    view = Ember.ListView.create({height: height, rowHeight: rowHeight, content: Ember.A()});
+    view = Ember.ListView.create({
+      height: 500,
+      rowHeight: 50,
+      content: Ember.A()
+    });
   });
 
   equal(view._numChildViewsForViewport(), 11);
-
 });
 
-test("computing the number of child views to create", function() {
-  var height = 500, rowHeight = 50;
-
+test("computing the number of child views to create after when scroll down a bit", function() {
   Ember.run(function(){
-    view = Ember.ListView.create({height: height, rowHeight: rowHeight, content: Ember.A()});
+    view = Ember.ListView.create({
+      height: 500,
+      rowHeight: 50,
+      scrollTop: 51,
+      content: Ember.A()
+    });
   });
 
   equal(view._numChildViewsForViewport(), 11);
@@ -520,11 +524,12 @@ test("height change", function(){
 });
 
 test("height and width change after with scroll", function(){
+  // start off with 2x3 grid visible and 8 elements
   var content = generateContent(8),
+      width = 100,
       height = 150,
       rowHeight = 50,
       elementWidth = 50,
-      width = 100,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
@@ -542,50 +547,41 @@ test("height and width change after with scroll", function(){
 
   appendView();
 
+  deepEqual(itemPositions(), [
+            { x:  0, y:    0 }, { x: 50, y:    0 },
+            { x:  0, y:   50 }, { x: 50, y:   50 },
+            { x:  0, y:  100 }, { x: 50, y:  100 },
+            { x:  0, y:  150 }, { x: 50, y:  150 }
+            ], "The rows are rendered in the correct positions");
+
+  equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
+
+  // user is scrolled near the bottom of the list
   Ember.run(function(){
-    view.scrollTo(1000);
+    view.scrollTo(51);
   });
 
   equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
 
   deepEqual(itemPositions(), [
-            { x:  0, y:    0 },
-            { x: 50, y:    0 },
-            { x:  0, y:   50 },
-            { x: 50, y:   50 },
-            { x:  0, y:  100 },
-            { x: 50, y:  100 },
-            { x:  0, y:  150 },
-            { x: 50, y:  150 }], "The rows are in the correct positions");
+              { x: 0, y:  50 }, { x: 50, y:  50 },
+              { x: 0, y: 100 }, { x: 50, y: 100 },
+              { x: 0, y: 150 }, { x: 50, y: 150 },
+/* padding */ { x: 0, y: 200 }, { x: 50, y: 200 }], "The rows are in the correct positions");
 
+  // rotate to a with 3x2 grid visible and 8 elements
   Ember.run(function() {
+    view.set('width',  150);
     view.set('height', 100);
-    view.set('width',   50);
   });
-
-  equal(view.$('.ember-list-item-view').length, 3, "The correct number of rows were rendered");
-
-  deepEqual(itemPositions(), [
-            { x:  0, y:    0 },
-            { x:  0, y:   50 },
-            { x:  0, y:  100 }], "The rows are in the correct positions");
-
-  Ember.run(function() {
-    view.set('height', 150);
-    view.set('width',  100);
-  });
-
-  deepEqual(itemPositions(), [
-            { x:  0, y:    0 },
-            { x: 50, y:    0 },
-            { x:  0, y:   50 },
-            { x: 50, y:   50 },
-            { x:  0, y:  100 },
-            { x: 50, y:  100 },
-            { x:  0, y:  150 },
-            { x: 50, y:  150 }], "The rows are in the correct positions");
-
   equal(view.$('.ember-list-item-view').length, 8, "The correct number of rows were rendered");
+
+  deepEqual(itemPositions(), [
+              { x:  0, y:   50 }, { x: 50, y:   50 }, { x:  100, y:  50 },
+              { x:  0, y:  100 }, { x: 50, y:  100 }, { x: 100, y:  100 },
+/* padding */ { x:  0, y:  150 }, { x: 50, y:  150 }
+            ], "The rows are in the correct positions");
+
 });
 
 test("elementWidth change", function(){
@@ -674,7 +670,6 @@ test("elementWidth change", function(){
     equal(positionSorted[i].innerText, "Item " + (i+1));
   }
 });
-
 
 test("elementWidth change with scroll", function(){
   var i,
@@ -768,9 +763,7 @@ test("elementWidth change with scroll", function(){
   }
 });
 
-
-
-test("recycleing complex views", function(){
+test("recycling complex views", function(){
   var content = generateContent(100),
       height = 50,
       rowHeight = 50,
