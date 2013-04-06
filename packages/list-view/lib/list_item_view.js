@@ -85,28 +85,33 @@ Ember.ListItemView = Ember.View.extend({
   // this will eventually go away once rerender becomes
   // less wasteful. (and buggy)
   _contextDidChange: Ember.observer(function() {
-    var element, buffer;
+    var element, buffer, context;
 
     element = get(this, 'element');
     if (!element) { return; }
+    context = get(this, 'context');
 
     this.triggerRecursively('willClearRender');
     this.clearRenderedChildren();
 
-    buffer = Ember.RenderBuffer();
-    buffer = this.renderToBuffer(buffer);
+    if (context) {
+      buffer = Ember.RenderBuffer();
+      buffer = this.renderToBuffer(buffer);
 
-    this.invokeRecursively(willInsertElementIfNeeded);
+      this.invokeRecursively(willInsertElementIfNeeded);
 
-    element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
+      element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
 
-    set(this, 'element', element);
+      set(this, 'element', element);
 
-    this.transitionTo('inDOM', get(this, 'children'));
+      this.transitionTo('inDOM', get(this, 'children'));
 
-    this.invokeRecursively(didInsertElementIfNeeded);
+      this.invokeRecursively(didInsertElementIfNeeded);
 
-    this._updateStyle();
+      this._updateStyle();
+    } else {
+      element.innerHTML = ''; // when there is no context, this view should be completely empty
+    }
   }, 'context'),
 
   prepareForReuse: function() {

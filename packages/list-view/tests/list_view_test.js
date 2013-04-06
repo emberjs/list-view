@@ -892,3 +892,43 @@ test("A property of an item can be changed", function() {
   equal(view.$('.ember-list-item-view:eq(0)').text(), "Second change", "The item's name has been updated");
 
 });
+
+test("The list view is wrapped in an extra div to support JS-emulated scrolling", function() {
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Ember.A({}),
+      height: 100,
+      rowHeight: 50
+    });
+  });
+  appendView();
+  equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
+  equal(view.$('.ember-list-container > .ember-list-item-view').length, 3, "expected ember-list-items inside the wrapper div");
+  equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 1, "expected a ember-list-scrolling-view inside the wrapper div");
+});
+
+test("When scrolled to the very bottom, the 'padding' list items should be empty", function() {
+  var content = generateContent(4),
+      height = 150,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("Name: {{name}}")
+      });
+
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
+  });
+
+  appendView();
+  Ember.run(function(){
+    view.scrollTo(51);
+  });
+  var sortedElements = sortElementsByPosition(view.$('.ember-list-item-view')),
+      lastEl = sortedElements[sortedElements.length - 1];
+  equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
+});

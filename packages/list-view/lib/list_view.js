@@ -342,6 +342,17 @@ function createScrollingView(){
 Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   init: function(){
     this._super();
+    // overwrite the view's domManager.prepend to prepend inside the wrapper div
+    this.domManager.prepend = function(view, html) {
+      view.$('.ember-list-container').prepend(html);
+      // Ember.run.once(Ember.View, 'notifyMutationListeners');
+    };
+  },
+
+  render: function(buffer) {
+    buffer.push('<div class="ember-list-container">');
+    this._super(buffer);
+    buffer.push('</div>');
   },
 
   childViewsWillSync: function(){
