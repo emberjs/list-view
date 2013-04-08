@@ -27,7 +27,8 @@
     <script type="text/x-handlebars">
         <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
       {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=700 width=600 rowHeight=50 elementWidth=50}}
+      {{#collection Ember.ListView contentBinding="controller"
+      height=460 width=320 rowHeight=50 elementWidth=50}}
         hi
       {{/collection}}
       {{/group}}
