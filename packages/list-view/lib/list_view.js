@@ -23,6 +23,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     this._super();
     addContentArrayObserver.call(this);
     this._syncChildViews();
+    this.columnCountDidChange();
   },
 
   style: Ember.computed(function() {
@@ -153,17 +154,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     contentLength = get(this, 'content.length');
     childViewCountForHeight = this._numChildViewsForViewport();
-
-    if (childViewCountForHeight > contentLength) {
-      return contentLength;
-    } else {
-      return childViewCountForHeight;
-    }
+    return min(contentLength, childViewCountForHeight);
   },
 
   columnCount: Ember.computed('width', 'elementWidth', function() {
     var elementWidth, width, count;
-
     elementWidth = get(this, 'elementWidth');
     width = get(this, 'width');
 
@@ -172,10 +167,27 @@ Ember.ListViewMixin = Ember.Mixin.create({
     } else {
       count = 1;
     }
-
-    this._lastColumnCount = count;
-
     return count;
+  }),
+
+  columnCountDidChange: Ember.observer(function(){
+    var newColumnCount = get(this, 'columnCount'),
+        lastColumnCount = this._lastColumnCount,
+        currentScrollTop, proposedScrollTop, maxScrollTop, scrollTop;
+    this._lastColumnCount = newColumnCount;
+    if (!lastColumnCount) { return; }
+
+    currentScrollTop = get(this, 'scrollTop');
+    proposedScrollTop = currentScrollTop * (lastColumnCount / newColumnCount);
+    maxScrollTop = get(this, 'maxScrollTop');
+    scrollTop = min(maxScrollTop, proposedScrollTop);
+    set(this, 'scrollTop', scrollTop);
+  }, 'columnCount'),
+
+  maxScrollTop: Ember.computed('height', 'totalHeight', function(){
+    var totalHeight = get(this, 'totalHeight'),
+        viewportHeight = get(this, 'height');
+    return totalHeight - viewportHeight;
   }),
 
   _numChildViewsForViewport: function() {
