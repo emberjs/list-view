@@ -28,10 +28,18 @@ function detectListItemViews(childView) {
   return Ember.ListItemView.detectInstance(childView);
 }
 
+var domManager = Ember.create(Ember.ContainerView.proto().domManager);
+
+domManager.prepend = function(view, html) {
+  view.$('.ember-list-container').prepend(html);
+  notifyMutationListeners();
+};
+
 Ember.ListViewMixin = Ember.Mixin.create({
   itemViewClass: Ember.ListItemView,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
+  domManager: domManager,
   scrollTop: 0,
   _lastEndingIndex: 0,
   paddingCount: 1, // One row for padding
@@ -380,15 +388,6 @@ function notifyMutationListeners() {
 }
 
 Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
-  init: function(){
-    this._super();
-    // overwrite the view's domManager.prepend to prepend inside the wrapper div
-    this.domManager.prepend = function(view, html) {
-      view.$('.ember-list-container').prepend(html);
-      notifyMutationListeners();
-    };
-  },
-
   render: function(buffer) {
     buffer.push('<div class="ember-list-container">');
     this._super(buffer);
