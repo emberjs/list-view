@@ -231,7 +231,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     totalHeight = get(this, 'totalHeight'),
     viewportHeight = get(this, 'height');
 
-    return totalHeight - viewportHeight;
+    return max(0, totalHeight - viewportHeight);
   }),
 
   _numChildViewsForViewport: function() {
