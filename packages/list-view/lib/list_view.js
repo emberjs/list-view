@@ -49,7 +49,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
   scrollTop: 0,
   _lastEndingIndex: 0,
   paddingCount: 1, // One row for padding
-  domManager: domManager,
 
   init: function() {
     this._super();
@@ -452,78 +451,5 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     }
 
     this.pushObject(scrollingView);
-  }
-});
-
-/**
-  VirtualListView
-
-  @class VirtualListView
-  @namespace Ember
-*/
-Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
-  css: {
-    position: 'relative',
-    overflow: 'hidden'
-  },
-
-  didInsertElement: function() {
-    var self, element;
-
-    self = this;
-    element = this.$('> .ember-list-container')[0];
-
-    self._scroll = function(e) { self.scroll(e); };
-    self._touchMove = function(e) { self.touchMove(e); };
-    self._mouseWheel = function(e) { self.mouseWheel(e); };
-
-    element.addEventListener('scroll',     this._scroll);
-    element.addEventListener('touchmove',  this._touchMove);
-    element.addEventListener('mousewheel', this._mouseWheel);
-  },
-
-  willDestroyElement: function() {
-    var element;
-
-    element = this.$('> .ember-list-container')[0];
-
-    element.removeEventListener('scroll', this._scroll);
-    element.removeEventListener('touchmove', this._touchMove);
-    element.removeEventListener('mousewheel', this._mouseWheel);
-  },
-
-  mouseWheel: function(e){
-    e.preventDefault();
-
-    var inverted = e.webkitDirectionInvertedFromDevice;
-    var element = this.$('> .ember-list-container')[0];
-
-    this.y = this.y || 0;
-
-    if (inverted) {
-      this.y -= e.wheelDeltaY;
-    } else {
-      this.y += e.wheelDeltaY;
-    }
-
-    if (this.y > -1) { this.y = 0; }
-
-    element.style.webkitTransform = 'translate3d( 0px, ' + this.y + 'px, 0)';
-    this.scrollTo(Math.abs(this.y));
-    return false;
-  },
-
-  touchMove: function(e){
-    e.preventDefault();
-    var element = this.$('> .ember-list-container')[0];
-
-    this.y = this.y || 0;
-    this.y = e.pageY;
-    element.style.webkitTransform = 'translate3d( 0px, ' + (-this.y) + 'px, 0)';
-
-    this.scrollTo(Math.abs(this.y));
-    console.log('Attempt touchmove');
-    return false;
-    // call scroller library
   }
 });
