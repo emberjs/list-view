@@ -108,5 +108,11 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   mouseUp: function(e){
     this.endScroll(e.timeStamp);
     return false;
+  },
+  scrollerScrollTo: function(y, animate){
+    if (animate === undefined) {
+      animate = true;
+    }
+    this.scroller.scrollTo(0, y, animate, 1);
   }
 });
