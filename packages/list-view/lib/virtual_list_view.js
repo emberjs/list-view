@@ -1,6 +1,10 @@
 require('list-view/list_view_mixin');
+require('list-view/list_view_helper');
 
 var max = Math.max;
+function updateScrollerDimensions(){
+  this.scroller.setDimensions(this.get('width'), this.get('height'), this.get('width'), this.get('totalHeight'));
+}
 
 /**
   VirtualListView
@@ -15,20 +19,25 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
   init: function(){
     this._super();
+    this.setupScroller();
+  },
+  applyTransform: Ember.ListViewHelper.applyTransform,
+  setupScroller: function(){
     var _this = this;
     this.scroller = new Scroller(function(left, top, zoom) {
       if (_this.listContainerElement) {
-        _this.listContainerElement.style.webkitTransform = 'translate3d( 0px, ' + (-top) + 'px, 0)';
+        _this.applyTransform(_this.listContainerElement, {x: 0, y: -top});
         _this.scrollTo(max(0, top));
       }
     }, {
       scrollingX: false
     });
-
-    // Configure to have an outer dimension of 1000px and inner dimension of 3000px
+    updateScrollerDimensions.call(this);
     this.scroller.setDimensions(this.get('width'), this.get('height'), this.get('width'), this.get('totalHeight'));
   },
-
+  scrollerDimensionsNeedToChange: Ember.observer(function() {
+    Ember.run.once(this, updateScrollerDimensions);
+  }, 'width', 'height', 'elementWidth'),
   didInsertElement: function() {
     var self, listContainerElement;
 
