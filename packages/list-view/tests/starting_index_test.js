@@ -16,7 +16,7 @@ module("Ember.ListView unit: - startingIndex", {
   }
 });
 
-test("_startingIndex: base case", function(){
+test("base case", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
   view = Ember.ListView.create({
@@ -31,7 +31,7 @@ test("_startingIndex: base case", function(){
   equal(view._startingIndex(), 0);
 });
 
-test("_startingIndex: scroll but within content length", function(){
+test("scroll but within content length", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
   view = Ember.ListView.create({
@@ -46,7 +46,7 @@ test("_startingIndex: scroll but within content length", function(){
   equal(view._startingIndex(), 4);
 });
 
-test("_startingIndex: scroll but beyond content length", function(){
+test("scroll but beyond content length", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
   view = Ember.ListView.create({
@@ -60,3 +60,4 @@ test("_startingIndex: scroll but beyond content length", function(){
 
   equal(view._startingIndex(), 4);
 });
+
