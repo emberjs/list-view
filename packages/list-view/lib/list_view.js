@@ -301,6 +301,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
         endingIndex, numberOfChildViews, numberOfChildViewsNeeded,
         childViews, count, delta, index, childViewsLength, contentIndex;
 
+    // guard against height and width change, followed by destroy in the same runloop
+    if (this.state === 'destroyed') { return; }
+
     this.childViewsWillSync();
 
     childViewCount = this._childViewCount();
