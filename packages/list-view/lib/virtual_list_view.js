@@ -1,4 +1,5 @@
-require('list-view/list_view');
+require('list-view/list_view_mixin');
+
 var max = Math.max;
 
 /**
@@ -34,7 +35,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     self = this;
     this.listContainerElement = this.$('> .ember-list-container')[0];
 
-    self._scroll = function(e) { self.scroll(e); };
     self._touchStart = function(e) { self.touchStart(e); };
     self._touchMove = function(e) { self.touchMove(e); };
     self._touchEnd = function(e) { self.touchEnd(e); };
@@ -43,7 +43,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     self._mouseUp = function(e) { self.mouseUp(e); };
     self._mouseWheel = function(e) { self.mouseWheel(e); };
 
-    this.listContainerElement.addEventListener('scroll',     this._scroll);
     this.listContainerElement.addEventListener('touchstart',  this._touchStart);
     this.listContainerElement.addEventListener('touchmove',  this._touchMove);
     this.listContainerElement.addEventListener('touchend',  this._touchEnd);
@@ -54,7 +53,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   willDestroyElement: function() {
-    this.listContainerElement.removeEventListener('scroll', this._scroll);
     this.listContainerElement.removeEventListener('touchstart', this._touchStart);
     this.listContainerElement.removeEventListener('touchmove', this._touchMove);
     this.listContainerElement.removeEventListener('touchend', this._touchEnd);
@@ -63,48 +61,43 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     this.listContainerElement.removeEventListener('mouseup', this._mouseUp);
     this.listContainerElement.removeEventListener('mousewheel', this._mouseWheel);
   },
-
   mouseWheel: function(e){
-    e.preventDefault();
-
-    // this.scroller.doTouchMove(, e.timeStamp);
-
-    // var inverted = e.webkitDirectionInvertedFromDevice;
-    // this.y = this.y || 0;
-
-    // if (inverted) {
-    //   this.y -= e.wheelDeltaY;
-    // } else {
-    //   this.y += e.wheelDeltaY;
-    // }
-
-    // if (this.y > -1) { this.y = 0; }
-
+    // TODO: translate mouseWheel to beginScroll/continueScroll/endScroll
     return false;
+  },
+
+  beginScroll: function(touches, timeStamp) {
+    this.scroller.doTouchStart(touches, timeStamp);
+  },
+  continueScroll: function(touches, timeStamp) {
+    this.scroller.doTouchMove(touches, timeStamp);
+  },
+  endScroll: function(timeStamp) {
+    this.scroller.doTouchEnd(timeStamp);
   },
 
   touchStart: function(e){
-    this.scroller.doTouchStart(e.touches, e.timeStamp);
+    this.beginScroll(e.touches, e.timeStamp);
     return false;
   },
   touchMove: function(e){
-    this.scroller.doTouchMove(e.touches, e.timeStamp);
+    this.continueScroll(e.touches, e.timeStamp);
     return false;
   },
   touchEnd: function(e){
-    this.scroller.doTouchEnd(e.timeStamp);
+    this.endScroll(e.timeStamp);
     return false;
   },
   mouseDown: function(e){
-    this.scroller.doTouchStart([e], e.timeStamp);
+    this.beginScroll([e], e.timeStamp);
     return false;
   },
   mouseMove: function(e){
-    this.scroller.doTouchMove([e], e.timeStamp);
+    this.continueScroll([e], e.timeStamp);
     return false;
   },
   mouseUp: function(e){
-    this.scroller.doTouchEnd(e.timeStamp);
+    this.endScroll(e.timeStamp);
     return false;
   }
 });
