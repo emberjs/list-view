@@ -71,7 +71,13 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     this.listContainerElement.removeEventListener('mousewheel', this._mouseWheel);
   },
   mouseWheel: function(e){
-    // TODO: translate mouseWheel to beginScroll/continueScroll/endScroll
+    var inverted = e.webkitDirectionInvertedFromDevice,
+        delta = e.wheelDeltaY * (inverted ? 0.5 : -0.5),
+        candidatePosition = this.scroller.__scrollTop + delta;
+    if ((candidatePosition >= 0) && (candidatePosition <= this.scroller.__maxScrollTop)) {
+      //this.showScrollbar()
+      this.scroller.scrollBy(0, delta, true);
+    }
     return false;
   },
 
