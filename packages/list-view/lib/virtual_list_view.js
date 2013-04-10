@@ -94,11 +94,15 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   touchStart: function(e){
-    this.beginScroll(e.touches, e.timeStamp);
+    if (e.touches) {
+      this.beginScroll(e.touches, e.timeStamp);
+    }
     return false;
   },
   touchMove: function(e){
-    this.continueScroll(e.touches, e.timeStamp);
+    if (e.touches) {
+      this.continueScroll(e.touches, e.timeStamp);
+    }
     return false;
   },
   touchEnd: function(e){
