@@ -83,7 +83,10 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     return style;
   }),
-  scrollTo: function(scrollTop, options) {
+  scrollTo: function(y) {
+    throw "must override to perform the visual scroll and effectively delegate to _scrollContentTo";
+  },
+  _scrollContentTo: function(scrollTop, options) {
     var contentLength, childViews, childViewsLength,
         startingIndex, endingIndex, childView, attrs,
         contentIndex, visibleEndingIndex, maxContentIndex,
@@ -317,7 +320,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
         forEach(removeAndDestroy, this);
     }
 
-    this.scrollTo(get(this, 'scrollTop'), { force: true });
+    this._scrollContentTo(get(this, 'scrollTop'), { force: true });
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
