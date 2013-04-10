@@ -616,3 +616,19 @@ test("When scrolled to the very bottom, the 'padding' list items should be empty
       lastEl = sortedElements[sortedElements.length - 1];
   equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
 });
+
+test("When destroyed, short-circuits syncChildViews", function() {
+  expect(1);
+  view = Ember.VirtualListView.create({
+    content: helper.generateContent(4),
+    height: 150,
+    rowHeight: 50  });
+  appendView();
+  Ember.run(function(){
+    view.destroy();
+  });
+  Ember.run(function(){
+    view._syncChildViews();
+  });
+  ok(true, 'made it!');
+});
