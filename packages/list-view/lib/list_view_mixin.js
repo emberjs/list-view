@@ -41,6 +41,19 @@ domManager.prepend = function(view, html) {
   notifyMutationListeners();
 };
 
+function syncListContainerWidth(){
+  var elementWidth, columnCount, containerWidth, element;
+
+  elementWidth = get(this, 'elementWidth');
+  columnCount = get(this, 'columnCount');
+  containerWidth = elementWidth * columnCount;
+  element = this.$('.ember-list-container');
+
+  if (containerWidth && element) {
+    element.css('width', containerWidth);
+  }
+}
+
 Ember.ListViewMixin = Ember.Mixin.create({
   itemViewClass: Ember.ListItemView,
   classNames: ['ember-list-view'],
@@ -55,6 +68,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     addContentArrayObserver.call(this);
     this._syncChildViews();
     this.columnCountDidChange();
+    this.on('didInsertElement', syncListContainerWidth);
   },
 
   render: function(buffer) {
@@ -213,6 +227,12 @@ Ember.ListViewMixin = Ember.Mixin.create({
       proposedScrollTop = currentScrollTop * ratio;
       scrollTop = min(maxScrollTop, proposedScrollTop);
       set(this, 'scrollTop', scrollTop);
+    }
+
+    if (arguments.length > 0) {
+      // invoked by observer
+      Ember.run.schedule('afterRender', this, syncListContainerWidth);
+
     }
   }, 'columnCount'),
 
