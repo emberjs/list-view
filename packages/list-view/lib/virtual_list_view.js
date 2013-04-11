@@ -49,38 +49,20 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     var self, listContainerElement, el;
 
     self = this;
-    this.listContainerElement = el = this.$('> .ember-list-container')[0];
+    el = this.$()[0];
+    this.listContainerElement = this.$('> .ember-list-container')[0];
 
-    self.__touchStart = function(e) { self._touchStart(e); };
-    self.__touchMove =  function(e) { self._touchMove(e);  };
-    self.__touchEnd =   function(e) { self._touchEnd(e);   };
-    self.__mouseDown =  function(e) { self._mouseDown(e);  };
-    self.__mouseMove =  function(e) { self._mouseMove(e);  };
-    self.__mouseUp =    function(e) { self._mouseUp(e);    };
-    self.__mouseWheel = function(e) { self._mouseWheel(e); };
-
-    el.addEventListener('touchstart', this.__touchStart);
-    el.addEventListener('touchmove',  this.__touchMove);
-    el.addEventListener('touchend',   this.__touchEnd);
-    el.addEventListener('mousedown',  this.__mouseDown);
-    el.addEventListener('mousemove',  this.__mouseMove);
-    el.addEventListener('mouseup',    this.__mouseUp);
-    el.addEventListener('mousewheel', this.__mouseWheel);
+    self._mouseWheel = function(e) { self.mouseWheel(e); };
+    el.addEventListener('mousewheel', this._mouseWheel);
   },
 
   willDestroyElement: function() {
-    var el = this.listContainerElement;
+    var el = this.$()[0];
 
-    el.removeEventListener('touchstart', this.__touchStart);
-    el.removeEventListener('touchmove',  this.__touchMove);
-    el.removeEventListener('touchend',   this.__touchEnd);
-    el.removeEventListener('mousedown',  this.__mouseDown);
-    el.removeEventListener('mousemove',  this.__mouseMove);
-    el.removeEventListener('mouseup',    this.__mouseUp);
-    el.removeEventListener('mousewheel', this.__mouseWheel);
+    el.removeEventListener('mousewheel', this._mouseWheel);
   },
 
-  _mouseWheel: function(e){
+  mouseWheel: function(e){
     var inverted = e.webkitDirectionInvertedFromDevice,
         delta = e.wheelDeltaY * (inverted ? 0.5 : -0.5),
         candidatePosition = this.scroller.__scrollTop + delta;
@@ -105,36 +87,35 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     this.scroller.doTouchEnd(timeStamp);
   },
 
-  _touchStart: function(e){
-    if (e.touches) {
-      this.beginScroll(e.touches, e.timeStamp);
-    }
+  touchStart: function(e){
+    e = e.originalEvent || e;
+    this.beginScroll(e.touches, e.timeStamp);
     return false;
   },
 
-  _touchMove: function(e){
-    if (e.touches) {
-      this.continueScroll(e.touches, e.timeStamp);
-    }
+  touchMove: function(e){
+    e = e.originalEvent || e;
+    this.continueScroll(e.touches, e.timeStamp);
     return false;
   },
 
-  _touchEnd: function(e){
+  touchEnd: function(e){
+    e = e.originalEvent || e;
     this.endScroll(e.timeStamp);
     return false;
   },
 
-  _mouseDown: function(e){
+  mouseDown: function(e){
     this.beginScroll([e], e.timeStamp);
     return false;
   },
 
-  _mouseMove: function(e){
+  mouseMove: function(e){
     this.continueScroll([e], e.timeStamp);
     return false;
   },
 
-  _mouseUp: function(e){
+  mouseUp: function(e){
     this.endScroll(e.timeStamp);
     return false;
   },
