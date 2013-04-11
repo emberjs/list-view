@@ -267,7 +267,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     syncChildViews.call(this);
   }, 'content'),
 
-  heightOrWidthDidChange: Ember.observer(syncChildViews, 'height', 'width'),
+  needsSyncChildViews: Ember.observer(syncChildViews, 'height', 'width', 'columnCount'),
 
   _addItemView: function(contentIndex){
     var itemViewClass, childView;
