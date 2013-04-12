@@ -90,13 +90,25 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
 
     return false;
   },
-
-  beginScroll: function(touches, timeStamp) {
+  _isScrolling: false,
+  willBeginScroll: function(touches, timeStamp) {
+    this._isScrolling = false;
     this.scroller.doTouchStart(touches, timeStamp);
   },
 
   continueScroll: function(touches, timeStamp) {
-    this.scroller.doTouchMove(touches, timeStamp);
+    if (this._isScrolling) {
+      this.scroller.doTouchMove(touches, timeStamp);
+    } else {
+      var startingScrollTop = this.get('scrollTop');
+      this.scroller.doTouchMove(touches, timeStamp);
+      var endingScrollTop = this.get('scrollTop');
+      if (startingScrollTop !== endingScrollTop) {
+        var e = Ember.$.Event("scrollerstart");
+        Ember.$(touches[0].target).trigger(e);
+        this._isScrolling = true;
+      }
+    }
   },
 
   endScroll: function(timeStamp) {
@@ -105,7 +117,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
 
   touchStart: function(e){
     e = e.originalEvent || e;
-    this.beginScroll(e.touches, e.timeStamp);
+    this.willBeginScroll(e.touches, e.timeStamp);
     return false;
   },
 
@@ -122,7 +134,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   mouseDown: function(e){
-    this.beginScroll([e], e.timeStamp);
+    this.willBeginScroll([e], e.timeStamp);
     return false;
   },
 

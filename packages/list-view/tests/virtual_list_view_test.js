@@ -12,9 +12,10 @@ function Scroller(callback, opts){
     view._scrollContentTo(Math.max(0, top));
   };
   this.setDimensions = function() { setDimensionsCalled = setDimensionsCalled + 1; };
+  this.doTouchStart = function() {};
+  this.doTouchMove = function() {};
+  this.doTouchEnd = function() {};
 }
-
-window.Scroller = Scroller;
 
 function appendView() {
   Ember.run(function() {
@@ -24,6 +25,7 @@ function appendView() {
 
 module("Ember.VirtualListView Acceptance", {
   setup: function() {
+    window.Scroller = Scroller;
     css = Ember.$("<style>" +
             ".ember-list-view {" +
             "  overflow: auto;" +
@@ -702,7 +704,8 @@ test("When destroyed, short-circuits syncChildViews", function() {
   view = Ember.VirtualListView.create({
     content: helper.generateContent(4),
     height: 150,
-    rowHeight: 50  });
+    rowHeight: 50
+  });
   appendView();
   Ember.run(function(){
     view.destroy();
@@ -712,3 +715,4 @@ test("When destroyed, short-circuits syncChildViews", function() {
   });
   ok(true, 'made it!');
 });
+
