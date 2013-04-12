@@ -1,4 +1,6 @@
-var css, view, helper;
+var css, view, helper, scrollingDidCompleteCount,
+didInitializeScrollerCount, scrollerDimensionsDidChange;
+
 require('list-view/~tests/test_helper');
 helper = window.helper;
 
@@ -10,6 +12,7 @@ function Scroller(callback, opts){
   };
   this.setDimensions = function(){};
 }
+
 window.Scroller = Scroller;
 
 function appendView() {
@@ -75,6 +78,57 @@ test("should render a subset of the full content, based on the height, in the co
   equal(positionSorted[10].innerText, "Item 11");
 
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]);
+});
+
+test("lifecycle events", function(){
+  var content = helper.generateContent(100),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      }),
+    scrollingDidCompleteCount = 0,
+    didInitializeScrollerCount = 0,
+    scrollerDimensionsDidChangeCount = 0;
+
+  view = Ember.VirtualListView.extend({
+    init: function(){
+      // Some hooks for testing
+      this.on('didInitializeScroller', function(){ didInitializeScrollerCount++; });
+      this.on('scrollingDidComplete',  function(){ scrollingDidCompleteCount++;  });
+      this.on('scrollerDimensionsDidChange',  function(){ scrollerDimensionsDidChangeCount++;  });
+      this._super();
+    }
+  }).create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 475
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 1, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 0, 'scrollingDidCompleteCount event was NOT fired on create');
+
+  appendView();
+
+  Ember.run(function(){
+    view.set('height', height + 1);
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 2, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 0, 'scrollingDidCompleteCount event was NOT fired on create');
+
+  Ember.run(function(){
+    view.scrollTo(0, true);
+    view.scroller.opts.scrollingComplete();
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 2, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 1, 'scrollingDidCompleteCount event was NOT fired on create');
 });
 
 test("should render correctly with an initial scrollTop", function() {

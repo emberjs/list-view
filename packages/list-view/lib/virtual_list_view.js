@@ -14,6 +14,7 @@ function updateScrollerDimensions(target) {
   totalHeight = get(target, 'totalHeight');
 
   target.scroller.setDimensions(width, height, width, totalHeight);
+  target.trigger('scrollerDimensionsDidChange');
 }
 
 /**
@@ -36,20 +37,24 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   applyTransform: Ember.ListViewHelper.applyTransform,
 
   setupScroller: function(){
-    var _this = this;
+    var view = this;
 
-    this.scroller = new Scroller(function(left, top, zoom) {
-      if (_this.state !== 'inDOM') { return; }
+    view.scroller = new Scroller(function(left, top, zoom) {
+      if (view.state !== 'inDOM') { return; }
 
-      if (_this.listContainerElement) {
-        _this.applyTransform(_this.listContainerElement, {x: 0, y: -top});
-        _this._scrollContentTo(max(0, top));
+      if (view.listContainerElement) {
+        view.applyTransform(view.listContainerElement, {x: 0, y: -top});
+        view._scrollContentTo(max(0, top));
       }
     }, {
-      scrollingX: false
+      scrollingX: false,
+      scrollingComplete: function(){
+        view.trigger('scrollingDidComplete');
+      }
     });
 
-    updateScrollerDimensions(this);
+    view.trigger('didInitializeScroller');
+    updateScrollerDimensions(view);
   },
 
   scrollerDimensionsNeedToChange: Ember.observer(function() {
@@ -135,6 +140,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     if (animate === undefined) {
       animate = true;
     }
+
     this.scroller.scrollTo(0, y, animate, 1);
   }
 });
