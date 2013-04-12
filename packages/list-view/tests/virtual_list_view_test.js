@@ -1,5 +1,6 @@
-var css, view, helper, scrollingDidCompleteCount,
-didInitializeScrollerCount, scrollerDimensionsDidChange;
+var setDimensionsCalled = 0,
+    css, view, helper, scrollingDidCompleteCount,
+    didInitializeScrollerCount, scrollerDimensionsDidChange;
 
 require('list-view/~tests/test_helper');
 helper = window.helper;
@@ -10,7 +11,7 @@ function Scroller(callback, opts){
   this.scrollTo = function(left, top, zoom) {
     view._scrollContentTo(Math.max(0, top));
   };
-  this.setDimensions = function(){};
+  this.setDimensions = function() { setDimensionsCalled = setDimensionsCalled + 1; };
 }
 
 window.Scroller = Scroller;
@@ -78,6 +79,31 @@ test("should render a subset of the full content, based on the height, in the co
   equal(positionSorted[10].innerText, "Item 11");
 
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]);
+});
+
+test("should update dimensions of scroller when totalHeight changes", function() {
+  var content = helper.generateContent(100),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  view = Ember.VirtualListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
+  });
+
+  appendView();
+  setDimensionsCalled = 0;
+
+  Ember.run(function(){
+    content.pushObject({name: "New Item"});
+  });
+
+  equal(setDimensionsCalled, 1, "setDimensions was called on the scroller");
 });
 
 test("lifecycle events", function(){
