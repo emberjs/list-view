@@ -162,8 +162,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     childsCurrentContentIndex = get(childView, 'contentIndex');
 
-    this._prepareChildForReuse(childView);
-
     position = this.positionForIndex(contentIndex);
 
     set(childView, 'position', position);
