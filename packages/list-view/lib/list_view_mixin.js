@@ -119,6 +119,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     endingIndex = min(maxContentIndex, visibleEndingIndex);
 
+    this.trigger('scrollContentTo', scrollTop);
+
     if (!options.force && startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
       return;
     }
