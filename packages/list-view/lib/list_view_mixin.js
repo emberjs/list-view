@@ -97,16 +97,16 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     return style;
   }),
+
   scrollTo: function(y) {
     throw "must override to perform the visual scroll and effectively delegate to _scrollContentTo";
   },
-  _scrollContentTo: function(scrollTop, options) {
+
+  _scrollContentTo: function(scrollTop) {
     var contentLength, childViews, childViewsLength,
         startingIndex, endingIndex, childView, attrs,
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd;
-
-    options = options || { };
 
     set(this, 'scrollTop', scrollTop);
     contentLength = get(this, 'content.length');
@@ -121,7 +121,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this.trigger('scrollContentTo', scrollTop);
 
-    if (!options.force && startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
+    if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
       return;
     }
 
@@ -129,7 +129,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
       childView = childViews[contentIndex % childViewsLength];
-      this._reuseChildForContentIndex(childView, contentIndex, options);
+      this._reuseChildForContentIndex(childView, contentIndex);
     }
 
     this._lastStartingIndex = startingIndex;
@@ -153,21 +153,24 @@ Ember.ListViewMixin = Ember.Mixin.create({
     childView.prepareForReuse();
   },
 
-  _reuseChildForContentIndex: function(childView, contentIndex, options) {
-    var content, childsCurrentContentIndex, position;
+  _reuseChildForContentIndex: function(childView, contentIndex) {
+    var content, context, newContext, childsCurrentContentIndex, position;
 
     content = get(this, 'content');
+    context = get(childView, 'context');
+    newContext = content.objectAt(contentIndex);
+
     childsCurrentContentIndex = get(childView, 'contentIndex');
 
-    options = options || {};
     this._prepareChildForReuse(childView);
 
-    if (childsCurrentContentIndex !== contentIndex || options.force) {
-      position = this.positionForIndex(contentIndex);
+    position = this.positionForIndex(contentIndex);
 
-      set(childView, 'position', position);
+    set(childView, 'position', position);
+
+    if (childsCurrentContentIndex !== contentIndex || newContext !== context) {
       set(childView, 'contentIndex', contentIndex);
-      set(childView, 'context', content.objectAt(contentIndex));
+      set(childView, 'context', newContext);
     }
   },
 
@@ -214,13 +217,14 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   columnCountDidChange: Ember.observer(function(){
     var ratio, currentScrollTop, proposedScrollTop, maxScrollTop,
-        scrollTop, lastColumnCount, newColumnCount;
+        scrollTop, lastColumnCount, newColumnCount, element;
 
     lastColumnCount = this._lastColumnCount;
 
     currentScrollTop = get(this, 'scrollTop');
     newColumnCount = get(this, 'columnCount');
     maxScrollTop = get(this, 'maxScrollTop');
+    element = get(this, 'element');
 
     this._lastColumnCount = newColumnCount;
 
@@ -229,6 +233,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
       proposedScrollTop = currentScrollTop * ratio;
       scrollTop = min(maxScrollTop, proposedScrollTop);
       set(this, 'scrollTop', scrollTop);
+
+      if (element) { element.scrollTop = scrollTop; }
     }
 
     if (arguments.length > 0) {
@@ -346,7 +352,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
         forEach(removeAndDestroy, this);
     }
 
-    this._scrollContentTo(get(this, 'scrollTop'), { force: true });
+    this._scrollContentTo(get(this, 'scrollTop'));
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
@@ -373,11 +379,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
       if( start >= this._lastStartingIndex || start < this._lastEndingIndex) {
         index = 0;
         // ignore all changes not in the visible range
+        // this can re-position many, rather then causing a cascade of re-renders
         this.positionOrderedChildViews().
-          slice(start, start + addedCount).
           forEach(function(childView){
             contentIndex = this._lastStartingIndex + index;
-            this._reuseChildForContentIndex(childView, contentIndex, { force: true });
+            this._reuseChildForContentIndex(childView, contentIndex);
             index++;
           }, this);
       }
