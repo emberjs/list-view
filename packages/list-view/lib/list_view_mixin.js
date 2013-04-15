@@ -121,9 +121,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this.trigger('scrollContentTo', scrollTop);
 
-    if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
-      return;
-    }
+    // We were sometimes returning when we have elements that need to be repositioned
+    // For example when all elements fit on screen and column count changes
+    // if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
+    //   return;
+    // }
 
     contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
 
