@@ -60,6 +60,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   attributeBindings: ['style'],
   domManager: domManager,
   scrollTop: 0,
+  bottomPadding: 0,
   _lastEndingIndex: 0,
   paddingCount: 1, // One row for padding
 
@@ -141,14 +142,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
   childViewsWillSync: Ember.K,
   childViewsDidSync: Ember.K,
 
-  totalHeight: Ember.computed('content.length', 'rowHeight', 'columnCount', function() {
+  totalHeight: Ember.computed('content.length', 'rowHeight', 'columnCount', 'bottomPadding', function() {
     var contentLength, rowHeight, columnCount;
 
     contentLength = get(this, 'content.length');
     rowHeight = get(this, 'rowHeight');
     columnCount = get(this, 'columnCount');
+    bottomPadding = get(this, 'bottomPadding');
 
-    return (ceil(contentLength / columnCount)) * rowHeight;
+    return ((ceil(contentLength / columnCount)) * rowHeight) + bottomPadding;
   }),
 
   _prepareChildForReuse: function(childView) {
