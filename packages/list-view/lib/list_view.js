@@ -35,6 +35,12 @@ domManager.prepend = function(view, html) {
   notifyMutationListeners();
 };
 
+/**
+  ListViewMixin
+
+  @class ListViewMixin
+  @namespace Ember
+*/
 Ember.ListViewMixin = Ember.Mixin.create({
   itemViewClass: Ember.ListItemView,
   classNames: ['ember-list-view'],
@@ -62,6 +68,13 @@ Ember.ListViewMixin = Ember.Mixin.create({
     return style;
   }),
 
+  /**
+    Called when the element of the view has been inserted into the DOM
+    or after the view was re-rendered. Override this function to do any
+    set up that requires an element in the document body.
+
+    @event didInsertElement
+  */
   didInsertElement: function() {
     var self, element;
 
@@ -390,6 +403,12 @@ function notifyMutationListeners() {
   }
 }
 
+/**
+  ListView
+
+  @class ListView
+  @namespace Ember
+*/
 Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   render: function(buffer) {
     buffer.push('<div class="ember-list-container">');
@@ -419,6 +438,12 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   }
 });
 
+/**
+  VirtualListView
+
+  @class VirtualListView
+  @namespace Ember
+*/
 Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   touchMove: function(e){
     e.preventDefault();

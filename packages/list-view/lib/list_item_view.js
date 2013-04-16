@@ -107,6 +107,12 @@ function updateStyle() {
   this._position = position;
 }
 
+/**
+  ListItemView
+
+  @class ListItemView
+  @namespace Ember
+*/
 Ember.ListItemView = Ember.View.extend({
   classNames: ['ember-list-item-view'],
 
