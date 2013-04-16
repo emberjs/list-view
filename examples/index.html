@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+  </head>
+  <body>
+  <style>
+    .list-view {
+      overflow: auto;
+      position: relative;
+    }
+    .list-item-view {
+      position: absolute;
+    }
+  </style>
+    <script src="libs/jquery.js"></script>
+    <script src="libs/handlebars.js"></script>
+    <script src="libs/ember.js"></script>
+    <script src="libs/list-view.js"></script>
+    <script type="text/x-handlebars" data-template-name="index">
+      <h2>List View Demo</h2>
+      {{view App.ListView contentBinding="content"}}
+    </script>
+    <script type="text/x-handlebars" data-template-name="list_item">
+      {{name}}
+    </script>
+    <script>
+      App = Ember.Application.create({});
+
+      App.IndexRoute = Ember.Route.extend({
+        setupController: function(controller) {
+          var content = [];
+          for (var i = 0; i < 10000; i++) {
+            content.push({name: "Item " + i});
+          }
+          controller.set('content', content);
+        }
+      });
+
+      App.ListView = Ember.ListView.extend({
+        height: 500,
+        rowHeight: 50,
+        itemViewClass: Ember.ListItemView.extend({templateName: "list_item"})
+      });
+    </script>
+  </body>
+</html>
