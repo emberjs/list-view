@@ -1,0 +1,13 @@
+{
+  "name": "Ember.ListView Documentation",
+  "description": "An efficient incremental rendering list view for large lists.",
+  "version": "0.0.1",
+  "url": "https://github.com/emberjs/list-view",
+  "options": {
+    "paths": [
+      "../packages/list-view/lib"
+    ],
+    "exclude": "vendor",
+    "outdir": "./build"
+  }
+}

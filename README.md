@@ -49,6 +49,4 @@ Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master
 
 ## Running unit tests
 
-bundle
-bundle exec rackup
-open http://localhost:9292 in a browser
+Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.

@@ -1,0 +1,7 @@
+{
+  "name": "ember-list-view-docs",
+  "version": "0.0.1",
+  "dependencies": {
+    "yuidoc": "git://github.com/yui/yuidoc.git"
+  }
+}
