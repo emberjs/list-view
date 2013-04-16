@@ -62,3 +62,17 @@ test("odd", function(){
   equal(view.get('totalHeight'), 550);
 });
 
+test("with bottomPadding", function(){
+  var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
+
+  view = Ember.ListView.create({
+    height: height,
+    rowHeight: rowHeight,
+    content: helper.generateContent(20),
+    width: width,
+    elementWidth: elementWidth,
+    bottomPadding: 25
+  });
+
+  equal(view.get('totalHeight'), 525);
+});
