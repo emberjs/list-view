@@ -143,7 +143,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   childViewsDidSync: Ember.K,
 
   totalHeight: Ember.computed('content.length', 'rowHeight', 'columnCount', 'bottomPadding', function() {
-    var contentLength, rowHeight, columnCount;
+    var contentLength, rowHeight, columnCount, bottomPadding;
 
     contentLength = get(this, 'content.length');
     rowHeight = get(this, 'rowHeight');
