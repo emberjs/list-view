@@ -1,0 +1,13 @@
+{
+  "name": "The Ember List View Documentation",
+  "description": "The Ember List View Documentation",
+  "version": "0.0.1",
+  "url": "https://github.com/emberjs/list-view",
+  "options": {
+    "paths": [
+      "../packages/list-view/lib"
+    ],
+    "exclude": "vendor",
+    "outdir": "./build"
+  }
+}
