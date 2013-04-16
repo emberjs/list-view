@@ -1,9 +1,10 @@
 require 'bundler/setup'
 require 'ember-dev'
 
-# This is not ideal
-map "/lib" do
-  run Rack::Directory.new('lib')
+%W|demos lib|.each do |path|
+  map "/#{path}" do
+    run Rack::Directory.new(path)
+  end
 end
 
 run EmberDev::Server.new
