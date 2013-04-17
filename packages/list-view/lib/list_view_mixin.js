@@ -103,20 +103,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
     throw "must override to perform the visual scroll and effectively delegate to _scrollContentTo";
   },
 
-  _scrollContentTo: function(scrollTop, options) {
-    var contentLength, childViews, childViewsLength,
-        startingIndex, endingIndex, childView, attrs,
+  _scrollContentTo: function(scrollTop) {
+    var startingIndex, endingIndex,
         contentIndex, visibleEndingIndex, maxContentIndex,
-        contentIndexEnd;
+        contentIndexEnd, contentLength;
 
-
-    options = { force: false };
-
-    set(this, 'scrollTop', scrollTop);
     contentLength = get(this, 'content.length');
+    set(this, 'scrollTop', scrollTop);
+
     maxContentIndex = max(contentLength - 1, 0);
-    childViews = get(this, 'listItemViews');
-    childViewsLength =  childViews.length;
 
     startingIndex = this._startingIndex();
     visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
@@ -125,16 +120,12 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this.trigger('scrollContentTo', scrollTop);
 
-    if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex && !options.force) {
+    if (startingIndex === this._lastStartingIndex &&
+        endingIndex === this._lastEndingIndex) {
       return;
     }
 
-    contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
-
-    for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
-      childView = childViews[contentIndex % childViewsLength];
-      this._reuseChildForContentIndex(childView, contentIndex);
-    }
+    this._reuseChildren();
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex = endingIndex;
@@ -243,7 +234,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
     if (arguments.length > 0) {
       // invoked by observer
       Ember.run.schedule('afterRender', this, syncListContainerWidth);
-
     }
   }, 'columnCount'),
 
@@ -355,12 +345,41 @@ Ember.ListViewMixin = Ember.Mixin.create({
         forEach(removeAndDestroy, this);
     }
 
-    this._scrollContentTo(get(this, 'scrollTop'), { force: true });
+    this._scrollContentTo(get(this, 'scrollTop'));
+
+    this._reuseChildren();
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
 
     this.childViewsDidSync();
+  },
+
+  _reuseChildren: function(){
+    var contentLength, childViews, childViewsLength,
+        startingIndex, endingIndex, childView, attrs,
+        contentIndex, visibleEndingIndex, maxContentIndex,
+        contentIndexEnd, scrollTop;
+
+    scrollTop = get(this, 'scrollTop');
+    contentLength = get(this, 'content.length');
+    maxContentIndex = max(contentLength - 1, 0);
+    childViews = get(this, 'listItemViews');
+    childViewsLength =  childViews.length;
+
+    startingIndex = this._startingIndex();
+    visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
+
+    endingIndex = min(maxContentIndex, visibleEndingIndex);
+
+    this.trigger('scrollContentTo', scrollTop);
+
+    contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
+
+    for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
+      childView = childViews[contentIndex % childViewsLength];
+      this._reuseChildForContentIndex(childView, contentIndex);
+    }
   },
 
   listItemViews: Ember.computed('[]', function(){

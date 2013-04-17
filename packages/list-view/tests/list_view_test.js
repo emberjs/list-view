@@ -170,6 +170,78 @@ test("height change", function(){
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100], "The rows are in the correct positions" );
 });
 
+test("adding a column, when everything is already within viewport", function(){
+  // start off with 2x3 grid visible and 4 elements
+  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element, ?: no element
+  //
+  // x x  --|
+  // x x    |- viewport
+  // ? ?  --|
+  var content = helper.generateContent(4),
+      width = 100,
+      height = 150,
+      rowHeight = 50,
+      elementWidth = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        NestedViewClass: Ember.View.extend({
+          tagName: 'span',
+          template: Ember.Handlebars.compile("B:{{name}}")
+        })
+      });
+
+  view = Ember.ListView.create({
+    content: content,
+    width: width,
+    height: height,
+    rowHeight: rowHeight,
+    elementWidth: elementWidth,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  deepEqual(helper.itemPositions(view), [
+            { x:  0, y:    0 }, { x: 50, y:    0 },
+            { x:  0, y:   50 }, { x: 50, y:   50 }
+            ], "initial render: The rows are rendered in the correct positions");
+
+  equal(view.$('.ember-list-item-view').length, 4, "initial render: The correct number of rows were rendered");
+
+  // rotate to a with 3x2 grid visible and 8 elements
+  // rapid dimension changes
+  Ember.run(function() {
+    view.set('width',  140);
+  });
+
+  Ember.run(function() {
+    view.set('width',  150);
+  });
+
+  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element
+  //
+  // x x x --|
+  // x ? ?   |- viewport
+  // ? ? ? --|
+
+  equal(view.$('.ember-list-item-view').length, 4, "after width + height change: the correct number of rows were rendered");
+
+  deepEqual(helper.itemPositions(view), [
+            { x:  0, y:  0 }, { x: 50, y: 0 }, { x: 100, y: 0 },
+            { x:  0, y: 50 }
+            ], "after width + height change: The rows are in the correct positions");
+
+  var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+  deepEqual(texts, [
+             'A:Item 1B:Item 1',
+             'A:Item 2B:Item 2',
+             'A:Item 3B:Item 3',
+             'A:Item 4B:Item 4'
+            ], 'after width + height change: elements should be rendered in expected position');
+});
+
 test("height and width change after with scroll – simple", function(){
   // start off with 2x3 grid visible and 10 elements, at top of scroll
   // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element
