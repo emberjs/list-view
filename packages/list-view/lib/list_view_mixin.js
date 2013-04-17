@@ -332,14 +332,16 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     if (delta === 0) {
       // no change
-    } else if (delta > 0) { // more views are needed
+    } else if (delta > 0) {
+      // more views are needed
       contentIndex = this._lastEndingIndex;
 
       for (count = 0; count < delta; count++, contentIndex++) {
         this._addItemView(contentIndex);
       }
 
-    } else { // less views are needed
+    } else {
+      // less views are needed
       childViews.
         splice(numberOfChildViewsNeeded, numberOfChildViews).
         forEach(removeAndDestroy, this);

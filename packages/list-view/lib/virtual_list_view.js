@@ -86,7 +86,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
         candidatePosition = this.scroller.__scrollTop + delta;
 
     if ((candidatePosition >= 0) && (candidatePosition <= this.scroller.__maxScrollTop)) {
-      //TODO: this.showScrollbar()
       this.scroller.scrollBy(0, delta, true);
     }
 
