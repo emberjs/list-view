@@ -27,6 +27,12 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     'overflow-scrolling': 'touch'
   },
 
+  scrollTo: function(y){
+    var element = get(this, 'element');
+    element.scrollTop = y;
+    this._scrollContentTo(y);
+  },
+
   childViewsWillSync: function(){
     var scrollingView;
     scrollingView = get(this, '_scrollingView');
