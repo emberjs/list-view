@@ -103,11 +103,14 @@ Ember.ListViewMixin = Ember.Mixin.create({
     throw "must override to perform the visual scroll and effectively delegate to _scrollContentTo";
   },
 
-  _scrollContentTo: function(scrollTop) {
+  _scrollContentTo: function(scrollTop, options) {
     var contentLength, childViews, childViewsLength,
         startingIndex, endingIndex, childView, attrs,
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd;
+
+
+    options = { force: false };
 
     set(this, 'scrollTop', scrollTop);
     contentLength = get(this, 'content.length');
@@ -122,11 +125,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this.trigger('scrollContentTo', scrollTop);
 
-    // We were sometimes returning when we have elements that need to be repositioned
-    // For example when all elements fit on screen and column count changes
-    // if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex) {
-    //   return;
-    // }
+    if (startingIndex === this._lastStartingIndex && endingIndex === this._lastEndingIndex && !options.force) {
+      return;
+    }
 
     contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
 
@@ -354,7 +355,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
         forEach(removeAndDestroy, this);
     }
 
-    this._scrollContentTo(get(this, 'scrollTop'));
+    this._scrollContentTo(get(this, 'scrollTop'), { force: true });
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
