@@ -1,6 +1,21 @@
-var css, view, helper;
+var setDimensionsCalled = 0,
+    css, view, helper, scrollingDidCompleteCount,
+    didInitializeScrollerCount, scrollerDimensionsDidChange;
+
 require('list-view/~tests/test_helper');
 helper = window.helper;
+
+function Scroller(callback, opts){
+  this.callback = callback;
+  this.opts = opts;
+  this.scrollTo = function(left, top, zoom) {
+    view._scrollContentTo(Math.max(0, top));
+  };
+  this.setDimensions = function() { setDimensionsCalled = setDimensionsCalled + 1; };
+  this.doTouchStart = function() {};
+  this.doTouchMove = function() {};
+  this.doTouchEnd = function() {};
+}
 
 function appendView() {
   Ember.run(function() {
@@ -8,8 +23,9 @@ function appendView() {
   });
 }
 
-module("Ember.ListView Acceptance", {
+module("Ember.VirtualListView Acceptance", {
   setup: function() {
+    window.Scroller = Scroller;
     css = Ember.$("<style>" +
             ".ember-list-view {" +
             "  overflow: auto;" +
@@ -33,7 +49,7 @@ module("Ember.ListView Acceptance", {
 });
 
 test("should exist", function() {
-  view = Ember.ListView.create();
+  view = Ember.VirtualListView.create();
   appendView();
   ok(view);
 });
@@ -46,7 +62,7 @@ test("should render a subset of the full content, based on the height, in the co
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     rowHeight: rowHeight,
@@ -56,7 +72,7 @@ test("should render a subset of the full content, based on the height, in the co
   appendView();
 
   equal(view.get('element').style.height, "500px", "The list view height is correct");
-  equal(view.$(':last')[0].style.height, "5000px", "The scrollable view has the correct height");
+  // equal(view.$(':last')[0].style.height, "5000px", "The scrollable view has the correct height");
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
@@ -67,6 +83,82 @@ test("should render a subset of the full content, based on the height, in the co
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]);
 });
 
+test("should update dimensions of scroller when totalHeight changes", function() {
+  var content = helper.generateContent(100),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  view = Ember.VirtualListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
+  });
+
+  appendView();
+  setDimensionsCalled = 0;
+
+  Ember.run(function(){
+    content.pushObject({name: "New Item"});
+  });
+
+  equal(setDimensionsCalled, 1, "setDimensions was called on the scroller");
+});
+
+test("lifecycle events", function(){
+  var content = helper.generateContent(100),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      }),
+    scrollingDidCompleteCount = 0,
+    didInitializeScrollerCount = 0,
+    scrollerDimensionsDidChangeCount = 0;
+
+  view = Ember.VirtualListView.extend({
+    init: function(){
+      // Some hooks for testing
+      this.on('didInitializeScroller', function(){ didInitializeScrollerCount++; });
+      this.on('scrollingDidComplete',  function(){ scrollingDidCompleteCount++;  });
+      this.on('scrollerDimensionsDidChange',  function(){ scrollerDimensionsDidChangeCount++;  });
+      this._super();
+    }
+  }).create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 475
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 1, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 0, 'scrollingDidCompleteCount event was NOT fired on create');
+
+  appendView();
+
+  Ember.run(function(){
+    view.set('height', height + 1);
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 2, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 0, 'scrollingDidCompleteCount event was NOT fired on create');
+
+  Ember.run(function(){
+    view.scrollTo(0, true);
+    view.scroller.opts.scrollingComplete();
+  });
+
+  equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
+  equal(scrollerDimensionsDidChangeCount, 2, 'scrollerDimensionsDidChangeCount event was fired on create');
+  equal(scrollingDidCompleteCount, 1, 'scrollingDidCompleteCount event was NOT fired on create');
+});
+
 test("should render correctly with an initial scrollTop", function() {
   var content = helper.generateContent(100),
       height = 500,
@@ -75,7 +167,7 @@ test("should render correctly with an initial scrollTop", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     rowHeight: rowHeight,
@@ -103,7 +195,7 @@ test("should be programatically scrollable", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     rowHeight: rowHeight,
@@ -136,7 +228,7 @@ test("height change", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     rowHeight: rowHeight,
@@ -170,78 +262,6 @@ test("height change", function(){
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100], "The rows are in the correct positions" );
 });
 
-test("adding a column, when everything is already within viewport", function(){
-  // start off with 2x3 grid visible and 4 elements
-  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element, ?: no element
-  //
-  // x x  --|
-  // x x    |- viewport
-  // ? ?  --|
-  var content = helper.generateContent(4),
-      width = 100,
-      height = 150,
-      rowHeight = 50,
-      elementWidth = 50,
-      itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
-        NestedViewClass: Ember.View.extend({
-          tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
-        })
-      });
-
-  view = Ember.ListView.create({
-    content: content,
-    width: width,
-    height: height,
-    rowHeight: rowHeight,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
-  });
-
-  appendView();
-
-  deepEqual(helper.itemPositions(view), [
-            { x:  0, y:    0 }, { x: 50, y:    0 },
-            { x:  0, y:   50 }, { x: 50, y:   50 }
-            ], "initial render: The rows are rendered in the correct positions");
-
-  equal(view.$('.ember-list-item-view').length, 4, "initial render: The correct number of rows were rendered");
-
-  // rotate to a with 3x2 grid visible and 8 elements
-  // rapid dimension changes
-  Ember.run(function() {
-    view.set('width',  140);
-  });
-
-  Ember.run(function() {
-    view.set('width',  150);
-  });
-
-  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element
-  //
-  // x x x --|
-  // x ? ?   |- viewport
-  // ? ? ? --|
-
-  equal(view.$('.ember-list-item-view').length, 4, "after width + height change: the correct number of rows were rendered");
-
-  deepEqual(helper.itemPositions(view), [
-            { x:  0, y:  0 }, { x: 50, y: 0 }, { x: 100, y: 0 },
-            { x:  0, y: 50 }
-            ], "after width + height change: The rows are in the correct positions");
-
-  var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
-  deepEqual(texts, [
-             'A:Item 1B:Item 1',
-             'A:Item 2B:Item 2',
-             'A:Item 3B:Item 3',
-             'A:Item 4B:Item 4'
-            ], 'after width + height change: elements should be rendered in expected position');
-});
-
 test("height and width change after with scroll – simple", function(){
   // start off with 2x3 grid visible and 10 elements, at top of scroll
   // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element
@@ -264,7 +284,7 @@ test("height and width change after with scroll – simple", function(){
         })
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     width: width,
     height: height,
@@ -363,7 +383,7 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items, ", 
         })
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     width: width,
     height: height,
@@ -443,7 +463,7 @@ test("elementWidth change", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     width: width,
@@ -528,7 +548,7 @@ test("elementWidth change with scroll", function(){
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     width: width,
@@ -612,7 +632,7 @@ test("A property of an item can be changed", function() {
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: content,
     height: height,
     rowHeight: rowHeight,
@@ -646,20 +666,21 @@ test("A property of an item can be changed", function() {
 });
 
 test("The list view is wrapped in an extra div to support JS-emulated scrolling", function() {
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: Ember.A({}),
     height: 100,
     rowHeight: 50
   });
 
   appendView();
+
   equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
-  equal(view.$('.ember-list-container > .ember-list-item-view').length, 0, "expected ember-list-items inside the wrapper div");
-  equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 1, "expected a ember-list-scrolling-view inside the wrapper div");
+  equal(view.$('.ember-list-container > .ember-list-item-view').length, 0, "expected no ember-list-items inside the wrapper div");
+  equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 0, "expected no ember-list-scrolling-view inside the wrapper div");
 });
 
 test("When scrolled to the very bottom, the 'padding' list items should be empty", function() {
-  view = Ember.ListView.create({
+  view = Ember.VirtualListView.create({
     content: helper.generateContent(4),
     height: 150,
     rowHeight: 50,
@@ -676,5 +697,101 @@ test("When scrolled to the very bottom, the 'padding' list items should be empty
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view')),
       lastEl = sortedElements[sortedElements.length - 1];
+
   equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
+});
+
+test("When destroyed, short-circuits syncChildViews", function() {
+  expect(1);
+
+  view = Ember.VirtualListView.create({
+    content: helper.generateContent(4),
+    height: 150,
+    rowHeight: 50
+  });
+
+  appendView();
+
+  Ember.run(function(){
+    view.destroy();
+  });
+
+  Ember.run(function(){
+    view._syncChildViews();
+  });
+
+  ok(true, 'made it!');
+});
+
+test("adding a column, when everything is already within viewport", function(){
+  // start off with 2x3 grid visible and 4 elements
+  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element, ?: no element
+  //
+  // x x  --|
+  // x x    |- viewport
+  // ? ?  --|
+  var content = helper.generateContent(4),
+      width = 100,
+      height = 150,
+      rowHeight = 50,
+      elementWidth = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        NestedViewClass: Ember.View.extend({
+          tagName: 'span',
+          template: Ember.Handlebars.compile("B:{{name}}")
+        })
+      });
+
+  view = Ember.VirtualListView.create({
+    content: content,
+    width: width,
+    height: height,
+    rowHeight: rowHeight,
+    elementWidth: elementWidth,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  deepEqual(helper.itemPositions(view), [
+            { x:  0, y:    0 }, { x: 50, y:    0 },
+            { x:  0, y:   50 }, { x: 50, y:   50 }
+            ], "initial render: The rows are rendered in the correct positions");
+
+  equal(view.$('.ember-list-item-view').length, 4, "initial render: The correct number of rows were rendered");
+
+  // rapid dimension changes
+  Ember.run(function() {
+    view.set('width',  140);
+  });
+
+  Ember.run(function() {
+    view.set('width',  150);
+  });
+
+
+  // x: visible, +: padding w/ element, 0: element not-drawn, o: padding w/o element
+  //
+  // x x x --|
+  // x ? ?   |- viewport
+  // ? ? ? --|
+
+  equal(view.$('.ember-list-item-view').length, 4, "after width + height change: the correct number of rows were rendered");
+
+  deepEqual(helper.itemPositions(view), [
+            { x:  0, y:  0 }, { x: 50, y: 0 }, { x: 100, y: 0 },
+            { x:  0, y: 50 }
+            ], "after width + height change: The rows are in the correct positions");
+
+  var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+
+  deepEqual(texts, [
+             'A:Item 1B:Item 1',
+             'A:Item 2B:Item 2',
+             'A:Item 3B:Item 3',
+             'A:Item 4B:Item 4'
+            ], 'after width + height change: elements should be rendered in expected position');
 });

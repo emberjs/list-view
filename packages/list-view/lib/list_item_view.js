@@ -1,26 +1,6 @@
+require('list-view/list_view_helper');
+
 var get = Ember.get, set = Ember.set;
-
-// extract into positiongDelegate
-var applyTransform = (function(){
-  var element = document.createElement('div');
-
-  if ('webkitTransform' in element.style){
-    return function(element, position){
-      var x = position.x,
-          y = position.y;
-
-      element.style.webkitTransform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-    };
-  }else{
-    return function(element, position){
-      var x = position.x,
-          y = position.y;
-
-      element.style.top =  y + 'px';
-      element.style.left = x + 'px';
-    };
-  }
-})();
 
 var backportedInnerString = function(buffer) {
   var content = [], childBuffers = buffer.childBuffers;
@@ -120,11 +100,7 @@ Ember.ListItemView = Ember.View.extend({
   _updateStyle: updateStyle,
   _contextDidChange: Ember.observer(rerender, 'context'),
 
-  applyTransform: applyTransform,
+  applyTransform: Ember.ListViewHelper.applyTransform,
   positionDidChange: Ember.observer(updateStyle, 'position'),
-  didInsertElement: updateStyle,
-
-  prepareForReuse: function() {
-    this._position = null;
-  }
+  didInsertElement: updateStyle
 });
