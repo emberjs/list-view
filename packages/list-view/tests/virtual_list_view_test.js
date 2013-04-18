@@ -673,6 +673,7 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
   });
 
   appendView();
+
   equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
   equal(view.$('.ember-list-container > .ember-list-item-view').length, 0, "expected no ember-list-items inside the wrapper div");
   equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 0, "expected no ember-list-scrolling-view inside the wrapper div");
@@ -696,23 +697,29 @@ test("When scrolled to the very bottom, the 'padding' list items should be empty
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view')),
       lastEl = sortedElements[sortedElements.length - 1];
+
   equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
 });
 
 test("When destroyed, short-circuits syncChildViews", function() {
   expect(1);
+
   view = Ember.VirtualListView.create({
     content: helper.generateContent(4),
     height: 150,
     rowHeight: 50
   });
+
   appendView();
+
   Ember.run(function(){
     view.destroy();
   });
+
   Ember.run(function(){
     view._syncChildViews();
   });
+
   ok(true, 'made it!');
 });
 
@@ -780,6 +787,7 @@ test("adding a column, when everything is already within viewport", function(){
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
   var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+
   deepEqual(texts, [
              'A:Item 1B:Item 1',
              'A:Item 2B:Item 2',
