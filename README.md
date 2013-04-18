@@ -7,7 +7,6 @@ An efficient incremental rendering list view for large lists.
 
 [Demo on JSBin](http://jsbin.com/igawaq/23/)
 
-
 ## Usage
 
 ### Template
@@ -47,6 +46,12 @@ You can customize the row views by subclassing `Ember.ListItemView` and specifyi
 
 Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js) for more information.
 
+## Building Ember.ListView
+
+1. Run `bundle install` to fetch the necessary ruby gems.
+2. Run `rake dist` to build Ember.ListView. `list-view.js` will be
+placed in the `dist/modules` directory.
+ 
 ## Running unit tests
 
 Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
