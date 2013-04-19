@@ -3,31 +3,37 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <link rel="stylesheet" href="css/example.css">
+    <title>Ember.ListView examples</title>
   </head>
   <body>
-  <style>
-    .list-view {
-      overflow: auto;
-      position: relative;
-    }
-    .list-item-view {
-      position: absolute;
-    }
-  </style>
     <script src="libs/jquery.js"></script>
     <script src="libs/handlebars.js"></script>
     <script src="libs/ember.js"></script>
     <script src="libs/list-view.js"></script>
     <script type="text/x-handlebars" data-template-name="index">
-      <h2>List View Demo</h2>
-      {{view App.ListView contentBinding="content"}}
+      <ul class="examples-list">
+        <li>
+          <h2>List View Demo</h2>
+          {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50 width=500}}
+            {{name}}
+          {{/collection}}
+        </li>
+        <li>
+          <h2>List View Demo</h2>
+          {{view App.ListView contentBinding="content"}}
+        </li>
+      </ul>
     </script>
-    <script type="text/x-handlebars" data-template-name="list_item">
+    <script type="text/x-handlebars" data-template-name="row_item">
       {{name}}
     </script>
     <script>
       App = Ember.Application.create({});
+
+      App.IndexController = Ember.ArrayController.extend({
+        content: []
+      });
 
       App.IndexRoute = Ember.Route.extend({
         setupController: function(controller) {
@@ -41,8 +47,10 @@
 
       App.ListView = Ember.ListView.extend({
         height: 500,
-        rowHeight: 50,
-        itemViewClass: Ember.ListItemView.extend({templateName: "list_item"})
+        width: 500,
+        elementWidth: 80,
+        rowHeight: 20,
+        itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
       });
     </script>
   </body>
