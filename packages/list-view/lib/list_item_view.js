@@ -88,8 +88,28 @@ function updateStyle() {
 }
 
 /**
-  ListItemView
+  The `Ember.ListViewItem` view class renders a
+  [div](https://developer.mozilla.org/en/HTML/Element/div) HTML element
+  with `ember-list-item-view` class. It allows you to specify a custom item
+  handlebars template for `Ember.ListView`.
 
+  Example:
+
+  ```handlebars
+  <script type="text/x-handlebars" data-template-name="row_item">
+    {{name}}
+  </script>
+  ```
+
+  ```javascript
+  App.ListView = Ember.ListView.extend({
+    height: 500,
+    rowHeight: 20,
+    itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
+  });
+  ```
+
+  @extends Ember.View
   @class ListItemView
   @namespace Ember
 */
