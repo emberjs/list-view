@@ -121,6 +121,16 @@ App.ListView = Ember.ListView.extend({
 }
 ```
 
+## How it works
+
+`Ember.ListView` will create enough rows to fill the visible area (as defined by the `height` property). It reacts to scroll events and reuses/repositions the rows as scrolled.
+
+Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js) for more information.
+
+## Running unit tests
+
+Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
+
 ## List of contributors
 
 + [Ray Cohen](https://github.com/raycohen)
@@ -132,13 +142,3 @@ App.ListView = Ember.ListView.extend({
 + [Sebastian Seilund](https://github.com/sebastianseilund)
 
 A lot of the work was sponsored by [Yapp Labs](https://www.yapp.us/).
-
-## How it works
-
-`Ember.ListView` will create enough rows to fill the visible area (as defined by the `height` property). It reacts to scroll events and reuses/repositions the rows as scrolled.
-
-Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js) for more information.
-
-## Running unit tests
-
-Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
