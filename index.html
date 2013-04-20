@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>List-view by emberjs</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>List-view</h1>
+        <p>An incremental rendering list view for Ember.js</p>
+
+        <p class="view"><a href="https://github.com/emberjs/list-view">View the Project on GitHub <small>emberjs/list-view</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/emberjs/list-view/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/emberjs/list-view/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/emberjs/list-view">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Ember.ListView</h1>
+
+<p>An efficient incremental rendering list view for large lists.</p>
+
+<p>Ember.ListView works on mobile phones that support web overflow touch css,
+doesn't work on iOS because iOS doesn't emit scroll events during the momentum
+phase of a scroll nor do the elements know there offset top during that scroll phase.</p>
+
+<h2>Dependecies</h2>
+
+<p>You will need to include <a href="http://jquery.com/">jquery</a>, <a href="http://handlebarsjs.com">handlebars</a>,
+<a href="http://emberjs.com">ember.js</a> and list view extension. </p>
+
+<h2>Usage</h2>
+
+<p>First, let's create a template:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-handlebars"</span> <span class="na">data-template-name=</span><span class="s">"index"</span><span class="nt">&gt;</span>
+  <span class="p">{{</span><span class="err">#</span><span class="nx">collection</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ListView</span> <span class="nx">contentBinding</span><span class="o">=</span><span class="s2">"controller"</span> <span class="nx">height</span><span class="o">=</span><span class="mi">500</span> <span class="nx">rowHeight</span><span class="o">=</span><span class="mi">50</span> <span class="nx">width</span><span class="o">=</span><span class="mi">500</span><span class="p">}}</span>
+    <span class="p">{{</span><span class="nx">name</span><span class="p">}}</span>
+  <span class="p">{{</span><span class="err">/collection}}</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<p>Next, let's feed our template with some data:</p>
+
+<div class="highlight"><pre><span class="c1">// create Ember application</span>
+<span class="nx">App</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+
+<span class="c1">// create Ember.ArrayController</span>
+<span class="nx">App</span><span class="p">.</span><span class="nx">IndexController</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ArrayController</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">content</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">});</span>
+
+<span class="c1">// define default index route and pushing some data to content</span>
+<span class="nx">App</span><span class="p">.</span><span class="nx">IndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">setupController</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">content</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="nx">controller</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Shazam! You should be able to see a scrollable area with 10,000 items in it.</p>
+
+<p><img src="/screens/list.png" alt=""></p>
+
+<h2>Subclassing</h2>
+
+<p>Here's an example of how to create your version of <code>Ember.ListView</code>.</p>
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-handlebars"</span> <span class="na">data-template-name=</span><span class="s">"index"</span><span class="nt">&gt;</span>
+  <span class="p">{{</span><span class="nx">view</span> <span class="nx">App</span><span class="p">.</span><span class="nx">ListView</span> <span class="nx">contentBinding</span><span class="o">=</span><span class="s2">"content"</span><span class="p">}}</span>
+<span class="nt">&lt;/script&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-handlebars"</span> <span class="na">data-template-name=</span><span class="s">"row_item"</span><span class="nt">&gt;</span>
+  <span class="p">{{</span><span class="nx">name</span><span class="p">}}</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1">// create Ember application</span>
+<span class="nx">App</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+
+<span class="c1">// define default index route and pushing some data to content</span>
+<span class="nx">App</span><span class="p">.</span><span class="nx">IndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">setupController</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">content</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="nx">controller</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// extending Ember.ListView</span>
+<span class="c1">// customize the row views by subclassing Ember.ListItemView</span>
+<span class="c1">// and specifying the itemViewClass property in the Ember.ListView definition</span>
+<span class="nx">App</span><span class="p">.</span><span class="nx">ListView</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ListView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">height</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span>
+  <span class="nx">rowHeight</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+  <span class="nx">itemViewClass</span><span class="o">:</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ListItemView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span><span class="nx">templateName</span><span class="o">:</span> <span class="s2">"row_item"</span><span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Unfortunately, if you want to customize item template, you would have to use <code>Ember.ListItemView</code>
+and create an additional template, as you see above. You cannot specify <code>templateName</code> paramter
+directly on <code>Ember.ListView</code> because it's derived from <code>Ember.ContainerView</code> and it cannot have a template.</p>
+
+<h3>Required parameters</h3>
+
+<p>You must specify the <code>height</code> and <code>rowHeight</code> parameters because <code>Ember.ListView</code> will try
+to fill visible area with rows. If you would like to have multiple columns, then you need to specify
+<code>elementWidth</code>, as well as <code>width</code>.</p>
+
+<div class="highlight"><pre><span class="nx">App</span><span class="p">.</span><span class="nx">ListView</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ListView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">height</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span>
+  <span class="nx">rowHeight</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+  <span class="nx">elementWidth</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+  <span class="nx">width</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span>
+  <span class="nx">itemViewClass</span><span class="o">:</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ListItemView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span><span class="nx">templateName</span><span class="o">:</span> <span class="s2">"row_item"</span><span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+
+<p><img src="/screens/grid.png" alt=""></p>
+
+<h3>Required CSS</h3>
+
+<div class="highlight"><pre><span class="nc">.ember-list-view</span> <span class="p">{</span>
+  <span class="k">overflow</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+  <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ember-list-item-view</span> <span class="p">{</span>
+  <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>List of contributors</h2>
+
+<ul>
+<li><a href="https://github.com/raycohen">Ray Cohen</a></li>
+<li><a href="https://github.com/stefanpenner">Stefan Penner</a></li>
+<li><a href="https://github.com/lukemelia">Luke Melia</a></li>
+<li><a href="https://github.com/ebryn">Erik Bryn</a></li>
+<li><a href="https://github.com/2k00l">Alex Navasardyan</a></li>
+<li><a href="https://github.com/christophermanning">Christopher Manning</a></li>
+<li><a href="https://github.com/sebastianseilund">Sebastian Seilund</a></li>
+</ul><p>A lot of the work was sponsored by <a href="https://www.yapp.us/">Yapp Labs</a>.</p>
+
+<h2>How it works</h2>
+
+<p><code>Ember.ListView</code> will create enough rows to fill the visible area (as defined by the <code>height</code> property). It reacts to scroll events and reuses/repositions the rows as scrolled.</p>
+
+<p>Please look at the <a href="https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js">unit tests</a> for more information.</p>
+
+<h2>Running unit tests</h2>
+
+<p>Run <code>bundle exec rackup</code> and open <a href="http://localhost:9292">http://localhost:9292</a> in a browser.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/emberjs">emberjs</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
