@@ -6,6 +6,7 @@
     <title>List-view by emberjs</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/list-view.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
@@ -76,7 +77,7 @@ phase of a scroll nor do the elements know there offset top during that scroll p
 
 <p>Shazam! You should be able to see a scrollable area with 10,000 items in it.</p>
 
-<p><img src="/screens/list.png" alt=""></p>
+<div id="ex"></div>
 
 <h2>Subclassing</h2>
 
@@ -134,8 +135,6 @@ to fill visible area with rows. If you would like to have multiple columns, then
 <span class="p">});</span>
 </pre></div>
 
-<p><img src="/screens/grid.png" alt=""></p>
-
 <h3>Required CSS</h3>
 
 <div class="highlight"><pre><span class="nc">.ember-list-view</span> <span class="p">{</span>
@@ -146,6 +145,16 @@ to fill visible area with rows. If you would like to have multiple columns, then
   <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
+
+<h2>How it works</h2>
+
+<p><code>Ember.ListView</code> will create enough rows to fill the visible area (as defined by the <code>height</code> property). It reacts to scroll events and reuses/repositions the rows as scrolled.</p>
+
+<p>Please look at the <a href="https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js">unit tests</a> for more information.</p>
+
+<h2>Running unit tests</h2>
+
+<p>Run <code>bundle exec rackup</code> and open <a href="http://localhost:9292">http://localhost:9292</a> in a browser.</p>
 
 <h2>List of contributors</h2>
 
@@ -158,16 +167,6 @@ to fill visible area with rows. If you would like to have multiple columns, then
 <li><a href="https://github.com/christophermanning">Christopher Manning</a></li>
 <li><a href="https://github.com/sebastianseilund">Sebastian Seilund</a></li>
 </ul><p>A lot of the work was sponsored by <a href="https://www.yapp.us/">Yapp Labs</a>.</p>
-
-<h2>How it works</h2>
-
-<p><code>Ember.ListView</code> will create enough rows to fill the visible area (as defined by the <code>height</code> property). It reacts to scroll events and reuses/repositions the rows as scrolled.</p>
-
-<p>Please look at the <a href="https://github.com/emberjs/list-view/blob/master/packages/list-view/tests/list_view_test.js">unit tests</a> for more information.</p>
-
-<h2>Running unit tests</h2>
-
-<p>Run <code>bundle exec rackup</code> and open <a href="http://localhost:9292">http://localhost:9292</a> in a browser.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/emberjs">emberjs</a></p>
@@ -175,6 +174,36 @@ to fill visible area with rows. If you would like to have multiple columns, then
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script src="javascripts/libs/jquery.js"></script>
+    <script src="javascripts/libs/handlebars.js"></script>
+    <script src="javascripts/libs/ember.js"></script>
+    <script src="javascripts/libs/list-view.js"></script>
+    <script>
+      // create Ember application
+      App = Ember.Application.create({
+        rootElement: '#ex'
+      });
+
+      // create Ember.ArrayController
+      App.IndexController = Ember.ArrayController.extend({
+        content: []
+      });
+
+      // define default index route and pushing some data to content
+      App.IndexRoute = Ember.Route.extend({
+        setupController: function(controller) {
+          var content = [];
+          for (var i = 0; i < 10000; i++) {
+            content.push({name: "Item " + i});
+          }
+          controller.set('content', content);
+        }
+      });
+    </script>
+    <script type="text/x-handlebars" data-template-name="index">
+      {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
+        {{name}}
+      {{/collection}}
+    </script>
   </body>
 </html>
