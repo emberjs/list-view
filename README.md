@@ -6,6 +6,15 @@ Ember.ListView works on mobile phones that support web overflow touch css,
 doesn't work on iOS because iOS doesn't emit scroll events during the momentum
 phase of a scroll nor do the elements know there offset top during that scroll phase.
 
+### Table of Contents
+
+1. [Usage](#usage)
+1. [Subclassing](#subclassing)
+1. [Build it](#build-it)
+1. [How it works](#how-it-works)
+1. [Run unit tests](#running-unit-tests)
+1. [Contributors](#list-of-contributors)
+
 ## Dependecies
 
 You will need to include [jquery](http://jquery.com/), [handlebars](http://handlebarsjs.com),
@@ -120,6 +129,12 @@ App.ListView = Ember.ListView.extend({
   position: absolute;
 }
 ```
+## Build It
+
+1. `git clone https://github.com/mehulkar/list-view.git`
+2. `bundle`
+3. `bundle exec rake dist`
+4. `cp dist/modules/list-view.js mycoolapp/`
 
 ## How it works
 
