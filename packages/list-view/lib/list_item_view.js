@@ -117,6 +117,10 @@ function updateStyle() {
   @namespace Ember
 */
 Ember.ListItemView = Ember.View.extend({
+  init: function(){
+    this._super();
+    this.on('didInsertElement', updateStyle);
+  },
   classNames: ['ember-list-item-view'],
 
   _position: null,
@@ -124,6 +128,5 @@ Ember.ListItemView = Ember.View.extend({
   _contextDidChange: Ember.observer(rerender, 'context'),
 
   applyTransform: Ember.ListViewHelper.applyTransform,
-  positionDidChange: Ember.observer(updateStyle, 'position'),
-  didInsertElement: updateStyle
+  positionDidChange: Ember.observer(updateStyle, 'position')
 });
