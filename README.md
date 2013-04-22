@@ -24,8 +24,10 @@ we need to work on for future releases of `Ember.ListView`.
 
 ## Dependecies
 
-You will need to include [jquery](http://jquery.com/), [handlebars](http://handlebarsjs.com),
-[ember.js](http://emberjs.com).
+Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.com/),
+[handlebars](http://handlebarsjs.com), [ember.js](http://emberjs.com).
+
+`Ember.VirtualListView` need an additional dependency: [zynga scroller](https://github.com/zynga/scroller).
 
 ## Usage
 
