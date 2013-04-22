@@ -1,0 +1,5 @@
+after_success: 'bundle exec rake publish_build'
+script: 'bundle exec rake test'
+env:
+  global:
+    - S3_BUCKET_NAME=builds.emberjs.com
