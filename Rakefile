@@ -31,4 +31,4 @@ task :update_ember => "packages/ember/lib/main.js"
 task :clean => "ember:clean"
 task :dist => "ember:dist"
 task :test, [:suite] => "ember:test"
-task :default => :dist
+task :default => [:dist, :test]
