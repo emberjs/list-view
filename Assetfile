@@ -1,14 +1,12 @@
 instance_eval File.read(EmberDev.support_path.join('Assetfile'))
 
 distros = {
-  :full    => %w(list-view)
+  "list-view" => %w(list-view)
 }
 
 output "dist"
 
 distros.each do |name, modules|
-  name = "ember-dev-package"
-
   input "dist/modules" do
     module_paths = modules.map{|m| "#{m}.js" }
     match "{#{module_paths.join(',')}}" do
