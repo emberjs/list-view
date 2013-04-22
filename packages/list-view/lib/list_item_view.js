@@ -52,6 +52,9 @@ function rerender() {
     buffer = Ember.RenderBuffer();
     buffer = this.renderToBuffer(buffer);
 
+    // check again for childViews, since rendering may have added some
+    hasChildViews = this._childViews.length > 0;
+
     if (hasChildViews) {
       this.invokeRecursively(willInsertElementIfNeeded, false);
     }
