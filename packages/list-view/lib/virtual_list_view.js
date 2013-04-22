@@ -169,5 +169,10 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   mouseUp: function(e){
     this.endScroll(e.timeStamp);
     return false;
+  },
+
+  mouseLeave: function(e){
+    this.endScroll(e.timeStamp);
+    return false;
   }
 });
