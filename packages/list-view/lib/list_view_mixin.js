@@ -101,6 +101,13 @@ Ember.ListViewMixin = Ember.Mixin.create({
     buffer.push('</div>');
   },
 
+  willInsertElement: function() {
+    if (!this.get("height") || !this.get("rowHeight")) {
+      throw "A ListView must be created with a height and a rowHeight.";
+    }
+    this._super();
+  },
+
   /**
     @private
 

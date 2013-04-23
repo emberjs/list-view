@@ -16,12 +16,6 @@ module("Ember.ListView unit - totalHeight", {
   }
 });
 
-test("should exist", function() {
-  view = Ember.ListView.create();
-  appendView();
-  ok(view);
-});
-
 test("single column", function(){
   var height = 500, rowHeight = 50;
 

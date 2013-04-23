@@ -49,7 +49,10 @@ module("Ember.VirtualListView Acceptance", {
 });
 
 test("should exist", function() {
-  view = Ember.VirtualListView.create();
+  view = Ember.VirtualListView.create({
+    height: 500,
+    rowHeight: 50
+  });
   appendView();
   ok(view);
 });
@@ -794,4 +797,15 @@ test("adding a column, when everything is already within viewport", function(){
              'A:Item 3B:Item 3',
              'A:Item 4B:Item 4'
             ], 'after width + height change: elements should be rendered in expected position');
+});
+
+test("Creating a VirtualListView without height and rowHeight properties should throw an exception", function() {
+  throws(function() {
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4)
+    });
+
+    appendView();
+  },
+  /A ListView must be created with a height and a rowHeight./, "Throws exception.");
 });
