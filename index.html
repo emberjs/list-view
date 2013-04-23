@@ -177,6 +177,9 @@ to fill visible area with rows. If you would like to have multiple columns, then
     <script src="javascripts/libs/jquery.js"></script>
     <script src="javascripts/libs/handlebars.js"></script>
     <script src="javascripts/libs/ember.js"></script>
+    <script src="javascripts/libs/zynga-scroller/animate.js"></script>
+    <script src="javascripts/libs/zynga-scroller/raf.js"></script>
+    <script src="javascripts/libs/zynga-scroller/scroller.js"></script>
     <script src="javascripts/libs/list-view.js"></script>
     <script>
       // create Ember application
@@ -184,9 +187,20 @@ to fill visible area with rows. If you would like to have multiple columns, then
         rootElement: '#ex'
       });
 
+      var content = [];
+      for (var i = 0; i < 10000; i++) {
+        content.push({name: "Item " + i});
+      }
       // create Ember.ArrayController
       App.IndexController = Ember.ArrayController.extend({
         content: []
+      });
+
+      App.ExtendedVirtualList = Ember.VirtualListView.extend({
+        content: content,
+        height: 500,
+        rowHeight: 50,
+        itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
       });
 
       // define default index route and pushing some data to content
@@ -200,7 +214,13 @@ to fill visible area with rows. If you would like to have multiple columns, then
         }
       });
     </script>
+    <script type="text/x-handlebars" data-template-name="row_item">
+      {{name}}
+    </script>
     <script type="text/x-handlebars" data-template-name="index">
+      <h2>Virtual List View</h2>
+      {{view App.ExtendedVirtualList contentBinding="content"}}
+      <h2>List View</h2>
       {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
         {{name}}
       {{/collection}}
