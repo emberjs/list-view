@@ -189,26 +189,20 @@ to fill visible area with rows. If you would like to have multiple columns, then
         rootElement: '#ex'
       });
 
+      var content = [];
+      for (var i = 0; i < 10000; i++) {
+        content.push({name: "Item " + i});
+      }
       // create Ember.ArrayController
       App.IndexController = Ember.ArrayController.extend({
         content: []
       });
 
-      App.VV = Ember.VirtualListView.extend({
-        templateName: 'vv',
+      App.ExtendedVirtualList = Ember.VirtualListView.extend({
+        content: content,
         height: 500,
-        rowHeight: 500
-      });
-
-      App.then(function () {
-        var content = [];
-        for (var i = 0; i < 10000; i++) {
-          content.push({name: "Item " + i});
-        }
-        var a = App.VV.create({
-          content: content
-        });
-        a.appendTo('#ex2');
+        rowHeight: 50,
+        itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
       });
 
       // define default index route and pushing some data to content
@@ -219,18 +213,16 @@ to fill visible area with rows. If you would like to have multiple columns, then
             content.push({name: "Item " + i});
           }
           controller.set('content', content);
-        },
-        renderTemplate: function () {
-          console.log('stuff');
         }
       });
     </script>
-    <script type="text/x-handlebars" data-template-name="vv">
-      {{#each content}}
-        {{name}}
-      {{/each}}
+    <script type="text/x-handlebars" data-template-name="row_item">
+      {{name}}
     </script>
     <script type="text/x-handlebars" data-template-name="index">
+      <h2>Virtual List View</h2>
+      {{view App.ExtendedVirtualList contentBinding="content"}}
+      <h2>List View</h2>
       {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
         {{name}}
       {{/collection}}
