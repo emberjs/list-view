@@ -29,6 +29,10 @@ Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.co
 
 `Ember.VirtualListView` need an additional dependency: [zynga scroller](https://github.com/zynga/scroller).
 
+## Demo
+
+Please, take a look at our live [demo](http://emberjs.com/list-view).
+
 ## Usage
 
 First, let's create a template:
