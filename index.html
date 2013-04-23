@@ -77,7 +77,9 @@ phase of a scroll nor do the elements know there offset top during that scroll p
 
 <p>Shazam! You should be able to see a scrollable area with 10,000 items in it.</p>
 
-<div id="ex"></div>
+<div id="ex">
+  <div id="ex2"></div>
+</div>
 
 <h2>Subclassing</h2>
 
@@ -177,6 +179,9 @@ to fill visible area with rows. If you would like to have multiple columns, then
     <script src="javascripts/libs/jquery.js"></script>
     <script src="javascripts/libs/handlebars.js"></script>
     <script src="javascripts/libs/ember.js"></script>
+    <script src="javascripts/libs/zynga-scroller/animate.js"></script>
+    <script src="javascripts/libs/zynga-scroller/raf.js"></script>
+    <script src="javascripts/libs/zynga-scroller/scroller.js"></script>
     <script src="javascripts/libs/list-view.js"></script>
     <script>
       // create Ember application
@@ -189,6 +194,23 @@ to fill visible area with rows. If you would like to have multiple columns, then
         content: []
       });
 
+      App.VV = Ember.VirtualListView.extend({
+        templateName: 'vv',
+        height: 500,
+        rowHeight: 500
+      });
+
+      App.then(function () {
+        var content = [];
+        for (var i = 0; i < 10000; i++) {
+          content.push({name: "Item " + i});
+        }
+        var a = App.VV.create({
+          content: content
+        });
+        a.appendTo('#ex2');
+      });
+
       // define default index route and pushing some data to content
       App.IndexRoute = Ember.Route.extend({
         setupController: function(controller) {
@@ -197,8 +219,16 @@ to fill visible area with rows. If you would like to have multiple columns, then
             content.push({name: "Item " + i});
           }
           controller.set('content', content);
+        },
+        renderTemplate: function () {
+          console.log('stuff');
         }
       });
+    </script>
+    <script type="text/x-handlebars" data-template-name="vv">
+      {{#each content}}
+        {{name}}
+      {{/each}}
     </script>
     <script type="text/x-handlebars" data-template-name="index">
       {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
