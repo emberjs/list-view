@@ -33,7 +33,10 @@ module("Ember.ListView Acceptance", {
 });
 
 test("should exist", function() {
-  view = Ember.ListView.create();
+  view = Ember.ListView.create({
+    height: 500,
+    rowHeight: 50 
+  });
   appendView();
   ok(view);
 });
@@ -678,3 +681,15 @@ test("When scrolled to the very bottom, the 'padding' list items should be empty
       lastEl = sortedElements[sortedElements.length - 1];
   equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
 });
+
+test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
+  throws(function() {
+    view = Ember.ListView.create({
+      content: helper.generateContent(4)
+    });
+
+    appendView();
+  },
+  /A ListView must be created with a height and a rowHeight./, "Throws exception.");
+});
+
