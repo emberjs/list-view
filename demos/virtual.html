@@ -3,16 +3,75 @@
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 
     <style>
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, font, img, ins, kbd, q, s, samp,
+      small, strike, strong, sub, sup, tt, var,
+      dl, dt, dd, ol, ul, li,
+      fieldset, form, label, legend,
+      table, caption, tbody, tfoot, thead, tr, th, td {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-weight: inherit;
+        font-style: inherit;
+        font-size: 100%;
+        font-family: inherit;
+        vertical-align: baseline;
+      }
+      /* remember to define focus styles! */
+      :focus {
+        outline: 0;
+      }
+      body {
+        line-height: 1;
+        color: black;
+        background: white;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      /* tables still need 'cellspacing="0"' in the markup */
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      caption, th, td {
+        text-align: left;
+        font-weight: normal;
+      }
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: "";
+      }
+      blockquote, q {
+        quotes: "" "";
+      }
+
       html {
         font-family: sans-serif;
       }
+
       .ember-list-view {
+        overflow: auto;
         position: relative;
         width: 100%;
       }
+
       .ember-list-item-view {
         position: absolute;
+        color: white;
+        width: 100px;
+        height: 100px;
       }
+
+      .ember-list-item-view img{
+        width: 100px;
+        height: 100px;
+      }
+
       .ember-list-container {
         -webkit-transform: translate3d(0px, 0px, 0);
       }
@@ -35,24 +94,25 @@
       document.ontouchmove = function(event){
         event.preventDefault();
       };
-</script>
+    </script>
   </head>
 
   <body>
     <script type="text/x-handlebars">
-      {{#group}}
-      {{#collection Ember.VirtualListView contentBinding="controller" height=320 rowHeight=50}}
-        <img height="50px" width="50px" {{bindAttr src="imageSrc"}}/>
-        {{name}}
-        {{name}}
-        {{name}}
-        {{name}}
+      {{#collection Ember.VirtualListView contentBinding="controller" height=500 width=500 elementWidth=100 rowHeight=100}}
+        {{name}} <img {{bindAttr src=imageSrc}}/>
       {{/collection}}
-      {{/group}}
     </script>
 
     <script>
       App = Ember.Application.create();
+
+      // for debugging
+      App.ApplicationView = Ember.View.extend({
+        didInsertElement: function(){
+          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
+        }
+      });
 
       var images = [
         'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
@@ -65,9 +125,9 @@
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
-          for (var i = 0; i < 10000; i++) {
+          for (var i = 0; i < 100000; i++) {
             content.push({
-              name: 'Item ' + i,
+              name: 'Item ' + (i + 1),
               imageSrc: images[i%images.length]
             });
           }
