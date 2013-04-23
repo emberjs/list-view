@@ -26,10 +26,9 @@
   </head>
 
   <body>
-    <img height="50px" width="50px" {{bindAttr src="imageSrc"}} class="hidden"/>
     <script type="text/x-handlebars">
       {{#group}}
-      {{#collection Ember.ListView contentBinding="controller" height=600 width=600 rowHeight=50 elementWidth=200}}
+      {{#collection Ember.ListView contentBinding="controller" height=300 width=500 rowHeight=50 elementWidth=100}}
         {{name}}
       {{/collection}}
       {{/group}}
@@ -37,6 +36,13 @@
 
     <script>
       App = Ember.Application.create();
+
+      // for debugging
+      App.ApplicationView = Ember.View.extend({
+        didInsertElement: function(){
+          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
+        }
+      });
 
       var images = [
         'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
@@ -55,7 +61,7 @@
           var content = [];
           for (var i = 0; i < 100000; i++) {
             content.push({
-              name: 'Item ' + i,
+              name: 'Item ' + (i+1),
               imageSrc: images[i%images.length]
             });
           }
