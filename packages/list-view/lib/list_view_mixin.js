@@ -157,6 +157,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   /**
     @private
+
+    Internal method used to force scroll position
+
+    @method scrollTo
+  */
+  _scrollTo: Ember.K,
+
+  /**
+    @private
     @method _scrollContentTo
   */
   _scrollContentTo: function(scrollTop) {
@@ -326,9 +335,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
       ratio = (lastColumnCount / newColumnCount);
       proposedScrollTop = currentScrollTop * ratio;
       scrollTop = min(maxScrollTop, proposedScrollTop);
-      set(this, 'scrollTop', scrollTop);
 
-      if (element) { element.scrollTop = scrollTop; }
+      this._scrollTo(scrollTop);
+      set(this, 'scrollTop', scrollTop);
     }
 
     if (arguments.length > 0) {
