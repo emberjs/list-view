@@ -1,4 +1,4 @@
-# Ember.ListView [![Build Status](https://secure.travis-ci.org/emberjs/list-view.png?branch=master)](http://travis-ci.org/emberjs/list-view.js)
+# Ember.ListView [![Build Status](https://secure.travis-ci.org/emberjs/list-view.png?branch=master)](http://travis-ci.org/emberjs/list-view)
 
 An efficient incremental rendering list view for large lists.
 
