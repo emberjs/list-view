@@ -41,12 +41,9 @@ function rerender() {
   if (!element) { return; }
 
   context = get(this, 'context');
-  hasChildViews = this._childViews.length > 0;
 
-  if (hasChildViews) {
-    this.triggerRecursively('willClearRender');
-    this.clearRenderedChildren();
-  }
+  this.triggerRecursively('willClearRender');
+  this.clearRenderedChildren();
 
   if (context) {
     buffer = Ember.RenderBuffer();
