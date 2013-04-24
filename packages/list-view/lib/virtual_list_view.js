@@ -85,6 +85,8 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
 
   willBeginScroll: function(touches, timeStamp) {
     this._isScrolling = false;
+    this.trigger('scrollingDidStart');
+
     this.scroller.doTouchStart(touches, timeStamp);
   },
 
@@ -156,7 +158,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   mouseDown: function(e){
-    window.MOUSE_DOWN = true;
     this.willBeginScroll([e], e.timeStamp);
     return false;
   },
