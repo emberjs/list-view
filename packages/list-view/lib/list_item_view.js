@@ -131,6 +131,8 @@ Ember.ListItemView = Ember.View.extend({
   positionDidChange: Ember.observer(updateStyle, 'position')
 });
 
+BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+
 Ember.ReusableListItemView = Ember.View.extend({
   init: function(){
     this._super();
@@ -138,7 +140,14 @@ Ember.ReusableListItemView = Ember.View.extend({
     this.set('context', Ember.ObjectProxy.create());
   },
   updateContext: function(newContext){
+    this.prepareForReuse();
     this.set('context.content', newContext);
+  },
+  prepareForReuse: function(){
+    var $img = this.$('img');
+    if ($img) {
+      $img.attr('src', BLANK_GIF);
+    }
   },
   classNames: ['ember-list-item-view'],
   _positionDidChange: Ember.observer(updateStyle, 'position'),

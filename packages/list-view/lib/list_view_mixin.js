@@ -234,7 +234,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     var content, context, newContext, childsCurrentContentIndex, position;
 
     content = get(this, 'content');
-    context = get(childView, 'context');
+    context = get(childView, 'context.content');
     newContext = content.objectAt(contentIndex);
 
     childsCurrentContentIndex = get(childView, 'contentIndex');
@@ -243,8 +243,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     set(childView, 'position', position);
 
-    if (childsCurrentContentIndex !== contentIndex || newContext !== context) {
+    if (childsCurrentContentIndex !== contentIndex) {
       set(childView, 'contentIndex', contentIndex);
+    }
+    if (newContext !== context) {
+      console.log('calling updateContext', newContext);
       childView.updateContext(newContext);
     }
   },
