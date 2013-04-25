@@ -25,7 +25,7 @@ function sortByContentIndex (viewOne, viewTwo){
 }
 
 function detectListItemViews(childView) {
-  return Ember.ListItemView.detectInstance(childView);
+  return Ember.ListItemViewMixin.detect(childView);
 }
 
 function notifyMutationListeners() {
@@ -234,19 +234,13 @@ Ember.ListViewMixin = Ember.Mixin.create({
     var content, context, newContext, childsCurrentContentIndex, position;
 
     content = get(this, 'content');
-    context = get(childView, 'context');
-    newContext = content.objectAt(contentIndex);
-
-    childsCurrentContentIndex = get(childView, 'contentIndex');
-
     position = this.positionForIndex(contentIndex);
-
     set(childView, 'position', position);
 
-    if (childsCurrentContentIndex !== contentIndex || newContext !== context) {
-      set(childView, 'contentIndex', contentIndex);
-      set(childView, 'context', newContext);
-    }
+    set(childView, 'contentIndex', contentIndex);
+
+    newContext = content.objectAt(contentIndex);
+    childView.updateContext(newContext);
   },
 
   /**
@@ -504,6 +498,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this._scrollContentTo(get(this, 'scrollTop'));
 
+    // if _scrollContentTo short-circuits, we still need
+    // to call _reuseChildren to get new views positioned
+    // and rendered correctly
     this._reuseChildren();
 
     this._lastStartingIndex = startingIndex;

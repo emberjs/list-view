@@ -35,7 +35,6 @@ function didInsertElementIfNeeded(view) {
 
 function rerender() {
   var element, buffer, context, hasChildViews;
-
   element = get(this, 'element');
 
   if (!element) { return; }
@@ -68,27 +67,40 @@ function rerender() {
     if (hasChildViews) {
       this.invokeRecursively(didInsertElementIfNeeded, false);
     }
-
-    this._updateStyle();
   } else {
     element.innerHTML = ''; // when there is no context, this view should be completely empty
   }
 }
 
-function updateStyle() {
+function positionElement() {
   var element, position, _position;
 
   element = get(this, 'element');
   position = get(this, 'position');
   _position = this._position;
 
+  if (!position) { return; }
   if (!element) { return; }
-  if (samePosition(position, _position)) { return; }
 
+  // TODO: avoid needing this by avoiding unnecessary
+  // calls to this method in the first place
+  if (samePosition(position, _position)) { return; }
   this.applyTransform(element, position);
 
   this._position = position;
 }
+
+Ember.ListItemViewMixin = Ember.Mixin.create({
+  init: function(){
+    this._super();
+    this.one('didInsertElement', positionElement);
+  },
+  classNames: ['ember-list-item-view'],
+  _position: null,
+  _positionDidChange: Ember.observer(positionElement, 'position'),
+  _positionElement: positionElement,
+  applyTransform: Ember.ListViewHelper.applyTransform
+});
 
 /**
   The `Ember.ListViewItem` view class renders a
@@ -116,17 +128,37 @@ function updateStyle() {
   @class ListItemView
   @namespace Ember
 */
-Ember.ListItemView = Ember.View.extend({
+Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
+  updateContext: function(newContext){
+    var context = get(this, 'context');
+    if (context !== newContext) {
+      set(this, 'context', newContext);
+    }
+  },
+  _contextDidChange: Ember.observer(rerender, 'context'),
+  positionDidChange: Ember.observer(positionElement, 'position'),
+  _positionElement: positionElement,
+  applyTransform: Ember.ListViewHelper.applyTransform
+});
+
+var BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   init: function(){
     this._super();
-    this.on('didInsertElement', updateStyle);
+    this.set('context', Ember.ObjectProxy.create());
   },
-  classNames: ['ember-list-item-view'],
-
-  _position: null,
-  _updateStyle: updateStyle,
-  _contextDidChange: Ember.observer(rerender, 'context'),
-
-  applyTransform: Ember.ListViewHelper.applyTransform,
-  positionDidChange: Ember.observer(updateStyle, 'position')
+  updateContext: function(newContext){
+    var context = get(this, 'context.content');
+    if (context !== newContext) {
+      this.prepareForReuse();
+      set(this, 'context.content', newContext);
+    }
+  },
+  prepareForReuse: function(){
+    var $img = this.$('img');
+    if ($img) {
+      $img.attr('src', BLANK_GIF);
+    }
+  }
 });
