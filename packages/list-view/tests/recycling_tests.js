@@ -407,9 +407,6 @@ test("recycling complex views short list, with ReusableListItemView", function()
   equal(innerViewDestroyCount, 0, "expected number of innerView's willDestroyElement (post-scroll to 0)");
 });
 
-// list with 20 items, 2 columns, scroll to end, switch to 3 columns. an empty view is rendered in the lower right
-// separate list_item_view.js into 3 files: mixin, list item view, and reusable list item view
-
 test("recycling complex views with ReusableListItemView, handling empty slots at the end of the grid", function(){
   var content = helper.generateContent(20),
       height = 150,
