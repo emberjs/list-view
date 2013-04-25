@@ -140,8 +140,12 @@ Ember.ReusableListItemView = Ember.View.extend({
     this.set('context', Ember.ObjectProxy.create());
   },
   updateContext: function(newContext){
-    this.prepareForReuse();
-    this.set('context.content', newContext);
+    context = get(this, 'context.content');
+    if (context !== newContext) {
+      console.log('updating context', newContext);
+      this.prepareForReuse();
+      this.set('context.content', newContext);
+    }
   },
   prepareForReuse: function(){
     var $img = this.$('img');

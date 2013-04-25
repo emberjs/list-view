@@ -234,22 +234,13 @@ Ember.ListViewMixin = Ember.Mixin.create({
     var content, context, newContext, childsCurrentContentIndex, position;
 
     content = get(this, 'content');
-    context = get(childView, 'context.content');
-    newContext = content.objectAt(contentIndex);
-
-    childsCurrentContentIndex = get(childView, 'contentIndex');
-
     position = this.positionForIndex(contentIndex);
-
     set(childView, 'position', position);
 
-    if (childsCurrentContentIndex !== contentIndex) {
-      set(childView, 'contentIndex', contentIndex);
-    }
-    if (newContext !== context) {
-      console.log('calling updateContext', newContext);
-      childView.updateContext(newContext);
-    }
+    set(childView, 'contentIndex', contentIndex);
+
+    newContext = content.objectAt(contentIndex);
+    childView.updateContext(newContext);
   },
 
   /**
