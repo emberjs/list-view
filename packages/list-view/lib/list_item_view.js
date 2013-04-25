@@ -148,6 +148,9 @@ Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
     this._super();
     this.set('context', Ember.ObjectProxy.create());
   },
+  isVisible: Ember.computed('context.content', function(){
+    return !!this.get('context.content');
+  }),
   updateContext: function(newContext){
     var context = get(this, 'context.content');
     if (context !== newContext) {
