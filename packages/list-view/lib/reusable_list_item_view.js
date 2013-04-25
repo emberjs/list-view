@@ -2,8 +2,6 @@ require('list-view/list_item_view_mixin');
 
 var get = Ember.get, set = Ember.set;
 
-var BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-
 Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   init: function(){
     this._super();
@@ -15,14 +13,11 @@ Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context.content');
     if (context !== newContext) {
-      this.prepareForReuse();
+      if (this.state === 'inDOM') {
+        this.prepareForReuse(newContext);
+      }
       set(this, 'context.content', newContext);
     }
   },
-  prepareForReuse: function(){
-    var $img = this.$('img');
-    if ($img) {
-      $img.attr('src', BLANK_GIF);
-    }
-  }
+  prepareForReuse: Ember.K
 });
