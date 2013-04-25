@@ -48,8 +48,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
       if (view.listContainerElement) {
         view.applyTransform(view.listContainerElement, {x: 0, y: -top});
         view._scrollerTop = top;
-        y = max(0, top);
-        view._scrollContentTo(y);
+        view._scrollContentTo(top);
       }
     }, {
       scrollingX: false,
