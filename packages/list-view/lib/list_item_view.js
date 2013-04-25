@@ -76,18 +76,18 @@ function rerender() {
 }
 
 function updateStyle() {
-  var element, position, _position;
+  var element, position;//, _position;
 
   element = get(this, 'element');
   position = get(this, 'position');
-  _position = this._position;
+  // _position = this._position;
 
   if (!element) { return; }
-  if (samePosition(position, _position)) { return; }
+  // if (samePosition(position, _position)) { return; }
 
   this.applyTransform(element, position);
 
-  this._position = position;
+  // this._position = position;
 }
 
 /**
@@ -129,4 +129,24 @@ Ember.ListItemView = Ember.View.extend({
 
   applyTransform: Ember.ListViewHelper.applyTransform,
   positionDidChange: Ember.observer(updateStyle, 'position')
+});
+
+Ember.ReusableListItemView = Ember.View.extend({
+  init: function(){
+    this._super();
+    this.on('didInsertElement', updateStyle);
+    this.set('context', Ember.ObjectProxy.create());
+  },
+  updateContext: function(newContext){
+    this.set('context.content', newContext);
+  },
+  classNames: ['ember-list-item-view'],
+  _positionDidChange: Ember.observer(updateStyle, 'position'),
+  _position: null,
+  _updateStyle: updateStyle,
+  applyTransform: Ember.ListViewHelper.applyTransform,
+  render: function(buffer) {
+    console.log('render');
+    return this._super(buffer);
+  }
 });

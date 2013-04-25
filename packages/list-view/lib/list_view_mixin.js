@@ -25,7 +25,7 @@ function sortByContentIndex (viewOne, viewTwo){
 }
 
 function detectListItemViews(childView) {
-  return Ember.ListItemView.detectInstance(childView);
+  return Ember.ReusableListItemView.detectInstance(childView);
 }
 
 function notifyMutationListeners() {
@@ -59,7 +59,7 @@ function syncListContainerWidth(){
   @namespace Ember
 */
 Ember.ListViewMixin = Ember.Mixin.create({
-  itemViewClass: Ember.ListItemView,
+  itemViewClass: Ember.ReusableListItemView,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   domManager: domManager,
@@ -245,7 +245,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     if (childsCurrentContentIndex !== contentIndex || newContext !== context) {
       set(childView, 'contentIndex', contentIndex);
-      set(childView, 'context', newContext);
+      childView.updateContext(newContext);
     }
   },
 
