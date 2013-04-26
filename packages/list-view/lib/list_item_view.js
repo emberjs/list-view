@@ -36,11 +36,15 @@ function rerender() {
   if (!element) { return; }
 
   context = get(this, 'context');
-  hasChildViews = this._childViews.length > 0;
 
-  if (hasChildViews) {
-    this.triggerRecursively('willClearRender');
+  // releases action helpers in contents
+  // this means though that the ListViewItem itself can't use classBindings or attributeBindings
+  // need support for rerender contents in ember
+  this.triggerRecursively('willClearRender');
+
+  if (this.lengthAfterRender > this.lengthBeforeRender) {
     this.clearRenderedChildren();
+    this._childViews.length = this.lengthBeforeRender; // triage bug in ember
   }
 
   if (context) {
