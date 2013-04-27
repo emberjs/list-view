@@ -31,12 +31,12 @@ Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.co
 
 ## Demo
 
-Please, take a look at our live [demo](http://emberjs.com/list-view).
+Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin link](http://jsbin.com/omobov/1/edit);
 
 ## Submitting bugs
 
-Please, attach code samples or links to jsbin or jsfiddle. It would help us greatly to help you and to improve
-ember list view.
+Please, attach code samples or links to [jsbin](http://jsbin.com/) or [jsfiddle](http://jsfiddle.net/).
+It would help us greatly to help you and to improve ember list view.
 
 ## Usage
 
