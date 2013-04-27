@@ -31,7 +31,8 @@ Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.co
 
 ## Demo
 
-Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin link](http://jsbin.com/omobov/1/edit);
+Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin](http://jsbin.com/) links:
+[first](http://jsbin.com/omobov/1/edit) and [second](http://jsbin.com/omobov/3/edit).
 
 ## Submitting bugs
 
