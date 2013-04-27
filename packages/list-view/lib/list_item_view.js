@@ -101,9 +101,16 @@ function rerender() {
 Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context');
-    if (context !== newContext) {
-      set(this, 'context', newContext);
-    }
+    Ember.instrument('updateContext', this, function() {
+      if (context !== newContext) {
+        set(this, 'context', newContext);
+        Ember.instrument('updateContext.render', this, function(){}, this);
+        console.log('render');
+      } else {
+        Ember.instrument('updateContext.reposition', this, function(){}, this);
+        console.log('repositions');
+      }
+    }, this);
   },
   _contextDidChange: Ember.observer(rerender, 'context')
 });

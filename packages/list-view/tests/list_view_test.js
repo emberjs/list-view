@@ -98,6 +98,47 @@ test("should render correctly with an initial scrollTop", function() {
   deepEqual(helper.itemPositions(view).map(yPosition), [450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950], "The rows are in the correct positions");
 });
 
+test("should perform correct number of renders and repositions while scrolling", function () {
+  var content = helper.generateContent(6),
+      height = 50,
+      rowHeight = 10,
+      scrollTop = 10,
+      repositions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  Ember.subscribe("updateContext.render", {
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("updateContext.reposition", {
+    after: function(name, timestamp, payload) {
+      repositions++;
+    }
+  });
+
+  Ember.run(function() {
+    view.scrollTo(scrollTop);
+  });
+
+  equal(renders, 1, "The correct number of renders occured");
+  equal(repositions, 5, "The correct number of repositions occured");
+});
+
 test("should be programatically scrollable", function() {
   var content = helper.generateContent(100),
       height = 500,
