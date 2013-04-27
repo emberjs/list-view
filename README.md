@@ -33,6 +33,11 @@ Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.co
 
 Please, take a look at our live [demo](http://emberjs.com/list-view).
 
+## Submitting bugs
+
+Please, attach code samples or links to jsbin or jsfiddle. It would help us greatly to help you and to improve
+ember list view.
+
 ## Usage
 
 First, let's create a template:
