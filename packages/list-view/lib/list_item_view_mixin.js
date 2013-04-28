@@ -13,8 +13,7 @@ function positionElement() {
   position = get(this, 'position');
   _position = this._position;
 
-  if (!position) { return; }
-  if (!element) { return; }
+  if (!position || !element) { return; }
 
   // TODO: avoid needing this by avoiding unnecessary
   // calls to this method in the first place
