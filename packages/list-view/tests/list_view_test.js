@@ -29,13 +29,15 @@ module("Ember.ListView Acceptance", {
     Ember.run(function() {
       if (view) { view.destroy(); }
     });
+
+    Ember.ENABLE_PROFILING = false;
   }
 });
 
 test("should exist", function() {
   view = Ember.ListView.create({
     height: 500,
-    rowHeight: 50 
+    rowHeight: 50
   });
   appendView();
   ok(view);
@@ -98,20 +100,37 @@ test("should render correctly with an initial scrollTop", function() {
   deepEqual(helper.itemPositions(view).map(yPosition), [450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950], "The rows are in the correct positions");
 });
 
-test("should perform correct number of renders and repositions while scrolling", function () {
+test("should perform correct number of renders and repositions on short list init", function () {
   var content = helper.generateContent(6),
       height = 50,
+      width = 50,
       rowHeight = 10,
-      scrollTop = 10,
       repositions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
 
+  Ember.ENABLE_PROFILING = true;
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("view.updateContext.reposition", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      repositions++;
+    }
+  });
+
   view = Ember.ListView.create({
     content: content,
     height: height,
+    width: width,
     rowHeight: rowHeight,
     itemViewClass: itemViewClass,
     scrollTop: 0
@@ -119,24 +138,97 @@ test("should perform correct number of renders and repositions while scrolling",
 
   appendView();
 
-  Ember.subscribe("updateContext.render", {
+  equal(renders, 6, "The correct number of renders occured");
+  equal(repositions, 6, "The correct number of repositions occured");
+});
+
+test("should perform correct number of renders and repositions while short list scrolling", function () {
+  var content = helper.generateContent(6),
+      height = 50,
+      width = 50,
+      scrollTop = 50,
+      rowHeight = 10,
+      repositions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  Ember.ENABLE_PROFILING = true;
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
     after: function(name, timestamp, payload) {
       renders++;
     }
   });
 
-  Ember.subscribe("updateContext.reposition", {
+  Ember.subscribe("view.updateContext.reposition", {
+    before: function(){},
     after: function(name, timestamp, payload) {
       repositions++;
     }
   });
 
-  Ember.run(function() {
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  Ember.run(function () {
     view.scrollTo(scrollTop);
   });
 
-  equal(renders, 1, "The correct number of renders occured");
-  equal(repositions, 5, "The correct number of repositions occured");
+  equal(renders, 6 + 5, "The correct number of renders occured");
+  equal(repositions, 6 + 1, "The correct number of repositions occured");
+});
+
+test("should perform correct number of renders and repositions on long list init", function () {
+  var content = helper.generateContent(200),
+      height = 50,
+      width = 50,
+      rowHeight = 10,
+      repositions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  Ember.ENABLE_PROFILING = true;
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("view.updateContext.reposition", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      repositions++;
+    }
+  });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  equal(renders, 6, "The correct number of renders occured");
+  equal(repositions, 6, "The correct number of repositions occured");
 });
 
 test("should be programatically scrollable", function() {
