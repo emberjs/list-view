@@ -54,6 +54,30 @@ function syncListContainerWidth(){
   }
 }
 
+function enableProfilingOutput() {
+  function before(name, time, payload) {
+    console.time(name);
+  }
+
+  function after (name, time, payload) {
+    console.timeEnd(name);
+    if (payload) {
+      console.log(payload);
+    }
+  }
+
+  if (Ember.ENABLE_PROFILING) {
+    Ember.subscribe('view._scrollContentTo', {
+      before: before,
+      after: after
+    });
+    Ember.subscribe('view.updateContext', {
+      before: before,
+      after: after
+    });
+  }
+}
+
 /**
   @class Ember.ListViewMixin
   @namespace Ember
@@ -79,6 +103,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   */
   init: function() {
     this._super();
+    enableProfilingOutput();
     addContentArrayObserver.call(this);
     this._syncChildViews();
     this.columnCountDidChange();
@@ -172,29 +197,37 @@ Ember.ListViewMixin = Ember.Mixin.create({
     var startingIndex, endingIndex,
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd, contentLength, scrollTop;
+
     scrollTop = max(0, y);
 
-    contentLength = get(this, 'content.length');
-    set(this, 'scrollTop', scrollTop);
+    Ember.instrument('view._scrollContentTo', {
+      scrollTop: scrollTop,
+      content: get(this, 'content'),
+      startingIndex: this._startingIndex(),
+      endingIndex: min(max(get(this, 'content.length') - 1, 0), this._startingIndex() + this._numChildViewsForViewport())
+    }, function () {
+      contentLength = get(this, 'content.length');
+      set(this, 'scrollTop', scrollTop);
 
-    maxContentIndex = max(contentLength - 1, 0);
+      maxContentIndex = max(contentLength - 1, 0);
 
-    startingIndex = this._startingIndex();
-    visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
+      startingIndex = this._startingIndex();
+      visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
 
-    endingIndex = min(maxContentIndex, visibleEndingIndex);
+      endingIndex = min(maxContentIndex, visibleEndingIndex);
 
-    this.trigger('scrollYChanged', y);
+      this.trigger('scrollYChanged', y);
 
-    if (startingIndex === this._lastStartingIndex &&
-        endingIndex === this._lastEndingIndex) {
-      return;
-    }
+      if (startingIndex === this._lastStartingIndex &&
+          endingIndex === this._lastEndingIndex) {
+        return;
+      }
 
-    this._reuseChildren();
+      this._reuseChildren();
 
-    this._lastStartingIndex = startingIndex;
-    this._lastEndingIndex = endingIndex;
+      this._lastStartingIndex = startingIndex;
+      this._lastEndingIndex = endingIndex;
+    }, this);
   },
 
   childViewsWillSync: Ember.K,
@@ -232,13 +265,18 @@ Ember.ListViewMixin = Ember.Mixin.create({
     @method _reuseChildForContentIndex
   */
   _reuseChildForContentIndex: function(childView, contentIndex) {
-    var content, context, newContext, childsCurrentContentIndex, position;
+    var content, context, newContext, childsCurrentContentIndex, position, enableProfiling;
 
     content = get(this, 'content');
+    enableProfiling = get(this, 'enableProfiling');
     position = this.positionForIndex(contentIndex);
     set(childView, 'position', position);
 
     set(childView, 'contentIndex', contentIndex);
+
+    if (enableProfiling) {
+      Ember.instrument('view._reuseChildForContentIndex', position, function(){}, this);
+    }
 
     newContext = content.objectAt(contentIndex);
     childView.updateContext(newContext);
