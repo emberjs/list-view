@@ -146,7 +146,7 @@ App.ListView = Ember.ListView.extend({
 ```
 ## Build It
 
-1. `git clone https://github.com/mehulkar/list-view.git`
+1. `git clone https://github.com/emberjs/list-view.git`
 2. `bundle`
 3. `bundle exec rake dist`
 4. `cp dist/modules/list-view.js mycoolapp/`
