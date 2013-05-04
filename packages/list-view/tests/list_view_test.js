@@ -101,17 +101,15 @@ test("should render correctly with an initial scrollTop", function() {
 });
 
 test("should perform correct number of renders and repositions on short list init", function () {
-  var content = helper.generateContent(6),
-      height = 50,
+  var content = helper.generateContent(8),
+      height = 60,
       width = 50,
       rowHeight = 10,
-      repositions = 0,
+      positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
-
-  Ember.ENABLE_PROFILING = true;
 
   Ember.subscribe("view.updateContext.render", {
     before: function(){},
@@ -120,10 +118,10 @@ test("should perform correct number of renders and repositions on short list ini
     }
   });
 
-  Ember.subscribe("view.updateContext.reposition", {
+  Ember.subscribe("view.updateContext.positionElement", {
     before: function(){},
     after: function(name, timestamp, payload) {
-      repositions++;
+      positions++;
     }
   });
 
@@ -138,17 +136,17 @@ test("should perform correct number of renders and repositions on short list ini
 
   appendView();
 
-  equal(renders, 6, "The correct number of renders occured");
-  equal(repositions, 6, "The correct number of repositions occured");
+  equal(renders, 14, "The correct number of renders occured");
+  equal(positions, 35, "The correct number of positions occured");
 });
 
 test("should perform correct number of renders and repositions while short list scrolling", function () {
-  var content = helper.generateContent(6),
-      height = 50,
+  var content = helper.generateContent(8),
+      height = 60,
       width = 50,
       scrollTop = 50,
       rowHeight = 10,
-      repositions = 0,
+      positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
@@ -163,10 +161,10 @@ test("should perform correct number of renders and repositions while short list 
     }
   });
 
-  Ember.subscribe("view.updateContext.reposition", {
+  Ember.subscribe("view.updateContext.positionElement", {
     before: function(){},
     after: function(name, timestamp, payload) {
-      repositions++;
+      positions++;
     }
   });
 
@@ -185,8 +183,8 @@ test("should perform correct number of renders and repositions while short list 
     view.scrollTo(scrollTop);
   });
 
-  equal(renders, 6 + 5, "The correct number of renders occured");
-  equal(repositions, 6 + 1, "The correct number of repositions occured");
+  equal(renders, 21, "The correct number of renders occured");
+  equal(positions, 49, "The correct number of positions occured");
 });
 
 test("should perform correct number of renders and repositions on long list init", function () {
@@ -194,13 +192,11 @@ test("should perform correct number of renders and repositions on long list init
       height = 50,
       width = 50,
       rowHeight = 10,
-      repositions = 0,
+      positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
-
-  Ember.ENABLE_PROFILING = true;
 
   Ember.subscribe("view.updateContext.render", {
     before: function(){},
@@ -209,10 +205,10 @@ test("should perform correct number of renders and repositions on long list init
     }
   });
 
-  Ember.subscribe("view.updateContext.reposition", {
+  Ember.subscribe("view.updateContext.positionElement", {
     before: function(){},
     after: function(name, timestamp, payload) {
-      repositions++;
+      positions++;
     }
   });
 
@@ -227,8 +223,8 @@ test("should perform correct number of renders and repositions on long list init
 
   appendView();
 
-  equal(renders, 6, "The correct number of renders occured");
-  equal(repositions, 6, "The correct number of repositions occured");
+  equal(renders, ((height / 10) + 1) * 2, "The correct number of renders occured");
+  equal(positions, ((height / 10) + 1) * height / 10, "The correct number of positions occured");
 });
 
 test("should be programatically scrollable", function() {

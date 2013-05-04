@@ -9,18 +9,20 @@ function samePosition(a, b) {
 function positionElement() {
   var element, position, _position;
 
-  element = get(this, 'element');
-  position = get(this, 'position');
-  _position = this._position;
+  Ember.instrument('view.updateContext.positionElement', this, function() {
+    element = get(this, 'element');
+    position = get(this, 'position');
+    _position = this._position;
 
-  if (!position || !element) { return; }
+    if (!position || !element) { return; }
 
-  // TODO: avoid needing this by avoiding unnecessary
-  // calls to this method in the first place
-  if (samePosition(position, _position)) { return; }
-  this.applyTransform(element, position);
+    // TODO: avoid needing this by avoiding unnecessary
+    // calls to this method in the first place
+    if (samePosition(position, _position)) { return; }
+    this.applyTransform(element, position);
 
-  this._position = position;
+    this._position = position;
+  }, this);
 }
 
 Ember.ListItemViewMixin = Ember.Mixin.create({
