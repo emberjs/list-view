@@ -29,13 +29,15 @@ module("Ember.ListView Acceptance", {
     Ember.run(function() {
       if (view) { view.destroy(); }
     });
+
+    Ember.ENABLE_PROFILING = false;
   }
 });
 
 test("should exist", function() {
   view = Ember.ListView.create({
     height: 500,
-    rowHeight: 50 
+    rowHeight: 50
   });
   appendView();
   ok(view);
@@ -96,6 +98,133 @@ test("should render correctly with an initial scrollTop", function() {
   equal(positionSorted[10].innerText, "Item 20");
 
   deepEqual(helper.itemPositions(view).map(yPosition), [450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950], "The rows are in the correct positions");
+});
+
+test("should perform correct number of renders and repositions on short list init", function () {
+  var content = helper.generateContent(8),
+      height = 60,
+      width = 50,
+      rowHeight = 10,
+      positions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("view.updateContext.positionElement", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      positions++;
+    }
+  });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  equal(renders, 14, "The correct number of renders occured");
+  equal(positions, 35, "The correct number of positions occured");
+});
+
+test("should perform correct number of renders and repositions while short list scrolling", function () {
+  var content = helper.generateContent(8),
+      height = 60,
+      width = 50,
+      scrollTop = 50,
+      rowHeight = 10,
+      positions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  Ember.ENABLE_PROFILING = true;
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("view.updateContext.positionElement", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      positions++;
+    }
+  });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  Ember.run(function () {
+    view.scrollTo(scrollTop);
+  });
+
+  equal(renders, 21, "The correct number of renders occured");
+  equal(positions, 49, "The correct number of positions occured");
+});
+
+test("should perform correct number of renders and repositions on long list init", function () {
+  var content = helper.generateContent(200),
+      height = 50,
+      width = 50,
+      rowHeight = 10,
+      positions = 0,
+      renders = 0,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  Ember.subscribe("view.updateContext.render", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      renders++;
+    }
+  });
+
+  Ember.subscribe("view.updateContext.positionElement", {
+    before: function(){},
+    after: function(name, timestamp, payload) {
+      positions++;
+    }
+  });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    width: width,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    scrollTop: 0
+  });
+
+  appendView();
+
+  equal(renders, ((height / 10) + 1) * 2, "The correct number of renders occured");
+  equal(positions, ((height / 10) + 1) * height / 10, "The correct number of positions occured");
 });
 
 test("should be programatically scrollable", function() {

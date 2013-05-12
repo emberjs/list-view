@@ -101,9 +101,11 @@ function rerender() {
 Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context');
-    if (context !== newContext) {
-      set(this, 'context', newContext);
-    }
+    Ember.instrument('view.updateContext.render', this, function() {
+      if (context !== newContext) {
+        set(this, 'context', newContext);
+      }
+    }, this);
   },
   _contextDidChange: Ember.observer(rerender, 'context')
 });
