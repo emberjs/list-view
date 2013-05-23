@@ -21,6 +21,7 @@ we need to work on for future releases of `Ember.ListView`.
 1. [How it works](#how-it-works)
 1. [Run unit tests](#running-unit-tests)
 1. [Contributors](#list-of-contributors)
+1. [Caveats](#caveats)
 
 ## Dependecies
 
@@ -160,6 +161,22 @@ Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master
 ## Running unit tests
 
 Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
+
+## List of contributors
+
++ [Ray Cohen](https://github.com/raycohen)
++ [Stefan Penner](https://github.com/stefanpenner)
++ [Luke Melia](https://github.com/lukemelia)
++ [Erik Bryn](https://github.com/ebryn)
++ [Alex Navasardyan](https://github.com/2k00l)
++ [Christopher Manning](https://github.com/christophermanning)
++ [Sebastian Seilund](https://github.com/sebastianseilund)
+ 
+## Caveats
+
+Things we are aware about and are on the list to fix.
+
++ `classNameBindings` won't work properly after view's recycle. [Demo](http://jsfiddle.net/SPZn4/2/).
 
 ## Thanks
 
