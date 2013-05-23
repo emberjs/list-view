@@ -165,7 +165,7 @@ Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9
 
 Things we are aware about and are on the list to fix.
 
-+ `classNameBindings` won't work properly after view's recycle. [Demo](http://jsfiddle.net/SPZn4/2/).
++ `classNameBindings` and `attributeBindings` won't work properly on `ListItemView` after view's recycle. Using it should be avoided. [Demo](http://jsfiddle.net/SPZn4/2/).
 
 ## Thanks
 
