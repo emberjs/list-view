@@ -126,7 +126,7 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
 
     this._scroll = function(e) { that.scroll(e); };
 
-    element.addEventListener('scroll', this._scroll);
+    $(element).on('scroll', this._scroll);
   },
 
   willDestroyElement: function() {
@@ -134,7 +134,7 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
 
     element = get(this, 'element');
 
-    element.removeEventListener('scroll', this._scroll);
+    $(element).off('scroll', this._scroll);
   },
 
   scroll: function(e) {
