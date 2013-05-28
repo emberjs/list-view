@@ -61,9 +61,6 @@ function enableProfilingOutput() {
 
   function after (name, time, payload) {
     console.timeEnd(name);
-    if (payload) {
-      console.log(payload);
-    }
   }
 
   if (Ember.ENABLE_PROFILING) {
