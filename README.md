@@ -80,7 +80,7 @@ Here's an example of how to create your version of ```Ember.ListView```.
 
 ``` html
 <script type="text/x-handlebars" data-template-name="index">
-  {{view App.ListView contentBinding="content"}}
+  {{view App.ListView contentBinding="controller"}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="row_item">
