@@ -2,17 +2,6 @@ require('list-view/list_view_mixin');
 
 var get = Ember.get, set = Ember.set;
 
-function createScrollingView(){
-  return Ember.View.createWithMixins({
-    attributeBindings: ['style'],
-    classNames: ['ember-list-scrolling-view'],
-
-    style: Ember.computed(function() {
-      return "height: " + get(this, 'parentView.totalHeight') + "px";
-    }).property('parentView.totalHeight')
-  });
-}
-
 /**
   The `Ember.ListView` view class renders a
   [div](https://developer.mozilla.org/en/HTML/Element/div) HTML element,
@@ -124,6 +113,8 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     that = this,
     element = get(this, 'element');
 
+    this._updateScrollableHeight();
+
     this._scroll = function(e) { that.scroll(e); };
 
     Ember.$(element).on('scroll', this._scroll);
@@ -147,22 +138,15 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     this._scrollContentTo(y);
   },
 
-  childViewsWillSync: function(){
-    var scrollingView;
-    scrollingView = get(this, '_scrollingView');
-    this.removeObject(scrollingView);
-  },
+  totalHeightDidChange: Ember.observer(function () {
+    Ember.run.scheduleOnce('afterRender', this, this._updateScrollableHeight);
+  }, 'totalHeight'),
 
-  childViewsDidSync: function(){
-    var scrollingView;
-
-    scrollingView = get(this, '_scrollingView');
-
-    if (!scrollingView) {
-      scrollingView =  createScrollingView();
-      this.set('_scrollingView', scrollingView);
+  _updateScrollableHeight: function () {
+    if (this.state === 'inDOM') {
+      this.$('.ember-list-container').css({
+        height: get(this, 'totalHeight')
+      });
     }
-
-    this.pushObject(scrollingView);
   }
 });

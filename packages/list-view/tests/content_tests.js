@@ -54,7 +54,7 @@ test("replacing the list content", function() {
   });
 
   equal(view.$('.ember-list-item-view').length, 1, "The rendered list was updated");
-  equal(view.$(':last')[0].style.height, "50px", "The scrollable view has the correct height");
+  equal(view.$('.ember-list-container').height(), 50, "The scrollable view has the correct height");
 });
 
 test("adding to the front of the list content", function() {
@@ -80,7 +80,7 @@ test("adding to the front of the list content", function() {
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
   equal(positionSorted[0].innerText, "Item -1", "The item has been inserted in the list");
-  equal(view.$(':last')[0].style.height, "5050px", "The scrollable view has the correct height");
+  equal(view.$('.ember-list-container').height(), 5050, "The scrollable view has the correct height");
 });
 
 test("inserting in the middle of visible content", function() {

@@ -61,7 +61,7 @@ test("should render a subset of the full content, based on the height, in the co
   appendView();
 
   equal(view.get('element').style.height, "500px", "The list view height is correct");
-  equal(view.$(':last')[0].style.height, "5000px", "The scrollable view has the correct height");
+  equal(view.$('.ember-list-container').height(), 5000, "The scrollable view has the correct height");
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
@@ -787,7 +787,6 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
   appendView();
   equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
   equal(view.$('.ember-list-container > .ember-list-item-view').length, 0, "expected ember-list-items inside the wrapper div");
-  equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 1, "expected a ember-list-scrolling-view inside the wrapper div");
 });
 
 test("When scrolled to the very bottom, the 'padding' list items should be empty", function() {

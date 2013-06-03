@@ -679,7 +679,6 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
 
   equal(view.$('.ember-list-container').length, 1, "expected a ember-list-container wrapper div");
   equal(view.$('.ember-list-container > .ember-list-item-view').length, 0, "expected no ember-list-items inside the wrapper div");
-  equal(view.$('.ember-list-container > .ember-list-scrolling-view').length, 0, "expected no ember-list-scrolling-view inside the wrapper div");
 });
 
 test("When scrolled to the very bottom, the 'padding' list items should be empty", function() {

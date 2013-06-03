@@ -227,9 +227,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
     }, this);
   },
 
-  childViewsWillSync: Ember.K,
-  childViewsDidSync: Ember.K,
-
   /**
     @private
 
@@ -502,8 +499,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
       return;
     }
 
-    this.childViewsWillSync();
-
     childViewCount = this._childViewCount();
     childViews = this.positionOrderedChildViews();
 
@@ -541,8 +536,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
-
-    this.childViewsDidSync();
   },
 
   /**
