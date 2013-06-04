@@ -1,5 +1,3 @@
-require('list-view/list_view_helper');
-
 var get = Ember.get, set = Ember.set;
 
 function samePosition(a, b) {
@@ -19,7 +17,7 @@ function positionElement() {
     // TODO: avoid needing this by avoiding unnecessary
     // calls to this method in the first place
     if (samePosition(position, _position)) { return; }
-    this.applyTransform(element, position);
+    this._parentView.applyTransform(element, position);
 
     this._position = position;
   }, this);
@@ -33,6 +31,5 @@ Ember.ListItemViewMixin = Ember.Mixin.create({
   classNames: ['ember-list-item-view'],
   _position: null,
   _positionDidChange: Ember.observer(positionElement, 'position'),
-  _positionElement: positionElement,
-  applyTransform: Ember.ListViewHelper.applyTransform
+  _positionElement: positionElement
 });
