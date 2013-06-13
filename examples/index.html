@@ -11,47 +11,21 @@
     <script src="libs/handlebars.js"></script>
     <script src="libs/ember.js"></script>
     <script src="libs/list-view.js"></script>
+    <script src="app.js"></script>
     <script type="text/x-handlebars" data-template-name="index">
       <ul class="examples-list">
         <li>
-          <h2>List View Demo</h2>
-          {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50 width=500}}
-            {{name}}
-          {{/collection}}
-        </li>
-        <li>
-          <h2>List View Demo</h2>
-          {{view App.ListView contentBinding="content"}}
+          <h2>List View Demo</h2>  
+          {{render "people"}}
         </li>
       </ul>
     </script>
-    <script type="text/x-handlebars" data-template-name="row_item">
-      {{name}}
-    </script>
-    <script>
-      App = Ember.Application.create({});
-
-      App.IndexController = Ember.ArrayController.extend({
-        content: []
-      });
-
-      App.IndexRoute = Ember.Route.extend({
-        setupController: function(controller) {
-          var content = [];
-          for (var i = 0; i < 10000; i++) {
-            content.push({name: "Item " + i});
-          }
-          controller.set('content', content);
-        }
-      });
-
-      App.ListView = Ember.ListView.extend({
-        height: 500,
-        width: 500,
-        elementWidth: 80,
-        rowHeight: 20,
-        itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
-      });
+    <script type="text/x-handlebars" data-template-name="people">
+      <h2>People</h2>
+      {{#collection Ember.ListView contentBinding="controller" height=300 rowHeight=100 width=500}}
+        {{isActive}}:{{name}}
+        <button {{action toggleActive target="controller"}}> activate</button>
+      {{/collection}}
     </script>
   </body>
 </html>
