@@ -152,7 +152,9 @@ test("should perform correct number of renders and repositions while short list 
         template: Ember.Handlebars.compile("{{name}}")
       });
 
-  Ember.ENABLE_PROFILING = true;
+  if (window.console) {
+    Ember.ENABLE_PROFILING = true;
+  }
 
   Ember.subscribe("view.updateContext.render", {
     before: function(){},
