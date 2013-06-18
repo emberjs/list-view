@@ -66,20 +66,17 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   }, 'width', 'height', 'totalHeight'),
 
   didInsertElement: function() {
-    var that, listContainerElement, element;
+    var that, listContainerElement;
 
     that = this;
-    element = this.$()[0];
     this.listContainerElement = this.$('> .ember-list-container')[0];
 
     this._mouseWheel = function(e) { that.mouseWheel(e); };
-    element.addEventListener('mousewheel', this._mouseWheel);
+    this.$().on('mousewheel', this._mouseWheel);
   },
 
   willDestroyElement: function() {
-    var element = this.$()[0];
-
-    element.removeEventListener('mousewheel', this._mouseWheel);
+    this.$().off('mousewheel', this._mouseWheel);
   },
 
   willBeginScroll: function(touches, timeStamp) {
