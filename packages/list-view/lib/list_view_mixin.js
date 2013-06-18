@@ -2,7 +2,8 @@ require('list-view/list_view_helper');
 
 var get = Ember.get, set = Ember.set,
 min = Math.min, max = Math.max, floor = Math.floor,
-ceil = Math.ceil;
+ceil = Math.ceil,
+forEach = Ember.ArrayPolyfills.forEach;
 
 function addContentArrayObserver() {
   var content = get(this, 'content');
@@ -522,9 +523,11 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     } else {
       // less views are needed
-      childViews.
-        splice(numberOfChildViewsNeeded, numberOfChildViews).
-        forEach(removeAndDestroy, this);
+      forEach.call(
+        childViews.splice(numberOfChildViewsNeeded, numberOfChildViews),
+        removeAndDestroy,
+        this
+      );
     }
 
     this._scrollContentTo(get(this, 'scrollTop'));
@@ -605,12 +608,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
         index = 0;
         // ignore all changes not in the visible range
         // this can re-position many, rather then causing a cascade of re-renders
-        this.positionOrderedChildViews().
-          forEach(function(childView){
+        forEach.call(
+          this.positionOrderedChildViews(),
+          function(childView) {
             contentIndex = this._lastStartingIndex + index;
             this._reuseChildForContentIndex(childView, contentIndex);
             index++;
-          }, this);
+          },
+          this
+        );
       }
 
       syncChildViews.call(this);
