@@ -22,7 +22,7 @@ we need to work on for future releases of `Ember.ListView`.
 1. [Run unit tests](#running-unit-tests)
 1. [Caveats](#caveats)
 
-## Dependecies
+## Dependencies
 
 Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.com/),
 [handlebars](http://handlebarsjs.com), [ember.js](http://emberjs.com).
