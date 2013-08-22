@@ -117,6 +117,26 @@ Unfortunately, if you want to customize item template, you would have to use ```
 and create an additional template, as you see above. You cannot specify ```templateName``` paramter
 directly on ```Ember.ListView``` because it's derived from ```Ember.ContainerView``` and it cannot have a template.
 
+
+### Changing height and width of ```Ember.ListView``` during runtime
+
+The height and width of the entire ```Ember.ListView``` can be adjusted at run-time. 
+When this occurs the ```Ember.ListView``` will transform existing view items to the new locations, 
+and create and position any new view items that might be needed. 
+This is meant to make resizing as cheap as possible.
+
+``` javascript
+App.ListView = Ember.ListView.extend({
+  height: 500,
+  width: 960,
+  adjustLayout: function(new_width, new_height) {
+    this.set('width', new_width);
+    this.set('height', new_height);
+  }
+});
+```
+
+
 ### Required parameters
 
 You must specify the ```height``` and ```rowHeight``` parameters because ```Ember.ListView``` will try
