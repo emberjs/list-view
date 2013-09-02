@@ -9,7 +9,7 @@ Ember.ListViewHelper = {
 
         element.style.webkitTransform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
       };
-    }else{
+    } else {
       return function(element, position){
         var x = position.x,
             y = position.y;

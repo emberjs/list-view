@@ -14,11 +14,11 @@
     ENV.__test_hook_count__ += object;
   });
 
+  var extendPrototypes = QUnit.urlParams.exntedprototypes;
+  ENV['EXTEND_PROTOTYPES'] = !!extendPrototypes;
+
   // Handle extending prototypes
   QUnit.config.urlConfig.push('extendprototypes');
-
-  var extendPrototypes = QUnit.urlParams.extendprototypes;
-  ENV['EXTEND_PROTOTYPES'] = !!extendPrototypes;
 
   // Don't worry about jQuery version
   ENV['FORCE_JQUERY'] = true;

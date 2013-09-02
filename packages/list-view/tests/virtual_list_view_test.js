@@ -670,7 +670,7 @@ test("A property of an item can be changed", function() {
 
 test("The list view is wrapped in an extra div to support JS-emulated scrolling", function() {
   view = Ember.VirtualListView.create({
-    content: Ember.A({}),
+    content: Ember.A(),
     height: 100,
     rowHeight: 50
   });
