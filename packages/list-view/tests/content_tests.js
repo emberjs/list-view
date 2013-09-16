@@ -79,7 +79,7 @@ test("adding to the front of the list content", function() {
   });
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(positionSorted[0].innerText, "Item -1", "The item has been inserted in the list");
+  equal(Ember.$(positionSorted[0]).text(), "Item -1", "The item has been inserted in the list");
   equal(view.$('.ember-list-container').height(), 5050, "The scrollable view has the correct height");
 });
 
@@ -105,8 +105,8 @@ test("inserting in the middle of visible content", function() {
   });
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(positionSorted[0].innerText, "Item 1", "The item has been inserted in the list");
-  equal(positionSorted[2].innerText, "Item 2'", "The item has been inserted in the list");
+  equal(Ember.$(positionSorted[0]).text(), "Item 1", "The item has been inserted in the list");
+  equal(Ember.$(positionSorted[2]).text(), "Item 2'", "The item has been inserted in the list");
 });
 
 test("clearing the content", function() {
@@ -152,13 +152,13 @@ test("deleting the first element", function() {
   appendView();
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(positionSorted[0].innerText, "Item 1", "The item has been inserted in the list");
+  equal(Ember.$(positionSorted[0]).text(), "Item 1", "The item has been inserted in the list");
 
   Ember.run(function() {
     content.removeAt(0);
   });
 
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(positionSorted[0].innerText, "Item 2", "The item has been inserted in the list");
+  equal(Ember.$(positionSorted[0]).text(), "Item 2", "The item has been inserted in the list");
 });
 

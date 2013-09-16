@@ -9,7 +9,7 @@ function generateContent(n) {
 function extractPositionFromTransform(string) {
   var matched, x, y, position;
 
-  matched = string.match(/translate3d\((\d+)px,\s*(\d+)px,.*$/);
+  matched = string.match(/translate(?:3d)?\((\d+)px,\s*(\d+)px/);
 
   x = parseInt(matched[1], 10);
   y = parseInt(matched[2], 10);
@@ -28,7 +28,8 @@ function extractNumberFromPosition(string) {
 }
 
 function extractPosition(element) {
-  var style, position;
+  var style, position,
+    transformProp = Ember.ListViewHelper.transformProp;
 
   style = element.style;
 
@@ -37,8 +38,8 @@ function extractPosition(element) {
       y: extractNumberFromPosition(style.top),
       x: extractNumberFromPosition(style.left)
     };
-  } else if (style.webkitTransform) {
-    position = extractPositionFromTransform(style.webkitTransform);
+  } else if (style[transformProp]) {
+    position = extractPositionFromTransform(style[transformProp]);
   }
 
   return position;

@@ -80,8 +80,8 @@ test("should render a subset of the full content, based on the height, in the co
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
   equal(view.$('.ember-list-item-view').length, 11, "The correct number of rows were rendered");
-  equal(positionSorted[0].innerText, "Item 1");
-  equal(positionSorted[10].innerText, "Item 11");
+  equal(Ember.$(positionSorted[0]).text(), "Item 1");
+  equal(Ember.$(positionSorted[10]).text(), "Item 11");
 
   deepEqual(helper.itemPositions(view).map(yPosition), [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]);
 });
@@ -184,8 +184,8 @@ test("should render correctly with an initial scrollTop", function() {
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
-  equal(positionSorted[0].innerText, "Item 10");
-  equal(positionSorted[10].innerText, "Item 20");
+  equal(Ember.$(positionSorted[0]).text(), "Item 10");
+  equal(Ember.$(positionSorted[10]).text(), "Item 20");
 
   deepEqual(helper.itemPositions(view).map(yPosition), [450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950], "The rows are in the correct positions");
 });
@@ -351,7 +351,7 @@ test("height and width change after with scroll – simple", function(){
             ], "after width + height change: The rows are in the correct positions");
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+  var texts = Ember.$.map(sortedElements, function(el){ return Ember.$(el).text(); });
   deepEqual(texts, [
              'A:Item 4B:Item 4',
              'A:Item 5B:Item 5',
@@ -446,7 +446,7 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items, ", 
             ], "The rows are in the correct positions");
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+  var texts = Ember.$.map(sortedElements, function(el){ return Ember.$(el).text(); });
   deepEqual(texts, [
              'A:Item 3B:Item 3', 'A:Item 4B:Item 4',
              'A:Item 5B:Item 5', '',
@@ -493,7 +493,7 @@ test("elementWidth change", function(){
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
   for(i = 0; i < 10; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i+1));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
   }
 
   Ember.run(function() {
@@ -513,7 +513,7 @@ test("elementWidth change", function(){
   ], "The rows are in the correct positions");
 
   for(i = 0; i < 5; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i+1));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
   }
 
   Ember.run(function() {
@@ -535,7 +535,7 @@ test("elementWidth change", function(){
             { x:100, y: 200 }], "The rows are in the correct positions");
 
   for(i = 0; i < 10; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i+1));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
   }
 });
 
@@ -582,7 +582,7 @@ test("elementWidth change with scroll", function(){
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
   for (i = 0; i < 10; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i + 41));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i + 41));
   }
 
   Ember.run(function() {
@@ -601,7 +601,7 @@ test("elementWidth change with scroll", function(){
             { x:0,   y: 2200 }], "after width 100 - The rows are in the correct positions");
 
   for(i = 0; i < 5; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i + 41));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i + 41));
   }
 
   Ember.run(function() {
@@ -623,7 +623,7 @@ test("elementWidth change with scroll", function(){
             { x:100, y: 1200 }], "after width 200 - The rows are in the correct positions");
 
   for(i = 0; i < 10; i++) {
-    equal(positionSorted[i].innerText, "Item " + (i + 41));
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i + 41));
   }
 });
 
@@ -788,7 +788,7 @@ test("adding a column, when everything is already within viewport", function(){
             ], "after width + height change: The rows are in the correct positions");
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  var texts = Ember.$.map(sortedElements, function(el){ return el.innerText; });
+  var texts = Ember.$.map(sortedElements, function(el){ return Ember.$(el).text(); });
 
   deepEqual(texts, [
              'A:Item 1B:Item 1',
