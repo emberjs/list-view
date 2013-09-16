@@ -557,7 +557,7 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items, ", 
             ], "The rows are in the correct positions");
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  var texts = Ember.$.map(sortedElements, function(el){ return $(el).text(); });
+  var texts = Ember.$.map(sortedElements, function(el){ return Ember.$(el).text(); });
   deepEqual(texts, [
              'A:Item 3B:Item 3', 'A:Item 4B:Item 4',
              'A:Item 5B:Item 5', '',
