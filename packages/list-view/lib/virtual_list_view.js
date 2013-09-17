@@ -1,6 +1,7 @@
 /*global Scroller*/
 require('list-view/list_view_mixin');
 require('list-view/list_view_helper');
+require('list-view/virtual_list_scroller_events');
 
 var max = Math.max, get = Ember.get, set = Ember.set;
 
@@ -23,8 +24,9 @@ function updateScrollerDimensions(target) {
   @class VirtualListView
   @namespace Ember
 */
-Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
+Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.VirtualListScrollerEvents, {
   _isScrolling: false,
+  _mouseWheel: null,
   css: {
     position: 'relative',
     overflow: 'hidden'
@@ -66,17 +68,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   }, 'width', 'height', 'totalHeight'),
 
   didInsertElement: function() {
-    var that, listContainerElement;
-
-    that = this;
     this.listContainerElement = this.$('> .ember-list-container')[0];
-
-    this._mouseWheel = function(e) { that.mouseWheel(e); };
-    this.$().on('mousewheel', this._mouseWheel);
-  },
-
-  willDestroyElement: function() {
-    this.$().off('mousewheel', this._mouseWheel);
   },
 
   willBeginScroll: function(touches, timeStamp) {
@@ -107,6 +99,10 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     }
   },
 
+  endScroll: function(timeStamp) {
+    this.scroller.doTouchEnd(timeStamp);
+  },
+
   // api
   scrollTo: function(y, animate) {
     if (animate === undefined) {
@@ -128,48 +124,6 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
       this.scroller.scrollBy(0, delta, true);
     }
 
-    return false;
-  },
-
-  endScroll: function(timeStamp) {
-    this.scroller.doTouchEnd(timeStamp);
-  },
-
-  touchStart: function(e){
-    e = e.originalEvent || e;
-    this.willBeginScroll(e.touches, e.timeStamp);
-    return false;
-  },
-
-  touchMove: function(e){
-    e = e.originalEvent || e;
-    this.continueScroll(e.touches, e.timeStamp);
-    return false;
-  },
-
-  touchEnd: function(e){
-    e = e.originalEvent || e;
-    this.endScroll(e.timeStamp);
-    return false;
-  },
-
-  mouseDown: function(e){
-    this.willBeginScroll([e], e.timeStamp);
-    return false;
-  },
-
-  mouseMove: function(e){
-    this.continueScroll([e], e.timeStamp);
-    return false;
-  },
-
-  mouseUp: function(e){
-    this.endScroll(e.timeStamp);
-    return false;
-  },
-
-  mouseLeave: function(e){
-    this.endScroll(e.timeStamp);
     return false;
   }
 });

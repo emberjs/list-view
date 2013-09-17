@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
@@ -7,6 +8,11 @@
         overflow: auto;
         position: relative;
         width: 100%;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
       }
 
       .ember-list-item-view {
@@ -29,9 +35,8 @@
     <script src="/handlebars.js"></script>
     <script type="text/javascript" src="/ember.js"></script>
     <script type="text/javascript" src="/demos/vendor/group-helper.js"></script>
-    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.e3e4f0f38ffea6b0aef98135372e4305d7f6e53b.js"></script>
-    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Raf.e3e4f0f38ffea6b0aef98135372e4305d7f6e53b.js"></script>
-    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.e3e4f0f38ffea6b0aef98135372e4305d7f6e53b.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
     <script type="text/javascript">
       document.addEventListener("DOMMouseScroll", function(e) {
