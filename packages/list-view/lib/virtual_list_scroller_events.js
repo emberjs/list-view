@@ -92,7 +92,7 @@ function unbindWindow(handlers) {
   window.removeEventListener(cancelEvent, handlers.cancel, false);
 }
 
-Ember.VirtualListScrollerEvents = Em.Mixin.create({
+Ember.VirtualListScrollerEvents = Ember.Mixin.create({
   init: function() {
     this.on('didInsertElement', this, 'bindScrollerEvents');
     this.on('willDestroyElement', this, 'unbindScrollerEvents');
