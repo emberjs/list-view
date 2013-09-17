@@ -1,5 +1,5 @@
 var fieldRegex = /input|textarea|select/i,
-  hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+  hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
   handleStart, handleMove, handleEnd, handleCancel,
   startEvent, moveEvent, endEvent, cancelEvent;
 if (hasTouch) {

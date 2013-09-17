@@ -27,7 +27,7 @@ function appendView() {
 }
 
 function fireEvent(type, target) {
-  var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+  var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
     events = hasTouch ? {
       start: 'touchstart',
       move: 'touchmove',
