@@ -25,10 +25,6 @@ function sortByContentIndex (viewOne, viewTwo){
   return get(viewOne, 'contentIndex') - get(viewTwo, 'contentIndex');
 }
 
-function detectListItemViews(childView) {
-  return Ember.ListItemViewMixin.detect(childView);
-}
-
 function notifyMutationListeners() {
   if (Ember.View.notifyMutationListeners) {
     Ember.run.once(Ember.View, 'notifyMutationListeners');
@@ -104,6 +100,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     this._super();
     this.on('didInsertElement', syncListContainerWidth);
     this.columnCountDidChange();
+    this._syncChildViews();
     this._addContentArrayObserver();
   },
 
@@ -494,7 +491,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     @method _syncChildViews
    **/
-  _syncChildViews: Ember.on('init', function(){
+  _syncChildViews: function(){
     var itemViewClass, startingIndex, childViewCount,
         endingIndex, numberOfChildViews, numberOfChildViewsNeeded,
         childViews, count, delta, index, childViewsLength, contentIndex;
@@ -542,7 +539,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
-  }),
+  },
 
   /**
     @private
@@ -557,7 +554,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     scrollTop = get(this, 'scrollTop');
     contentLength = get(this, 'content.length');
     maxContentIndex = max(contentLength - 1, 0);
-    childViews = get(this, 'listItemViews');
+    childViews = this._childViews;
     childViewsLength =  childViews.length;
 
     startingIndex = this._startingIndex();
@@ -577,22 +574,10 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   /**
     @private
-
-    Returns an array of current ListItemView views in the visible area
-    when you start to scroll.
-
-    @property {Ember.ComputedProperty} listItemViews
-  */
-  listItemViews: Ember.computed('[]', function(){
-    return this.filter(detectListItemViews);
-  }),
-
-  /**
-    @private
     @method positionOrderedChildViews
   */
   positionOrderedChildViews: function() {
-    return get(this, 'listItemViews').sort(sortByContentIndex);
+    return this._childViews.sort(sortByContentIndex);
   },
 
   arrayWillChange: Ember.K,
