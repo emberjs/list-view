@@ -81,15 +81,15 @@ function unbindElement(el, handlers) {
 }
 
 function bindWindow(handlers) {
-  window.addEventListener(moveEvent, handlers.move, false);
-  window.addEventListener(endEvent, handlers.end, false);
-  window.addEventListener(cancelEvent, handlers.cancel, false);
+  window.addEventListener(moveEvent, handlers.move, true);
+  window.addEventListener(endEvent, handlers.end, true);
+  window.addEventListener(cancelEvent, handlers.cancel, true);
 }
 
 function unbindWindow(handlers) {
-  window.removeEventListener(moveEvent, handlers.move, false);
-  window.removeEventListener(endEvent, handlers.end, false);
-  window.removeEventListener(cancelEvent, handlers.cancel, false);
+  window.removeEventListener(moveEvent, handlers.move, true);
+  window.removeEventListener(endEvent, handlers.end, true);
+  window.removeEventListener(cancelEvent, handlers.cancel, true);
 }
 
 Ember.VirtualListScrollerEvents = Ember.Mixin.create({
