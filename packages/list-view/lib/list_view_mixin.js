@@ -126,7 +126,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   willInsertElement: function() {
     if (!this.get("height") || !this.get("rowHeight")) {
-      throw "A ListView must be created with a height and a rowHeight.";
+      throw new Error("A ListView must be created with a height and a rowHeight.");
     }
     this._super();
   },
@@ -175,7 +175,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     @method scrollTo
   */
   scrollTo: function(y) {
-    throw 'must override to perform the visual scroll and effectively delegate to _scrollContentTo';
+    throw new Error('must override to perform the visual scroll and effectively delegate to _scrollContentTo');
   },
 
   /**
