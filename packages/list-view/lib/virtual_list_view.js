@@ -35,6 +35,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
   init: function(){
     this._super();
     this.setupScroller();
+    this.setupPullToRefresh();
   },
   _scrollerTop: 0,
   applyTransform: Ember.ListViewHelper.apply3DTransform,
@@ -61,6 +62,56 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
 
     view.trigger('didInitializeScroller');
     updateScrollerDimensions(view);
+  },
+  setupPullToRefresh: function() {
+    if (!this.pullToRefreshViewClass) { return; }
+    this._insertPullToRefreshView();
+    this._activateScrollerPullToRefresh();
+  },
+  _insertPullToRefreshView: function(){
+    this.pullToRefreshView = this.createChildView(this.pullToRefreshViewClass);
+    this.insertAt(0, this.pullToRefreshView);
+    var view = this;
+    this.pullToRefreshView.on('didInsertElement', function(){
+      view.applyTransform(this.get('element'), 0, -1 * view.pullToRefreshViewHeight);
+    });
+  },
+  _activateScrollerPullToRefresh: function(){
+    var view = this;
+    function activatePullToRefresh(){
+      view.pullToRefreshView.set('active', true);
+      view.trigger('activatePullToRefresh');
+    }
+    function deactivatePullToRefresh() {
+      view.pullToRefreshView.set('active', false);
+      view.trigger('deactivatePullToRefresh');
+    }
+    function startPullToRefresh() {
+      view.pullToRefreshView.set('refreshing', true);
+
+      function finishRefresh(){
+        if (view && !view.get('isDestroyed') && !view.get('isDestroying')) {
+          view.scroller.finishPullToRefresh();
+          view.pullToRefreshView.set('refreshing', false);
+        }
+      }
+      view.startRefresh(finishRefresh);
+    }
+    this.scroller.activatePullToRefresh(
+      this.pullToRefreshViewHeight,
+      activatePullToRefresh,
+      deactivatePullToRefresh,
+      startPullToRefresh
+    );
+  },
+
+  getReusableChildViews: function(){
+    var firstView = this._childViews[0];
+    if (firstView && firstView === this.pullToRefreshView) {
+      return this._childViews.slice(1);
+    } else {
+      return this._childViews;
+    }
   },
 
   scrollerDimensionsNeedToChange: Ember.observer(function() {
