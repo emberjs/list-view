@@ -554,7 +554,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     scrollTop = get(this, 'scrollTop');
     contentLength = get(this, 'content.length');
     maxContentIndex = max(contentLength - 1, 0);
-    childViews = this._childViews;
+    childViews = this.getReusableChildViews();
     childViewsLength =  childViews.length;
 
     startingIndex = this._startingIndex();
@@ -574,10 +574,18 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
   /**
     @private
+    @method getReusableChildViews
+  */
+  getReusableChildViews: function() {
+    return this._childViews;
+  },
+
+  /**
+    @private
     @method positionOrderedChildViews
   */
   positionOrderedChildViews: function() {
-    return this._childViews.sort(sortByContentIndex);
+    return this.getReusableChildViews().sort(sortByContentIndex);
   },
 
   arrayWillChange: Ember.K,

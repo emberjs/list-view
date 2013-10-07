@@ -9,7 +9,7 @@ function generateContent(n) {
 function extractPositionFromTransform(string) {
   var matched, x, y, position;
 
-  matched = string.match(/translate(?:3d)?\((\d+)px,\s*(\d+)px/);
+  matched = string.match(/translate(?:3d)?\((-?\d+)px,\s*(-?\d+)px/);
 
   x = parseInt(matched[1], 10);
   y = parseInt(matched[2], 10);
@@ -82,5 +82,6 @@ function itemPositions(view) {
 window.helper = {
   itemPositions: itemPositions,
   generateContent: generateContent,
-  sortElementsByPosition: sortElementsByPosition
+  sortElementsByPosition: sortElementsByPosition,
+  extractPosition: extractPosition
 };
