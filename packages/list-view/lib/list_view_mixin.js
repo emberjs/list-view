@@ -216,12 +216,12 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
       this.trigger('scrollYChanged', y);
 
+      this._reuseChildren();
+
       if (startingIndex === this._lastStartingIndex &&
           endingIndex === this._lastEndingIndex) {
         return;
       }
-
-      this._reuseChildren();
 
       this._lastStartingIndex = startingIndex;
       this._lastEndingIndex = endingIndex;
@@ -531,11 +531,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
     }
 
     this._scrollContentTo(get(this, 'scrollTop'));
-
-    // if _scrollContentTo short-circuits, we still need
-    // to call _reuseChildren to get new views positioned
-    // and rendered correctly
-    this._reuseChildren();
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;

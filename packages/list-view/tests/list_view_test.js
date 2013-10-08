@@ -136,8 +136,8 @@ test("should perform correct number of renders and repositions on short list ini
 
   appendView();
 
-  equal(renders, 14, "The correct number of renders occured");
-  equal(positions, 35, "The correct number of positions occured");
+  equal(renders, 7, "The correct number of renders occured");
+  equal(positions, 21, "The correct number of positions occured");
 });
 
 test("should perform correct number of renders and repositions while short list scrolling", function () {
@@ -185,8 +185,8 @@ test("should perform correct number of renders and repositions while short list 
     view.scrollTo(scrollTop);
   });
 
-  equal(renders, 21, "The correct number of renders occured");
-  equal(positions, 49, "The correct number of positions occured");
+  equal(renders, 14, "The correct number of renders occured");
+  equal(positions, 35, "The correct number of positions occured");
 });
 
 test("should perform correct number of renders and repositions on long list init", function () {
@@ -225,8 +225,8 @@ test("should perform correct number of renders and repositions on long list init
 
   appendView();
 
-  equal(renders, ((height / 10) + 1) * 2, "The correct number of renders occured");
-  equal(positions, ((height / 10) + 1) * height / 10, "The correct number of positions occured");
+  equal(renders, ((height / 10) + 1),  "The correct number of renders occurred");
+  equal(positions, 18, "The correct number of positions occurred");
 });
 
 test("should be programatically scrollable", function() {
