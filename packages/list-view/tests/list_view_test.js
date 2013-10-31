@@ -823,3 +823,81 @@ test("Creating a ListView without height and rowHeight properties should throw a
   /A ListView must be created with a height and a rowHeight./, "Throws exception.");
 });
 
+test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
+  throws(function() {
+    view = Ember.ListView.create({
+      content: helper.generateContent(4)
+    });
+
+    appendView();
+  },
+  /A ListView must be created with a height and a rowHeight./, "Throws exception.");
+});
+
+test("should trigger scrollYChanged correctly", function () {
+  var scrollYChanged = 0, reuseChildren = 0;
+
+  view = Ember.ListView.extend({
+    init: function () {
+      this.on('scrollYChanged', function () {
+        scrollYChanged++;
+      });
+      this._super();
+    },
+    _reuseChildren: function () {
+      reuseChildren++;
+      this._super();
+    }
+  }).create({
+    content: helper.generateContent(10),
+    height: 100,
+    rowHeight: 50
+  });
+
+  appendView();
+
+  equal(scrollYChanged, 0, 'scrollYChanged should not fire on init');
+
+  Ember.run(function () {
+    view.scrollTo(1);
+  });
+
+  equal(scrollYChanged, 1, 'scrollYChanged should fire after scroll');
+
+  Ember.run(function () {
+    view.scrollTo(1);
+  });
+
+  equal(scrollYChanged, 1, 'scrollYChanged should not fire for same value');
+});
+
+test("should trigger reuseChildren correctly", function () {
+  var scrollYChanged = 0, reuseChildren = 0;
+
+  view = Ember.ListView.extend({
+    _reuseChildren: function () {
+      reuseChildren++;
+      this._super();
+    }
+  }).create({
+    content: helper.generateContent(10),
+    height: 100,
+    rowHeight: 50
+  });
+
+  appendView();
+
+  equal(reuseChildren, 1, 'initialize the content');
+
+  Ember.run(function () {
+    view.scrollTo(1);
+  });
+
+  equal(reuseChildren, 1, 'should not update the content');
+
+  Ember.run(function () {
+    view.scrollTo(51);
+  });
+
+  equal(reuseChildren, 2, 'should update the content');
+});
