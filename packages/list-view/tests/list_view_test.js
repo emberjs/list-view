@@ -812,6 +812,34 @@ test("When scrolled to the very bottom, the 'padding' list items should be empty
   equal(lastEl.innerHTML, '', "expected the last ('padding') item view to have no content");
 });
 
+test("When scrolled past the totalHeight, views should not be recycled in. This is to support overscroll", function() {
+  view = Ember.ListView.create({
+    content: helper.generateContent(2),
+    height:100,
+    rowHeight: 50,
+    itemViewClass: Ember.ListItemView.extend({
+      template: Ember.Handlebars.compile("Name: {{name}}")
+    })
+  });
+
+  appendView();
+
+  Ember.run(function(){
+    view.scrollTo(150);
+  });
+
+  var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 2, "after width 200 - The correct number of rows were rendered");
+
+  deepEqual(helper.itemPositions(view), [
+            { x:0, y:  0 },
+            { x:0, y: 50 }] , "went beyond scroll max via overscroll");
+
+  equal(Ember.$(positionSorted[0]).text(), "Name: Item " + 1);
+  equal(Ember.$(positionSorted[1]).text(), "Name: Item " + 2);
+});
+
+
 test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
   throws(function() {
     view = Ember.ListView.create({
