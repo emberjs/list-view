@@ -132,7 +132,7 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   scroll: function(e) {
-    Ember.run(this, this.scrollTo, e.target.scrollTop);
+    this.scrollTo(e.target.scrollTop);
   },
 
   scrollTo: function(y){

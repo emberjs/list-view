@@ -1,4 +1,4 @@
-// Last commit: ee15285 (2013-12-13 12:18:21 -0500)
+// Last commit: 66834ad (2014-01-05 22:01:50 -0800)
 
 
 (function() {
@@ -477,10 +477,12 @@ Ember.ListViewMixin = Ember.Mixin.create({
         return;
       }
 
-      this._reuseChildren();
+      Ember.run(this, function(){
+        this._reuseChildren();
 
-      this._lastStartingIndex = startingIndex;
-      this._lastEndingIndex = endingIndex;
+        this._lastStartingIndex = startingIndex;
+        this._lastEndingIndex = endingIndex;
+      });
     }, this);
   },
 
@@ -1005,7 +1007,7 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   scroll: function(e) {
-    Ember.run(this, this.scrollTo, e.target.scrollTop);
+    this.scrollTo(e.target.scrollTop);
   },
 
   scrollTo: function(y){
@@ -1221,9 +1223,9 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
       if (view.state !== 'inDOM') { return; }
 
       if (view.listContainerElement) {
-        view.applyTransform(view.listContainerElement, 0, -top);
         view._scrollerTop = top;
         view._scrollContentTo(top);
+        view.applyTransform(view.listContainerElement, 0, -top);
       }
     }, {
       scrollingX: false,
@@ -1245,7 +1247,9 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
     this.insertAt(0, this.pullToRefreshView);
     var view = this;
     this.pullToRefreshView.on('didInsertElement', function(){
-      view.applyTransform(this.get('element'), 0, -1 * view.pullToRefreshViewHeight);
+      Ember.run.schedule('afterRender', this, function(){
+        view.applyTransform(this.get('element'), 0, -1 * view.pullToRefreshViewHeight);
+      });
     });
   },
   _activateScrollerPullToRefresh: function(){
