@@ -200,7 +200,9 @@ to fill visible area with rows. If you would like to have multiple columns, then
         content: content,
         height: 500,
         rowHeight: 50,
-        itemViewClass: Ember.ListItemView.extend({templateName: "row_item"})
+        itemViewClass: Ember.ReusableListItemView.extend({
+          templateName: "row_item"
+        })
       });
 
       // define default index route and pushing some data to content
@@ -219,9 +221,9 @@ to fill visible area with rows. If you would like to have multiple columns, then
     </script>
     <script type="text/x-handlebars" data-template-name="index">
       <h2>Virtual List View</h2>
-      {{view App.ExtendedVirtualList contentBinding="content"}}
+      {{view App.ExtendedVirtualList content=content}}
       <h2>List View</h2>
-      {{#collection Ember.ListView contentBinding="controller" height=500 rowHeight=50}}
+      {{#collection Ember.ListView content=controller height=500 rowHeight=50}}
         {{name}}
       {{/collection}}
     </script>
