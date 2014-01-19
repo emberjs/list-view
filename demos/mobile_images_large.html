@@ -42,23 +42,20 @@
     <script src="/handlebars.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
-    <script type="text/javascript" src="/ember.js"></script>
-    <script type="text/javascript" src="/demos/vendor/group-helper.js"></script>
+    <script type="text/javascript" src="/demos/vendor/ember.prod.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
   </head>
   <body>
     <script type="text/x-handlebars">
-      {{#collection Ember.VirtualListView contentBinding="controller" height=460 width=320 rowHeight=154 elementWidth=154}}
+      {{#collection Ember.VirtualListView content=controller height=460 width=320 rowHeight=154 elementWidth=154}}
         <div class="photo-grid-list-item">
           <div class="medium-frame">
-            {{#view App.PictureView}}
-              <img class="y-medium-thumbnail" width="133" height="133" {{bindAttr src="imageSrc"}}>
+            {{#view 'picture'}}
+              <img class="y-medium-thumbnail" width="133" height="133" {{bind-attr src="imageSrc"}}>
             {{/view}}
           </div>
         </div>
       {{/collection}}
-      {{#group}}
-      {{/group}}
     </script>
 
     <script>
@@ -84,16 +81,12 @@
       });
 
       var images = [
-        'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
-        'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg',
-        'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg',
         'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
         'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
         'http://www.senseimarketing.com/Portals/0/images/big%20data%20for%20blog.jpg',
         'http://www.thoughtworks.com/sites/www.thoughtworks.com/files/images/27/big-data-postcard.jpg',
         'http://cdn2.content.compendiumblog.com/uploads/user/3afaea40-a8eb-46e1-9cf6-d5c5a7093358/eab01a0a-55a8-4567-a001-429a7cf41f41/Image/af6a8f558d50dfae99175f484d7d3c65/big_data_w640.png',
         'http://zapt1.staticworld.net/images/article/2012/12/privacy-goes-public-100018807-gallery.jpg',
-        'http://freepostermaker.com/uploads/saved_posters/free-poster-sm3kedayrs-DIGITAL-LAW.jpg',
         'http://www.innovationmanagement.se/wp-content/uploads/2012/06/big-data-digital-technologies-transform-businesses-lack-capabilities.jpg',
         'http://www.microsoft.com/global/enterprise/publishingimages/featured-arts/big_data_insights.png'
       ];

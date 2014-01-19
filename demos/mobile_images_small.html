@@ -42,17 +42,16 @@
     <script src="/handlebars.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
-    <script type="text/javascript" src="/ember.js"></script>
-    <script type="text/javascript" src="/demos/vendor/group-helper.js"></script>
+    <script type="text/javascript" src="/demos/vendor/ember.prod.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
   </head>
   <body>
     <script type="text/x-handlebars">
-      {{#collection Ember.VirtualListView contentBinding="controller" height=460 width=320 rowHeight=154 elementWidth=154}}
+      {{#collection Ember.VirtualListView content=controller height=460 width=320 rowHeight=154 elementWidth=154}}
         <div class="photo-grid-list-item">
           <div class="medium-frame">
-            {{#view App.PictureView}}
-              <img class="y-medium-thumbnail" width="133" height="133" {{bindAttr src="imageSrc"}}>
+            {{#view 'picture'}}
+              <img class="y-medium-thumbnail" width="133" height="133" {{bind-attr src="imageSrc"}}>
             {{/view}}
           </div>
         </div>
