@@ -551,16 +551,18 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items, ", 
   equal(view.$('.ember-list-item-view').length, 5, "after width + height change: the correct number of rows were rendered");
 
   deepEqual(helper.itemPositions(view), [
+                                { x: 50, y:   0 },
               { x: 0, y:  50 }, { x: 50, y:  50 },
-              { x: 0, y: 100 }, { x: 50, y: 100 },
-              { x: 0, y: 150 }
-            ], "The rows are in the correct positions");
+              { x: 0, y: 100 }, { x: 50, y: 100 }
+            ], "after width + height change: The rows are in the correct positions");
 
   var sortedElements = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
   var texts = Ember.$.map(sortedElements, function(el){ return Ember.$(el).text(); });
   deepEqual(texts, [
-             'A:Item 3B:Item 3', 'A:Item 4B:Item 4',
-             'A:Item 5B:Item 5', '',
+             'A:Item 2B:Item 2',
+             'A:Item 3B:Item 3',
+             'A:Item 4B:Item 4',
+             'A:Item 5B:Item 5',
              ''
             ], 'elements should be rendered in expected position');
 });
@@ -928,4 +930,72 @@ test("should trigger reuseChildren correctly", function () {
   });
 
   equal(reuseChildren, 2, 'should update the content');
+});
+
+
+test("asdf", function() {
+  view = Ember.ListView.create({
+    content: helper.generateContent(15),
+    height: 235,
+    rowHeight: 73,
+    itemViewClass: Ember.ListItemView.extend({
+      template: Ember.Handlebars.compile("Name: {{name}}")
+    })
+  });
+
+  appendView();
+
+  var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 5);
+
+  deepEqual(helper.itemPositions(view), [
+            { x:0, y:   0 },
+            { x:0, y:  73 },
+            { x:0, y: 146 },
+            { x:0, y: 219 },
+            { x:0, y: 292 }
+  ] , "went beyond scroll max via overscroll");
+
+  var i;
+  for ( i = 0; i < positionSorted.length; i++) {
+    equal(Ember.$(positionSorted[i]).text(), "Name: Item " + (i + 1));
+  }
+
+  Ember.run(view, 'scrollTo', 1000);
+
+  positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 5);
+
+  // expected
+  // -----
+  // 1   |
+  // 2   |
+  // 3   |
+  // 4   |
+  // 5   | <--- hidden
+  // 6   |
+  // 7   |
+  // 8   |
+  // 9   |
+  // 10  |
+  // ----- 
+  // 11  |  <- buffer
+  // ----
+  // 12  | <-- partially visible
+  // 13  | <--- visible
+  // 14  |
+  // 15  |
+  // ----
+  deepEqual(helper.itemPositions(view), [
+            { x:0, y:  657 }, // <-- buffer
+            { x:0, y:  730 }, // <-- sorta in view
+            { x:0, y:  803 }, // <-- in view
+            { x:0, y:  876 }, // <-- in view
+            { x:0, y:  949 }  // <-- in view
+  ] , "went beyond scroll max via overscroll");
+
+  debugger;
+  for ( i = 0; i < positionSorted.length; i++) {
+    equal(Ember.$(positionSorted[i]).text(), "Name: Item " + (i + 10));
+  }
 });

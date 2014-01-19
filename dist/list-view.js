@@ -1,4 +1,4 @@
-// Last commit: ee15285 (2013-12-13 12:18:21 -0500)
+// Last commit: 10db771 (2013-12-13 13:27:36 -0500)
 
 
 (function() {
@@ -457,8 +457,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
     Ember.instrument('view._scrollContentTo', {
       scrollTop: scrollTop,
       content: get(this, 'content'),
-      startingIndex: this._startingIndex(),
-      endingIndex: min(max(get(this, 'content.length') - 1, 0), this._startingIndex() + this._numChildViewsForViewport())
+      startingIndex: this._startingIndex()//,
+      //endingIndex: min(max(get(this, 'content.length') - 1, 0), this._startingIndex() + this._numChildViewsForViewport())
     }, function () {
       contentLength = get(this, 'content.length');
       set(this, 'scrollTop', scrollTop);
@@ -650,7 +650,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   /**
     @private
 
-    Computes the number of views that would fit in the viewport area.
+    Computes the number of views that would 4it in the viewport area.
     You must specify `height` and `rowHeight` parameters for the number of
     views to be computed properly.
 
@@ -688,7 +688,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
 
-    largestStartingIndex = max(contentLength - 1, 0);
+    var forViewport = this._numChildViewsForViewport();
+    var paddingCount = (1 * columnCount);
+    largestStartingIndex = max(contentLength - (forViewport + paddingCount), 0);
 
     return min(calculatedStartingIndex, largestStartingIndex);
   },
