@@ -275,7 +275,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     content = get(this, 'content');
     enableProfiling = get(this, 'enableProfiling');
     position = this.positionForIndex(contentIndex);
-    set(childView, 'position', position);
+    childView.updatePosition(position);
 
     set(childView, 'contentIndex', contentIndex);
 

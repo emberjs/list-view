@@ -10,7 +10,7 @@ function positionElement() {
 
   Ember.instrument('view.updateContext.positionElement', this, function() {
     element = get(this, 'element');
-    position = get(this, 'position');
+    position = this.position;
     _position = this._position;
 
     if (!position || !element) { return; }
@@ -31,7 +31,10 @@ Ember.ListItemViewMixin = Ember.Mixin.create({
   },
   classNames: ['ember-list-item-view'],
   _position: null,
-  _positionDidChange: Ember.observer(positionElement, 'position'),
+  updatePosition: function(position) {
+    this.position = position;
+    this._positionElement();
+  },
   _positionElement: positionElement
 });
 
@@ -520,7 +523,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     content = get(this, 'content');
     enableProfiling = get(this, 'enableProfiling');
     position = this.positionForIndex(contentIndex);
-    set(childView, 'position', position);
+    childView.updatePosition(position);
 
     set(childView, 'contentIndex', contentIndex);
 

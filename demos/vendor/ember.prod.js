@@ -21744,11 +21744,11 @@ Ember.EventDispatcher = Ember.Object.extend({
     contextmenu : 'contextMenu',
     click       : 'click',
     dblclick    : 'doubleClick',
-    mousemove   : 'mouseMove',
+    //mousemove   : 'mouseMove',
     focusin     : 'focusIn',
     focusout    : 'focusOut',
-    mouseenter  : 'mouseEnter',
-    mouseleave  : 'mouseLeave',
+    //mouseenter  : 'mouseEnter',
+    //mouseleave  : 'mouseLeave',
     submit      : 'submit',
     input       : 'input',
     change      : 'change',
@@ -21758,7 +21758,7 @@ Ember.EventDispatcher = Ember.Object.extend({
     dragleave   : 'dragLeave',
     dragover    : 'dragOver',
     drop        : 'drop',
-    dragend     : 'dragEnd'
+    dragend     : 'dragEndi'
   },
 
   /**
