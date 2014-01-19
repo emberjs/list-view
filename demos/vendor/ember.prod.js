@@ -21758,7 +21758,7 @@ Ember.EventDispatcher = Ember.Object.extend({
     dragleave   : 'dragLeave',
     dragover    : 'dragOver',
     drop        : 'drop',
-    dragend     : 'dragEndi'
+    dragend     : 'dragEnd'
   },
 
   /**
