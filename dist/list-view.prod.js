@@ -325,7 +325,7 @@ function enableProfilingOutput() {
   @namespace Ember
 */
 Ember.ListViewMixin = Ember.Mixin.create({
-  itemViewClass: Ember.ListItemView,
+  itemViewClass: Ember.ReusableListItemView,
   emptyViewClass: Ember.View,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
