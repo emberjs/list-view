@@ -1,4 +1,4 @@
-// Last commit: f789811 (2014-01-19 01:24:33 -0500)
+// Last commit: 03e12b1 (2014-01-19 16:44:10 -0500)
 
 
 (function() {
@@ -898,13 +898,17 @@ var get = Ember.get, set = Ember.set;
   Example:
 
   ```javascript
-  App.contributors = [{ name: 'Stefan Penner' }, { name: 'Alex Navasardyan' }, { name: 'Rey Cohen'}];
+  App.ContributorsRoute = Ember.Route.extend({
+    model: function() {
+      return [{ name: 'Stefan Penner' }, { name: 'Alex Navasardyan' }, { name: 'Ray Cohen'}];
+    }
+  });
   ```
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50}}
+  {{#ember-list items=contributors height=500 rowHeight=50}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   Would result in the following HTML:
@@ -932,18 +936,18 @@ var get = Ember.get, set = Ember.set;
   Note, that `height` and `rowHeight` are required parameters.
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50}}
+  {{#ember-list items=this height=500 rowHeight=50}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   If you would like to have multiple columns in your view layout, you can
   set `width` and `elementWidth` parameters respectively.
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50 width=500 elementWidth=80}}
+  {{#ember-list items=this height=500 rowHeight=50 width=500 elementWidth=80}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   ### extending `Ember.ListView`
@@ -989,10 +993,8 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   didInsertElement: function() {
-    var that, element;
-
-    that = this,
-    element = get(this, 'element');
+    var that = this,
+        element = get(this, 'element');
 
     this._updateScrollableHeight();
 
@@ -1356,6 +1358,39 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
 
     return false;
   }
+});
+
+})();
+
+
+
+(function() {
+Ember.Handlebars.registerHelper('ember-list', function emberList(options) {
+  var hash = options.hash;
+  var types = options.hashTypes;
+
+  hash.content = hash.items;
+  delete hash.items;
+
+  types.content = types.items;
+  delete types.items;
+
+  if (!hash.content) {
+    hash.content = "this";
+    types.content = "ID";
+  }
+
+  for (var prop in hash) {
+    if (/-/.test(prop)) {
+      var camelized = Ember.String.camelize(prop);
+      hash[camelized] = hash[prop];
+      types[camelized] = types[prop];
+      delete hash[prop];
+      delete types[prop];
+    }
+  }
+
+  return Ember.Handlebars.helpers.collection.call(this, 'Ember.ListView', options);
 });
 
 })();

@@ -1,5 +1,5 @@
-require('list-view/list_view_mixin');
 require('list-view/list_view_helper');
+require('list-view/list_view_mixin');
 
 var get = Ember.get, set = Ember.set;
 
@@ -20,13 +20,17 @@ var get = Ember.get, set = Ember.set;
   Example:
 
   ```javascript
-  App.contributors = [{ name: 'Stefan Penner' }, { name: 'Alex Navasardyan' }, { name: 'Rey Cohen'}];
+  App.ContributorsRoute = Ember.Route.extend({
+    model: function() {
+      return [{ name: 'Stefan Penner' }, { name: 'Alex Navasardyan' }, { name: 'Ray Cohen'}];
+    }
+  });
   ```
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50}}
+  {{#ember-list items=contributors height=500 rowHeight=50}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   Would result in the following HTML:
@@ -54,18 +58,18 @@ var get = Ember.get, set = Ember.set;
   Note, that `height` and `rowHeight` are required parameters.
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50}}
+  {{#ember-list items=this height=500 rowHeight=50}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   If you would like to have multiple columns in your view layout, you can
   set `width` and `elementWidth` parameters respectively.
 
   ```handlebars
-  {{#collection Ember.ListView contentBinding="App.contributors" height=500 rowHeight=50 width=500 elementWidth=80}}
+  {{#ember-list items=this height=500 rowHeight=50 width=500 elementWidth=80}}
     {{name}}
-  {{/collection}}
+  {{/ember-list}}
   ```
 
   ### extending `Ember.ListView`
@@ -111,10 +115,8 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   didInsertElement: function() {
-    var that, element;
-
-    that = this,
-    element = get(this, 'element');
+    var that = this,
+        element = get(this, 'element');
 
     this._updateScrollableHeight();
 

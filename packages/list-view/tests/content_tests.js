@@ -32,6 +32,34 @@ module("Ember.ListView integration - Content", {
   }
 });
 
+test("the ember-list helper", function() {
+  var content = helper.generateContent(100);
+
+  view = Ember.View.create({
+    controller: content,
+    template: Ember.Handlebars.compile("{{#ember-list height=500 row-height=50}}{{name}}{{/ember-list}}")
+  });
+
+  appendView();
+
+  equal(view.$('.ember-list-item-view').length, 11, "The rendered list was updated");
+  equal(view.$('.ember-list-container').height(), 5000, "The scrollable view has the correct height");
+});
+
+test("the ember-list helper uses items=", function() {
+  var content = helper.generateContent(100);
+
+  view = Ember.View.create({
+    controller: { itemz: content },
+    template: Ember.Handlebars.compile("{{#ember-list items=itemz height=500 row-height=50}}{{name}}{{/ember-list}}")
+  });
+
+  appendView();
+
+  equal(view.$('.ember-list-item-view').length, 11, "The rendered list was updated");
+  equal(view.$('.ember-list-container').height(), 5000, "The scrollable view has the correct height");
+});
+
 test("replacing the list content", function() {
   var content = helper.generateContent(100),
       height = 500,
