@@ -1,4 +1,4 @@
-// Last commit: 03e12b1 (2014-01-19 16:44:10 -0500)
+// Last commit: f8ef0d2 (2014-01-23 19:49:27 -0500)
 
 
 (function() {
@@ -1392,6 +1392,7 @@ Ember.Handlebars.registerHelper('ember-list', function emberList(options) {
 
   return Ember.Handlebars.helpers.collection.call(this, 'Ember.ListView', options);
 });
+
 
 })();
 

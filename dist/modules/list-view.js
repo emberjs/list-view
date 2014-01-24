@@ -1390,6 +1390,7 @@ Ember.Handlebars.registerHelper('ember-list', function emberList(options) {
   return Ember.Handlebars.helpers.collection.call(this, 'Ember.ListView', options);
 });
 
+
 })();
 
 
