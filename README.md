@@ -13,6 +13,12 @@ which behaves exactly the same (in terms of configuration and working with it) a
 However, note that `Ember.VirtualListView` doesn't have a native scroll bar. This is something that
 we need to work on for future releases of `Ember.ListView`.
 
+### Downloads
+
+Latest:
+* [development](http://builds.emberjs.com/list-view/list-view-latest.js)
+* [minified](http://builds.emberjs.com/list-view/list-view-latest.min.js)
+
 ### Table of Contents
 
 1. [Usage](#usage)
