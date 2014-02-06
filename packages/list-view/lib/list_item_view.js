@@ -103,9 +103,9 @@ Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
     var context = get(this, 'context');
     Ember.instrument('view.updateContext.render', this, function() {
       if (context !== newContext) {
-        this.set('context', newContext);
-        if (newContext instanceof Ember.ObjectController) {
-          this.set('controller', newContext);
+        set(this, 'context', newContext);
+        if (newContext && newContext.isController) {
+          set(this, 'controller', newContext);
         }
       }
     }, this);

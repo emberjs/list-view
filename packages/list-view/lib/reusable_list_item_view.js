@@ -16,7 +16,12 @@ Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
       if (this.state === 'inDOM') {
         this.prepareForReuse(newContext);
       }
+
       set(this, 'context.content', newContext);
+
+      if (newContext && newContext.isController) {
+        set(this, 'controller', newContext);
+      }
     }
   },
   prepareForReuse: Ember.K
