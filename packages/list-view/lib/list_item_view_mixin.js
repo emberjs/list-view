@@ -17,8 +17,7 @@ function positionElement() {
     // TODO: avoid needing this by avoiding unnecessary
     // calls to this method in the first place
     if (samePosition(position, _position)) { return; }
-    this._parentView.applyTransform(element, position.x, position.y);
-
+    Ember.run.schedule('render', this, this._parentView.applyTransform, element, position.x, position.y);
     this._position = position;
   }, this);
 }
