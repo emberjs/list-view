@@ -134,26 +134,24 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
   },
 
   continueScroll: function(touches, timeStamp) {
-    Ember.run(this, function(){
-      var startingScrollTop, endingScrollTop, event;
+    var startingScrollTop, endingScrollTop, event;
 
-      if (this._isScrolling) {
-        this.scroller.doTouchMove(touches, timeStamp);
-      } else {
-        startingScrollTop = this._scrollerTop;
+    if (this._isScrolling) {
+      this.scroller.doTouchMove(touches, timeStamp);
+    } else {
+      startingScrollTop = this._scrollerTop;
 
-        this.scroller.doTouchMove(touches, timeStamp);
+      this.scroller.doTouchMove(touches, timeStamp);
 
-        endingScrollTop = this._scrollerTop;
+      endingScrollTop = this._scrollerTop;
 
-        if (startingScrollTop !== endingScrollTop) {
-          event = Ember.$.Event("scrollerstart");
-          Ember.$(touches[0].target).trigger(event);
+      if (startingScrollTop !== endingScrollTop) {
+        event = Ember.$.Event("scrollerstart");
+        Ember.$(touches[0].target).trigger(event);
 
-          this._isScrolling = true;
-        }
+        this._isScrolling = true;
       }
-    });
+    }
   },
 
   endScroll: function(timeStamp) {

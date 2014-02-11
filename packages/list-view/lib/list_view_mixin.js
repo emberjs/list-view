@@ -198,7 +198,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     scrollTop = max(0, y);
 
-    if (get(this, 'scrollTop') === scrollTop) {
+    if (this.scrollTop === scrollTop) {
       return;
     }
 
@@ -216,29 +216,32 @@ Ember.ListViewMixin = Ember.Mixin.create({
       startingIndex: startingIndex,
       endingIndex: min(max(contentLength - 1, 0), startingIndex + this._numChildViewsForViewport())
     }, function () {
-      Ember.run(this, function(){
-        set(this, 'scrollTop', scrollTop);
+      this.scrollTop = scrollTop;
 
-        maxContentIndex = max(contentLength - 1, 0);
+      maxContentIndex = max(contentLength - 1, 0);
 
-        startingIndex = this._startingIndex();
-        visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
+      startingIndex = this._startingIndex();
+      visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
 
-        endingIndex = min(maxContentIndex, visibleEndingIndex);
+      endingIndex = min(maxContentIndex, visibleEndingIndex);
+
+      if (startingIndex === this._lastStartingIndex &&
+          endingIndex === this._lastEndingIndex) {
 
         this.trigger('scrollYChanged', y);
+        return;
+      } else {
 
-        if (startingIndex === this._lastStartingIndex &&
-            endingIndex === this._lastEndingIndex) {
-          return;
-        }
+        Ember.run(this, function(){
+          this._reuseChildren();
 
-        this._reuseChildren();
-
-        this._lastStartingIndex = startingIndex;
-        this._lastEndingIndex = endingIndex;
-      });
+          this._lastStartingIndex = startingIndex;
+          this._lastEndingIndex = endingIndex;
+          this.trigger('scrollYChanged', y);
+        });
+      }
     }, this);
+
   },
 
   /**
@@ -365,7 +368,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     lastColumnCount = this._lastColumnCount;
 
-    currentScrollTop = get(this, 'scrollTop');
+    currentScrollTop = this.scrollTop;
     newColumnCount = get(this, 'columnCount');
     maxScrollTop = get(this, 'maxScrollTop');
     element = get(this, 'element');
@@ -378,7 +381,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
       scrollTop = min(maxScrollTop, proposedScrollTop);
 
       this._scrollTo(scrollTop);
-      set(this, 'scrollTop', scrollTop);
+      this.scrollTop = scrollTop;
     }
 
     if (arguments.length > 0) {
@@ -444,7 +447,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
       contentLength = _contentLength;
     }
 
-    scrollTop = get(this, 'scrollTop');
+    scrollTop = this.scrollTop;
     rowHeight = get(this, 'rowHeight');
     columnCount = get(this, 'columnCount');
 
@@ -564,7 +567,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd, scrollTop;
 
-    scrollTop = get(this, 'scrollTop');
+    scrollTop = this.scrollTop;
     contentLength = get(this, 'content.length');
     maxContentIndex = max(contentLength - 1, 0);
     childViews = this.getReusableChildViews();
