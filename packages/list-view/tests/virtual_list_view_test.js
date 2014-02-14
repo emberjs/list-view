@@ -808,3 +808,27 @@ test("Creating a VirtualListView without height and rowHeight properties should 
   },
   /A ListView must be created with a height and a rowHeight./, "Throws exception.");
 });
+
+test("Scrolling a few elements upwards when there is extra space below should not error", function() {
+  expect(0);
+
+  var content = helper.generateContent(3),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      });
+
+  view = Ember.VirtualListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass
+  });
+
+  appendView();
+
+  Ember.run(function() {
+    view.scrollTo(10);
+  });
+});

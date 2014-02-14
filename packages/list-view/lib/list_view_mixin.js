@@ -451,7 +451,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     rowHeight = get(this, 'rowHeight');
     columnCount = get(this, 'columnCount');
 
-    calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
+    calculatedStartingIndex = max(0, floor(scrollTop / rowHeight) * columnCount);
 
     largestStartingIndex = max(contentLength - 1, 0);
 
