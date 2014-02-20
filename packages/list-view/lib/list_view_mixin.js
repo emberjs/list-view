@@ -204,7 +204,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     // allow a visual overscroll, but don't scroll the content. As we are doing needless
     // recycyling, and adding unexpected nodes to the DOM.
-    scrollTop = Math.min(scrollTop, (get(this, 'totalHeight') - get(this, 'height')));
+    var maxScrollTop = max(0, get(this, 'totalHeight') - get(this, 'height'));
+    scrollTop = min(scrollTop, maxScrollTop);
 
     content = get(this, 'content');
     contentLength = get(content, 'length');
