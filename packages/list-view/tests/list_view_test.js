@@ -840,6 +840,27 @@ test("When scrolled past the totalHeight, views should not be recycled in. This 
 });
 
 
+test("When list-view is unable to scroll, scrollTop should be zero", function() {
+  view = Ember.ListView.create({
+    content: helper.generateContent(2),
+    height:400,
+    rowHeight: 100,
+    itemViewClass: Ember.ListItemView.extend({
+      template: Ember.Handlebars.compile("Name: {{name}}")
+    })
+  });
+
+  appendView();
+
+  Ember.run(function(){
+    view.scrollTo(1);
+  });
+
+  equal(view.get('scrollTop'), 0, "Scrolltop should be zero");
+
+});
+
+
 test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
   throws(function() {
     view = Ember.ListView.create({
