@@ -38,18 +38,7 @@ domManager.prepend = function(view, html) {
   notifyMutationListeners();
 };
 
-function syncListContainerWidth(){
-  var elementWidth, columnCount, containerWidth, element;
 
-  elementWidth = get(this, 'elementWidth');
-  columnCount = get(this, 'columnCount');
-  containerWidth = elementWidth * columnCount;
-  element = this.$('.ember-list-container');
-
-  if (containerWidth && element) {
-    element.css('width', containerWidth);
-  }
-}
 
 function enableProfilingOutput() {
   function before(name, time, payload) {
@@ -98,7 +87,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
   */
   init: function() {
     this._super();
-    this.on('didInsertElement', syncListContainerWidth);
+    this.on('didInsertElement', this._syncListContainerWidth);
     this.columnCountDidChange();
     this._syncChildViews();
     this._addContentArrayObserver();
@@ -347,7 +336,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     elementWidth = get(this, 'elementWidth');
     width = get(this, 'width');
 
-    if (elementWidth) {
+    if (elementWidth && width > elementWidth) {
       count = floor(width / elementWidth);
     } else {
       count = 1;
@@ -387,7 +376,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     if (arguments.length > 0) {
       // invoked by observer
-      Ember.run.schedule('afterRender', this, syncListContainerWidth);
+      Ember.run.schedule('afterRender', this, this._syncListContainerWidth);
     }
   }, 'columnCount'),
 
@@ -556,6 +545,26 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
+  },
+
+  /**
+    @private
+
+    Applies an inline width style to the list container.
+
+    @method _syncListContainerWidth
+   **/
+  _syncListContainerWidth: function(){
+    var elementWidth, columnCount, containerWidth, element;
+
+    elementWidth = get(this, 'elementWidth');
+    columnCount = get(this, 'columnCount');
+    containerWidth = elementWidth * columnCount;
+    element = this.$('.ember-list-container');
+
+    if (containerWidth && element) {
+      element.css('width', containerWidth);
+    }
   },
 
   /**

@@ -627,6 +627,27 @@ test("elementWidth change", function(){
     equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
   }
 
+  // Test a width smaller than elementWidth, should behave the same as width === elementWidth
+  Ember.run(function () {
+    view.set('width', 50);
+  });
+
+  equal(view.$('.ember-list-item-view').length, 5, "The correct number of rows were rendered");
+
+  positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+
+  deepEqual(helper.itemPositions(view), [
+            { x: 0, y: 0},
+            { x: 0, y: 50},
+            { x: 0, y: 100},
+            { x: 0, y: 150},
+            { x: 0, y: 200}
+  ], "The rows are in the correct positions");
+
+  for(i = 0; i < 5; i++) {
+    equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
+  }
+
   Ember.run(function() {
     view.set('width', 200);
   });
