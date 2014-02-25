@@ -31,6 +31,13 @@ function notifyMutationListeners() {
   }
 }
 
+function removeEmptyView() {
+  var emptyView = get(this, 'emptyView');
+  if (emptyView && emptyView instanceof Ember.View) {
+    emptyView.removeFromParent();
+  }
+}
+
 var domManager = Ember.create(Ember.ContainerView.proto().domManager);
 
 domManager.prepend = function(view, html) {
@@ -503,13 +510,18 @@ Ember.ListViewMixin = Ember.Mixin.create({
     @method _syncChildViews
    **/
   _syncChildViews: function(){
-    var itemViewClass, startingIndex, childViewCount,
-        endingIndex, numberOfChildViews, numberOfChildViewsNeeded,
-        childViews, count, delta, index, childViewsLength, contentIndex;
+    var childViews, childViewCount,
+        numberOfChildViews, numberOfChildViewsNeeded,
+        contentIndex, startingIndex, endingIndex,
+        contentLength, emptyView, count, delta;
 
     if (get(this, 'isDestroyed') || get(this, 'isDestroying')) {
       return;
     }
+
+    removeEmptyView.call(this);
+
+    contentLength = get(this, 'content.length');
 
     childViewCount = this._childViewCount();
     childViews = this.positionOrderedChildViews();
@@ -545,6 +557,24 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
+
+    if (!contentLength) {
+      emptyView = get(this, 'emptyView');
+
+      if (!emptyView) { return; }
+
+      if ('string' === typeof emptyView) {
+        emptyView = get(emptyView) || emptyView;
+      }
+
+      emptyView = this.createChildView(emptyView);
+      set(this, 'emptyView', emptyView);
+
+      if (Ember.CoreView.detect(emptyView)) {
+        this._createdEmptyView = emptyView;
+      }
+      this.unshiftObject(emptyView);
+    }
   },
 
   /**
@@ -622,6 +652,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
   arrayDidChange: function(content, start, removedCount, addedCount) {
     var index, contentIndex;
 
+    removeEmptyView.call(this);
+
     if (this.state === 'inDOM') {
       // ignore if all changes are out of the visible change
       if( start >= this._lastStartingIndex || start < this._lastEndingIndex) {
@@ -641,5 +673,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
 
       syncChildViews.call(this);
     }
+  },
+
+  destroy: function () {
+    if (!this._super()) { return; }
+
+    if (this._createdEmptyView) {
+      this._createdEmptyView.destroy();
+    }
+
+    return this;
   }
 });
