@@ -79,6 +79,16 @@ test("should render an empty view when there is no content", function() {
 
   equal(view.$('.ember-list-item-view').length, 10, "The correct number of rows were rendered");
   equal(view.$('.empty-view').length, 0, "The empty view is removed");
+
+  Ember.run(function () {
+    view.set('content', content);
+  });
+
+  equal(view.get('element').style.height, "500px", "The list view height is correct");
+  equal(view.$('.ember-list-container').height(), 0, "The scrollable view has the correct height");
+
+  equal(view.$('.ember-list-item-view').length, 0, "The correct number of rows were rendered");
+  equal(view.$('.empty-view').length, 1, "The empty view rendered");
 });
 
 test("should render a subset of the full content, based on the height, in the correct positions", function() {

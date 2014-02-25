@@ -38,6 +38,25 @@ function removeEmptyView() {
   }
 }
 
+function addEmptyView() {
+  var emptyView = get(this, 'emptyView');
+
+  if (!emptyView) { return; }
+
+  if ('string' === typeof emptyView) {
+    emptyView = get(emptyView) || emptyView;
+  }
+
+  emptyView = this.createChildView(emptyView);
+  set(this, 'emptyView', emptyView);
+
+  if (Ember.CoreView.detect(emptyView)) {
+    this._createdEmptyView = emptyView;
+  }
+
+  this.unshiftObject(emptyView);
+}
+
 var domManager = Ember.create(Ember.ContainerView.proto().domManager);
 
 domManager.prepend = function(view, html) {
@@ -519,12 +538,15 @@ Ember.ListViewMixin = Ember.Mixin.create({
       return;
     }
 
-    removeEmptyView.call(this);
-
     contentLength = get(this, 'content.length');
+    emptyView = get(this, 'emptyView');
 
     childViewCount = this._childViewCount();
     childViews = this.positionOrderedChildViews();
+
+    if (childViews.indexOf(emptyView) === 0) {
+      removeEmptyView.call(this);
+    }
 
     startingIndex = this._startingIndex();
     endingIndex = startingIndex + childViewCount;
@@ -543,7 +565,6 @@ Ember.ListViewMixin = Ember.Mixin.create({
       for (count = 0; count < delta; count++, contentIndex++) {
         this._addItemView(contentIndex);
       }
-
     } else {
       // less views are needed
       forEach.call(
@@ -558,22 +579,8 @@ Ember.ListViewMixin = Ember.Mixin.create({
     this._lastStartingIndex = startingIndex;
     this._lastEndingIndex   = this._lastEndingIndex + delta;
 
-    if (!contentLength) {
-      emptyView = get(this, 'emptyView');
-
-      if (!emptyView) { return; }
-
-      if ('string' === typeof emptyView) {
-        emptyView = get(emptyView) || emptyView;
-      }
-
-      emptyView = this.createChildView(emptyView);
-      set(this, 'emptyView', emptyView);
-
-      if (Ember.CoreView.detect(emptyView)) {
-        this._createdEmptyView = emptyView;
-      }
-      this.unshiftObject(emptyView);
+    if (contentLength === 0 || contentLength === undefined) {
+      addEmptyView.call(this);
     }
   },
 
