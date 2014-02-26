@@ -43,6 +43,54 @@ test("should exist", function() {
   ok(view);
 });
 
+test("should render an empty view when there is no content", function() {
+  var content = helper.generateContent(0),
+      height = 500,
+      rowHeight = 50,
+      itemViewClass = Ember.ListItemView.extend({
+        template: Ember.Handlebars.compile("{{name}}")
+      }),
+      emptyView = Ember.View.extend({
+        classNames: ['empty-view']
+      });
+
+  view = Ember.ListView.create({
+    content: content,
+    height: height,
+    rowHeight: rowHeight,
+    itemViewClass: itemViewClass,
+    emptyView: emptyView
+  });
+
+  appendView();
+
+  equal(view.get('element').style.height, "500px", "The list view height is correct");
+  equal(view.$('.ember-list-container').height(), 0, "The scrollable view has the correct height");
+
+  equal(view.$('.ember-list-item-view').length, 0, "The correct number of rows were rendered");
+  equal(view.$('.empty-view').length, 1, "The empty view rendered");
+
+  Ember.run(function () {
+    view.set('content', helper.generateContent(10));
+  });
+
+  equal(view.get('element').style.height, "500px", "The list view height is correct");
+  equal(view.$('.ember-list-container').height(), 500, "The scrollable view has the correct height");
+
+  equal(view.$('.ember-list-item-view').length, 10, "The correct number of rows were rendered");
+  equal(view.$('.empty-view').length, 0, "The empty view is removed");
+
+  Ember.run(function () {
+    view.set('content', content);
+  });
+
+  equal(view.get('element').style.height, "500px", "The list view height is correct");
+  equal(view.$('.ember-list-container').height(), 0, "The scrollable view has the correct height");
+
+  equal(view.$('.ember-list-item-view').length, 0, "The correct number of rows were rendered");
+  equal(view.$('.empty-view').length, 1, "The empty view rendered");
+});
+
 test("should render a subset of the full content, based on the height, in the correct positions", function() {
   var content = helper.generateContent(100),
       height = 500,
