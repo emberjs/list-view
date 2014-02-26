@@ -105,13 +105,14 @@ Ember.VirtualListScrollerEvents = Ember.Mixin.create({
     };
     return this._super();
   },
+  scrollElement: Ember.computed.alias('element'),
   bindScrollerEvents: function() {
-    var el = this.get('element'),
+    var el = this.get('scrollElement'),
       handlers = this.scrollerEventHandlers;
     bindElement(el, handlers);
   },
   unbindScrollerEvents: function() {
-    var el = this.get('element'),
+    var el = this.get('scrollElement'),
       handlers = this.scrollerEventHandlers;
     unbindElement(el, handlers);
     unbindWindow(handlers);
