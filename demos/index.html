@@ -20,7 +20,7 @@
   <body>
     <script type="text/x-handlebars">
       {{#ember-list items=controller height=300 width=500 row-height=100 element-width=100}}
-        {{name}}
+        {{superName}}
       {{/ember-list}}
     </script>
 
@@ -46,12 +46,23 @@
         template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
       });
 
+      App.ItemController = Ember.ObjectController.extend({
+        superName: function() {
+          return this.get('name') + '-super';
+        }.property('name')
+      });
+
+      App.ApplicationController = Ember.ArrayController.extend({
+        itemController: 'item'
+      });
+
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
           for (var i = 0; i < 100000; i++) {
             content.push({
               name: 'Item ' + (i+1),
+
               imageSrc: images[i%images.length]
             });
           }
