@@ -426,6 +426,20 @@ Ember.ListViewMixin = Ember.Mixin.create({
   /**
     @private
 
+    Determines whether the emptyView is the current childView.
+
+    @method _isChildEmptyView
+  */
+  _isChildEmptyView: function() {
+    var emptyView = get(this, 'emptyView');
+
+    return emptyView && emptyView instanceof Ember.View &&
+           this._childViews.length === 1 && this._childViews.indexOf(emptyView) === 0;
+  },
+
+  /**
+    @private
+
     Computes the number of views that would fit in the viewport area.
     You must specify `height` and `rowHeight` parameters for the number of
     views to be computed properly.
@@ -544,7 +558,7 @@ Ember.ListViewMixin = Ember.Mixin.create({
     childViewCount = this._childViewCount();
     childViews = this.positionOrderedChildViews();
 
-    if (childViews.indexOf(emptyView) === 0) {
+    if (this._isChildEmptyView()) {
       removeEmptyView.call(this);
     }
 
