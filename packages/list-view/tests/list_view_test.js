@@ -47,11 +47,14 @@ test("should render an empty view when there is no content", function() {
   var content = helper.generateContent(0),
       height = 500,
       rowHeight = 50,
+      emptyViewHeight = 175,
       itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       }),
       emptyView = Ember.View.extend({
-        classNames: ['empty-view']
+        attributeBindings: ['style'],
+        classNames: ['empty-view'],
+        style: 'height:' + emptyViewHeight + 'px;'
       });
 
   view = Ember.ListView.create({
@@ -65,7 +68,7 @@ test("should render an empty view when there is no content", function() {
   appendView();
 
   equal(view.get('element').style.height, "500px", "The list view height is correct");
-  equal(view.$('.ember-list-container').height(), 0, "The scrollable view has the correct height");
+  equal(view.$('.ember-list-container').height(), emptyViewHeight, "The scrollable view has the correct height");
 
   equal(view.$('.ember-list-item-view').length, 0, "The correct number of rows were rendered");
   equal(view.$('.empty-view').length, 1, "The empty view rendered");
@@ -85,7 +88,7 @@ test("should render an empty view when there is no content", function() {
   });
 
   equal(view.get('element').style.height, "500px", "The list view height is correct");
-  equal(view.$('.ember-list-container').height(), 0, "The scrollable view has the correct height");
+  equal(view.$('.ember-list-container').height(), emptyViewHeight, "The scrollable view has the correct height");
 
   equal(view.$('.ember-list-item-view').length, 0, "The correct number of rows were rendered");
   equal(view.$('.empty-view').length, 1, "The empty view rendered");

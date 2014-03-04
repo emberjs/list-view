@@ -148,9 +148,18 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   }, 'totalHeight'),
 
   _updateScrollableHeight: function () {
+    var height;
+
     if (this.state === 'inDOM') {
+      // if the list is currently displaying the emptyView, remove the height
+      if (this._isChildEmptyView()) {
+          height = '';
+      } else {
+          height = get(this, 'totalHeight');
+      }
+
       this.$('.ember-list-container').css({
-        height: get(this, 'totalHeight')
+        height: height
       });
     }
   }
