@@ -58,19 +58,14 @@ phase of a scroll nor do the elements know there offset top during that scroll p
 <div class="highlight"><pre><span class="c1">// create Ember application</span>
 <span class="nx">App</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
 
-<span class="c1">// create Ember.ArrayController</span>
-<span class="nx">App</span><span class="p">.</span><span class="nx">IndexController</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">ArrayController</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-  <span class="nx">content</span><span class="o">:</span> <span class="p">[]</span>
-<span class="p">});</span>
-
 <span class="c1">// define default index route and pushing some data to content</span>
 <span class="nx">App</span><span class="p">.</span><span class="nx">IndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-  <span class="nx">setupController</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">model</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">items</span> <span class="o">=</span> <span class="p">[];</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">content</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
+      <span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
     <span class="p">}</span>
-    <span class="nx">controller</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+    <span class="nx">return</span> <span class="nx">items</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">});</span>
 </pre></div>
@@ -97,12 +92,12 @@ phase of a scroll nor do the elements know there offset top during that scroll p
 
 <span class="c1">// define default index route and pushing some data to content</span>
 <span class="nx">App</span><span class="p">.</span><span class="nx">IndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-  <span class="nx">setupController</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">model</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">items</span> <span class="o">=</span> <span class="p">[];</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">content</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
+      <span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"Item "</span> <span class="o">+</span> <span class="nx">i</span><span class="p">});</span>
     <span class="p">}</span>
-    <span class="nx">controller</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+    <span class="nx">return</span> <span class="nx">items</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">});</span>
 
@@ -207,12 +202,12 @@ to fill visible area with rows. If you would like to have multiple columns, then
 
       // define default index route and pushing some data to content
       App.IndexRoute = Ember.Route.extend({
-        setupController: function(controller) {
-          var content = [];
+        model: function() {
+          var items = [];
           for (var i = 0; i < 10000; i++) {
-            content.push({name: "Item " + i});
+            items.push({name: "Item " + i});
           }
-          controller.set('content', content);
+          return items;
         }
       });
     </script>
