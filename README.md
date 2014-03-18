@@ -37,12 +37,12 @@ Both `Ember.ListView` and `Ember.VirtualListView` need [jquery](http://jquery.co
 
 ## Demo
 
-Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin](http://jsbin.com/) links:
-[first](http://jsbin.com/omobov/19) and [second](http://jsbin.com/omobov/18).
+Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin](http://emberjs.jsbin.com/) links:
+[first](http://emberjs.jsbin.com/betiyuna/1) and [second](http://emberjs.jsbin.com/fuqob/1).
 
 ## Submitting bugs
 
-Please, attach code samples or links to [jsbin](http://jsbin.com/) or [jsfiddle](http://jsfiddle.net/).
+Please, attach code samples or links to [jsbin](http://emberjs.jsbin.com/) or [jsfiddle](http://jsfiddle.net/).
 It would help us greatly to help you and to improve ember list view.
 
 ## Usage
@@ -61,19 +61,14 @@ Next, let's feed our template with some data:
 // create Ember application
 App = Ember.Application.create();
 
-// create Ember.ArrayController
-App.IndexController = Ember.ArrayController.extend({
-  content: []
-});
-
 // define default index route and pushing some data to content
 App.IndexRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    var content = [];
+  model: function() {
+    var items = [];
     for (var i = 0; i < 10000; i++) {
-      content.push({name: "Item " + i});
+      items.push({name: "Item " + i});
     }
-    controller.set('content', content);
+    return items;
   }
 });
 ```
@@ -100,12 +95,12 @@ App = Ember.Application.create();
 
 // define default index route and pushing some data to content
 App.IndexRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    var content = [];
+  model: function() {
+    var items = [];
     for (var i = 0; i < 10000; i++) {
-      content.push({name: "Item " + i});
+      items.push({name: "Item " + i});
     }
-    controller.set('content', content);
+    return items;
   }
 });
 
