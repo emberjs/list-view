@@ -101,7 +101,7 @@ var get = Ember.get, set = Ember.set;
 Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   css: {
     position: 'relative',
-    overflow: 'scroll',
+    overflow: 'auto',
     '-webkit-overflow-scrolling': 'touch',
     'overflow-scrolling': 'touch'
   },
