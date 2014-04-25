@@ -3,5 +3,5 @@ script: bundle exec rake test
 env:
   global:
   - S3_BUCKET_NAME=builds.emberjs.com
-  - secure: Z7Lw6oK+g3zsaU8BKUXwGIByUJQbxno8nlCf7LboCBqyiy67wv5pVsM/WBYXDFbAYA0NoW+xSQxzpgP3lz3OlvgcFrI8GJAuwLJllCLlm8gr7Opch40nXVRmzgQdKF00uYygxn2Y+apA57rv+V3FgRFhITg9T4cU31MWHYxi9Zo=
-  - secure: feq0vhGpwtWdV5YVfaYb16V03OE4Z5Ovd+GFKuPRan+tgI4tmq6Gt+BF0be05b0KBg4/XJvwxj3w06HJtU58ogfNzKxaJbFrLQFZYWnL2OvxJV+azfwKYReV8UWIxAgUfXfQ+4KiITPWwcp46kjGoyJvdX/k5n6g5CMlaeuFkx4=
+  - secure: Fg6aMd+Th1yEWAdrCfQhKetOcHjqrJwza/4mVV4AGxL/SSY66hr+dun3DnfKJiaCZ95+QEz7EXfXeX6hXEezVXqrSxrtJMh9k9Bq+5bWyBShTwY4KVAbJdOoviqFZ05bEKuaewaiY9j3M6FEOvt0rc7TKBsF2Z9xLqWX0aXZKRQ=
+  - secure: TcDVXVYLf5qoSHqCKMDx6sQlaIRjet6LovRLX2X9QBMMA9sSZsbW4SB7Jep8TwtaJZ093bkZwf5lTdzWTd0i9LVdFi95PabxStGMjetiif8HyYCO1hgpHIaKlYkev5I3x733ESiJWMU7UabEjwwN8mDnrR35pI1zKwHVDzFDjhs=
