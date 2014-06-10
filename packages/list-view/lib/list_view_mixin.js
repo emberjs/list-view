@@ -671,11 +671,14 @@ Ember.ListViewMixin = Ember.Mixin.create({
   */
   // TODO: refactor
   arrayDidChange: function(content, start, removedCount, addedCount) {
-    var index, contentIndex;
+    var index, contentIndex, state;
 
     removeEmptyView.call(this);
 
-    if (this.state === 'inDOM') {
+    // Support old and new Ember versions
+    state = this._state || this.state;
+
+    if (state === 'inDOM') {
       // ignore if all changes are out of the visible change
       if( start >= this._lastStartingIndex || start < this._lastEndingIndex) {
         index = 0;
