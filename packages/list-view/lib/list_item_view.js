@@ -38,7 +38,7 @@ function rerender() {
   context = get(this, 'context');
 
   // releases action helpers in contents
-  // this means though that the ListViewItem itself can't use classBindings or attributeBindings
+  // this means though that the ListItemView itself can't use classBindings or attributeBindings
   // need support for rerender contents in ember
   this.triggerRecursively('willClearRender');
 
@@ -73,7 +73,7 @@ function rerender() {
 }
 
 /**
-  The `Ember.ListViewItem` view class renders a
+  The `Ember.ListItemView` view class renders a
   [div](https://developer.mozilla.org/en/HTML/Element/div) HTML element
   with `ember-list-item-view` class. It allows you to specify a custom item
   handlebars template for `Ember.ListView`.
