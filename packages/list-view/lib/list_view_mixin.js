@@ -35,6 +35,9 @@ function removeEmptyView() {
   var emptyView = get(this, 'emptyView');
   if (emptyView && emptyView instanceof Ember.View) {
     emptyView.removeFromParent();
+    if (this.totalHeightDidChange !== undefined) {
+        this.totalHeightDidChange();
+    }
   }
 }
 
