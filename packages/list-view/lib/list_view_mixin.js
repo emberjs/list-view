@@ -673,7 +673,9 @@ Ember.ListViewMixin = Ember.Mixin.create({
   arrayDidChange: function(content, start, removedCount, addedCount) {
     var index, contentIndex, state;
 
-    removeEmptyView.call(this);
+    if (this._isChildEmptyView()) {
+        removeEmptyView.call(this);
+    }
 
     // Support old and new Ember versions
     state = this._state || this.state;
