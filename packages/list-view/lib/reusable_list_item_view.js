@@ -1,8 +1,8 @@
-require('list-view/list_item_view_mixin');
+import ListItemViewMixin from 'list-view/list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 
-Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
+var ReusableListItemView = Ember.View.extend(ListItemViewMixin, {
   init: function(){
     this._super();
     var context = Ember.ObjectProxy.create();
@@ -32,3 +32,5 @@ Ember.ReusableListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   },
   prepareForReuse: Ember.K
 });
+
+export default ReusableListItemView;

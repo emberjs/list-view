@@ -1,6 +1,9 @@
-require('list-view/list_view_helper');
+// jshint validthis: true
+
+import ReusableListItemView from 'list-view/reusable_list_item_view';
 
 var get = Ember.get, set = Ember.set,
+
 min = Math.min, max = Math.max, floor = Math.floor,
 ceil = Math.ceil,
 forEach = Ember.ArrayPolyfills.forEach;
@@ -91,8 +94,8 @@ function enableProfilingOutput() {
   @class Ember.ListViewMixin
   @namespace Ember
 */
-Ember.ListViewMixin = Ember.Mixin.create({
-  itemViewClass: Ember.ReusableListItemView,
+var ListViewMixin = Ember.Mixin.create({
+  itemViewClass: ReusableListItemView,
   emptyViewClass: Ember.View,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
@@ -709,3 +712,5 @@ Ember.ListViewMixin = Ember.Mixin.create({
     return this;
   }
 });
+
+export default ListViewMixin;

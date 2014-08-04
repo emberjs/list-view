@@ -1,3 +1,4 @@
+// TODO - remove this!
 var el = document.createElement('div'), style = el.style;
 
 var propPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
@@ -20,7 +21,7 @@ var perspectiveProp = testProp('perspective');
 var supports2D = transformProp !== null;
 var supports3D = perspectiveProp !== null;
 
-Ember.ListViewHelper = {
+var ListViewHelper = {
   transformProp: transformProp,
   applyTransform: (function(){
     if (supports2D) {
@@ -51,3 +52,5 @@ Ember.ListViewHelper = {
     }
   })()
 };
+
+export default ListViewHelper;

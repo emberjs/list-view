@@ -1,5 +1,4 @@
 var view, helper;
-require('list-view/~tests/test_helper');
 helper = window.helper;
 
 function appendView() {
