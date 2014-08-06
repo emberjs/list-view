@@ -1,3 +1,5 @@
+// jshint validthis: true
+
 var get = Ember.get, set = Ember.set;
 
 function samePosition(a, b) {
@@ -22,7 +24,7 @@ function positionElement() {
   }, this);
 }
 
-Ember.ListItemViewMixin = Ember.Mixin.create({
+var ListItemViewMixin = Ember.Mixin.create({
   init: function(){
     this._super();
     this.one('didInsertElement', positionElement);
@@ -35,3 +37,5 @@ Ember.ListItemViewMixin = Ember.Mixin.create({
   },
   _positionElement: positionElement
 });
+
+export default ListItemViewMixin;

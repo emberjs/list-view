@@ -2,20 +2,8 @@ var setDimensionsCalled = 0,
     css, view, helper, scrollingDidCompleteCount,
     didInitializeScrollerCount, scrollerDimensionsDidChange;
 
-require('list-view/~tests/test_helper');
 helper = window.helper;
 
-function Scroller(callback, opts){
-  this.callback = callback;
-  this.opts = opts;
-  this.scrollTo = function(left, top, zoom) {
-    view._scrollContentTo(Math.max(0, top));
-  };
-  this.setDimensions = function() { setDimensionsCalled = setDimensionsCalled + 1; };
-  this.doTouchStart = function() {};
-  this.doTouchMove = function() {};
-  this.doTouchEnd = function() {};
-}
 
 function appendView() {
   Ember.run(function() {
@@ -25,7 +13,18 @@ function appendView() {
 
 module("Ember.VirtualListView Acceptance", {
   setup: function() {
-    window.Scroller = Scroller;
+    window.Scroller = function(callback, opts){
+      this.callback = callback;
+      this.opts = opts;
+      this.scrollTo = function(left, top, zoom) {
+        view._scrollContentTo(Math.max(0, top));
+      };
+      this.setDimensions = function() { setDimensionsCalled = setDimensionsCalled + 1; };
+      this.doTouchStart = function() {};
+      this.doTouchMove = function() {};
+      this.doTouchEnd = function() {};
+    }
+
     css = Ember.$("<style>" +
             ".ember-list-view {" +
             "  overflow: auto;" +

@@ -1,37 +1,118 @@
-/*globals ENV QUnit EmberDev */
+/*globals ENV QUnit */
 
-(function() {
-  window.Ember = {
-    testing: true
-  };
-  window.ENV = window.ENV || {};
+(function (){
+  window.Ember = window.Ember || {};
 
-  // Test for "hooks in ENV.EMBER_LOAD_HOOKS['hookName'] get executed"
-  ENV.EMBER_LOAD_HOOKS = ENV.EMBER_LOAD_HOOKS || {};
-  ENV.EMBER_LOAD_HOOKS.__before_ember_test_hook__ = ENV.EMBER_LOAD_HOOKS.__before_ember_test_hook__ || [];
-  ENV.__test_hook_count__ = 0;
-  ENV.EMBER_LOAD_HOOKS.__before_ember_test_hook__.push(function(object) {
-    ENV.__test_hook_count__ += object;
-  });
+  Ember.config = {};
+  Ember.testing = true;
+  Ember.LOG_VERSION = false;
 
-  var extendPrototypes = QUnit.urlParams.exntedprototypes;
+  window.ENV = { TESTING: true, LOG_VERSION: false };
+
+  var extendPrototypes = QUnit.urlParams.extendprototypes;
   ENV['EXTEND_PROTOTYPES'] = !!extendPrototypes;
 
-  // Handle extending prototypes
-  QUnit.config.urlConfig.push('extendprototypes');
+  window.async = function(callback, timeout) {
+    stop();
 
-  // Don't worry about jQuery version
-  ENV['FORCE_JQUERY'] = true;
+    timeout = setTimeout(function() {
+      start();
+      ok(false, "Timeout was reached");
+    }, timeout || 200);
 
-  if (EmberDev.jsHint) {
-    // jsHint makes its own Object.create stub, we don't want to use this
-    ENV['STUB_OBJECT_CREATE'] = !Object.create;
-  }
+    return function() {
+      clearTimeout(timeout);
 
-  EmberDev.distros = {
-    spade:   'ember-spade.js',
-    build:   'ember.js',
-    prod:    'ember.prod.js',
-    runtime: 'ember-runtime.js'
+      start();
+
+      var args = arguments;
+      return Ember.run(function() {
+        return callback.apply(this, args);
+      });
+    };
   };
+
+  window.asyncEqual = function(a, b, message) {
+    Ember.RSVP.all([ Ember.RSVP.resolve(a), Ember.RSVP.resolve(b) ]).then(async(function(array) {
+      /*globals QUnit*/
+      QUnit.push(array[0] === array[1], array[0], array[1], message);
+    }));
+  };
+
+  window.invokeAsync = function(callback, timeout) {
+    timeout = timeout || 1;
+
+    setTimeout(async(callback, timeout+100), timeout);
+  };
+
+  var syncForTest = window.syncForTest = function(fn) {
+    var callSuper;
+
+    if (typeof fn !== "function") { callSuper = true; }
+
+    return function() {
+      var override = false, ret;
+
+      if (Ember.run && !Ember.run.currentRunLoop) {
+        Ember.run.begin();
+        override = true;
+      }
+
+      try {
+        if (callSuper) {
+          ret = this._super.apply(this, arguments);
+        } else {
+          ret = fn.apply(this, arguments);
+        }
+      } finally {
+        if (override) {
+          Ember.run.end();
+        }
+      }
+
+      return ret;
+    };
+  };
+
+  Ember.config.overrideAccessors = function() {
+    Ember.set = syncForTest(Ember.set);
+    Ember.get = syncForTest(Ember.get);
+  };
+
+  Ember.config.overrideClassMixin = function(ClassMixin) {
+    ClassMixin.reopen({
+      create: syncForTest()
+    });
+  };
+
+  Ember.config.overridePrototypeMixin = function(PrototypeMixin) {
+    PrototypeMixin.reopen({
+      destroy: syncForTest()
+    });
+  };
+
+  QUnit.begin(function(){
+    Ember.RSVP.configure('onerror', function(reason) {
+      // only print error messages if they're exceptions;
+      // otherwise, let a future turn of the event loop
+      // handle the error.
+      if (reason && reason instanceof Error) {
+        Ember.Logger.log(reason, reason.stack)
+        throw reason;
+      }
+    });
+
+    Ember.RSVP.resolve = syncForTest(Ember.RSVP.resolve);
+
+    Ember.View.reopen({
+      _insertElementLater: syncForTest()
+    });
+
+    Ember.RSVP.Promise.prototype.then = syncForTest(Ember.RSVP.Promise.prototype.then);
+  });
+
+  // Generate the jQuery expando on window ahead of time
+  // to make the QUnit global check run clean
+  jQuery(window).data('testing', true);
+
 })();

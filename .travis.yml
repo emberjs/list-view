@@ -1,7 +1,13 @@
-after_success: bundle exec rake publish_build
-script: bundle exec rake test
+---
+language: node_js
+node_js:
+  - "0.10"
+script: npm run-script test
+install:
+  - "npm install"
 env:
   global:
   - S3_BUCKET_NAME=builds.emberjs.com
   - secure: WEQDMFMtTnLhxqUVhQz0xo5i8sHuNcbflQlg8Srak0GKRMEe2Undfexlq0WvpyG/ly/dvJHX/v9pBXPeW0M+3QcqX0XAjLZ/Hwe6Ql5a1PI3vud9oZmYoohVUbwe03RZY52qhPfUkJz8MRU1WifSYKEPvlycl1HmQXWfBPwTsL8=
   - secure: Mp9qNHAwuomZJlC2GAhTAwpfQTHQE9k2JU8C0K81n60UOUsvLArDqDo6kyRUfEHOYihaM8887NuX1yH1Eb7GAupx9C+f6bIhF9sbPWg2ELjf2SHP7RyjJa3uiv5g/KC+bOu61IV1B8/LxEjKpq6SjgOLQFgQDGK/iWK3bI01IrM=
+

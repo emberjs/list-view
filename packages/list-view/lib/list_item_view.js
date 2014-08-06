@@ -1,4 +1,6 @@
-require('list-view/list_item_view_mixin');
+// jshint validthis: true
+
+import ListItemViewMixin from 'list-view/list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 
@@ -36,6 +38,7 @@ function rerender() {
   if (!element) { return; }
 
   context = get(this, 'context');
+
 
   // releases action helpers in contents
   // this means though that the ListItemView itself can't use classBindings or attributeBindings
@@ -98,7 +101,7 @@ function rerender() {
   @class ListItemView
   @namespace Ember
 */
-Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
+var ListItemView = Ember.View.extend(ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context');
     Ember.instrument('view.updateContext.render', this, function() {
@@ -113,3 +116,5 @@ Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
   rerender: function () { Ember.run.scheduleOnce('render', this, rerender); },
   _contextDidChange: Ember.observer(rerender, 'context', 'controller')
 });
+
+export default ListItemView;
