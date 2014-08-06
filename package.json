@@ -4,6 +4,7 @@
   "description": "An efficient incremental rendering list view for large lists.",
   "main": "dist/list-view.js",
   "scripts": {
+    "start": "ember server",
     "postinstall": "bower install",
     "demo": "ember build && node lib/demo_server.js",
     "docs": "./bin/generate_docs.js",
