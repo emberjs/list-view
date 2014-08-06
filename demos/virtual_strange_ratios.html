@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="/demos/style.css">
+    <style>
+      .ember-list-view {
+        overflow: auto;
+        position: relative;
+        width: 100%;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+        border: 1px solid red;
+      }
+
+      .ember-list-item-view {
+        position: absolute;
+        color: steelblue;
+        width: 73px;
+        height: 73px;
+      }
+
+      .ember-list-item-view img{
+        width: 73px;
+        height: 73px;
+      }
+      .ember-list-item-view .text {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .ember-list-container {
+        -webkit-transform: translate3d(0px, 0px, 0);
+      }
+    </style>
+    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="/dist/bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
+    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
+    <script type="text/javascript" src="/dist/list-view.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMMouseScroll", function(e) {
+        e.preventDefault();
+      }, false);
+      document.addEventListener("mousewheel", function(e) {
+        e.preventDefault();
+      }, false);
+      document.ontouchmove = function(event){
+        event.preventDefault();
+      };
+    </script>
+  </head>
+
+  <body>
+    <script type="text/x-handlebars">
+      {{#collection Ember.VirtualListView content=controller height=235 rowHeight=73}}
+        <img {{bind-attr src=imageSrc}}/>
+        <div class="text"> {{name}}</div>
+      {{/collection}}
+    </script>
+
+    <script>
+      App = Ember.Application.create();
+
+      // for debugging
+      App.ApplicationView = Ember.View.extend({
+        didInsertElement: function(){
+          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
+        }
+      });
+
+      var images = [
+        'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTT3GWRYa957yqKCeZhlRkZu0UKQROTZi-4BNs0qvKEM1kP4yL2SA',
+        'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
+        'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
+      ];
+
+      App.ApplicationRoute = Ember.Route.extend({
+        model: function() {
+          var content = [];
+          for (var i = 0; i < 15; i++) {
+            content.push({
+              name: 'Item ' + (i + 1),
+              imageSrc: images[i%images.length]
+            });
+          }
+          return content;
+        }
+      });
+    </script>
+  </body>
+</html>
