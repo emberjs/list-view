@@ -45,7 +45,7 @@ module("Ember.VirtualListView scrollerstart acceptance", {
         this.scrollTo(0, nextTopPosition, 1);
       };
       this.doTouchEnd = function() {};
-    }
+    };
 
     css = Ember.$("<style>" +
             ".ember-list-view {" +

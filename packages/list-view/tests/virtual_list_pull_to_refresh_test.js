@@ -55,7 +55,7 @@ module("Ember.VirtualListView pull to refresh acceptance", {
         this.finishPullToRefreshCalled = true;
       };
       this.doTouchEnd = function() {};
-    }
+    };
 
     css = Ember.$("<style>" +
             ".ember-list-view {" +

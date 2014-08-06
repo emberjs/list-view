@@ -26,6 +26,13 @@
         width: 100px;
         height: 100px;
       }
+
+      .ember-list-item-view .text {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
       .pull-to-refresh {
         background-color: yellow;
         height: 45px;
@@ -61,7 +68,8 @@
   <body>
     <script type="text/x-handlebars">
       {{#collection App.RefreshableListView content=controller height=500 width=500 elementWidth=100 rowHeight=100}}
-        {{name}} <img {{bind-attr src=imageSrc}}/>
+        <img {{bind-attr src=imageSrc}}/>
+        <div class="text"> {{name}}</div>
       {{/collection}}
     </script>
     <script type="text/x-handlebars" data-template-name="pull-to-refresh">

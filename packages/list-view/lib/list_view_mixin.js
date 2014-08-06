@@ -67,8 +67,6 @@ domManager.prepend = function(view, html) {
   notifyMutationListeners();
 };
 
-
-
 function enableProfilingOutput() {
   function before(name, time, payload) {
     console.time(name);
@@ -472,7 +470,7 @@ var ListViewMixin = Ember.Mixin.create({
   */
   _startingIndex: function(_contentLength) {
     var scrollTop, rowHeight, columnCount, calculatedStartingIndex,
-        contentLength, largestStartingIndex;
+        contentLength;
 
     if (_contentLength === undefined) {
       contentLength = get(this, 'content.length');
@@ -486,7 +484,9 @@ var ListViewMixin = Ember.Mixin.create({
 
     calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
 
-    largestStartingIndex = max(contentLength - 1, 0);
+    var viewsNeededForViewport = this._numChildViewsForViewport();
+    var paddingCount = (1 * columnCount);
+    var largestStartingIndex = max(contentLength - viewsNeededForViewport, 0);
 
     return min(calculatedStartingIndex, largestStartingIndex);
   },
@@ -683,7 +683,7 @@ var ListViewMixin = Ember.Mixin.create({
 
     if (state === 'inDOM') {
       // ignore if all changes are out of the visible change
-      if( start >= this._lastStartingIndex || start < this._lastEndingIndex) {
+      if (start >= this._lastStartingIndex || start < this._lastEndingIndex) {
         index = 0;
         // ignore all changes not in the visible range
         // this can re-position many, rather then causing a cascade of re-renders
