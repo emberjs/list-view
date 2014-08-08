@@ -10,6 +10,18 @@
       .ember-list-item-view {
         position: absolute;
       }
+      .dog {
+        height: 50px;
+        background-color: teal;
+      }
+      .cat {
+        height: 100px;
+        background-color: pink;
+      }
+      .other {
+        height: 150px;
+        background-color: purple;
+      }
     </style>
     <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
@@ -50,17 +62,23 @@
         rowHeight: 100,
         itemViews: {
           "cat" : Ember.ListItemView.extend({
+            classNames: ['cat'],
             rowHeight: 100,
-template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+            template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
           }),
           "dog" : Ember.ListItemView.extend({
+            classNames: ['dog'],
             rowHeight: 50,
-template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+            template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
           }),
           "other" : Ember.ListItemView.extend({
+            classNames: ['other'],
             rowHeight: 150,
-template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+            template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
           })
+        },
+        heightForIndex: function(idx){
+          return this.itemViewForIndex(idx).proto().rowHeight;
         },
         itemViewForIndex: function(idx){
           return this.itemViews[this.get('content').objectAt(idx).type];

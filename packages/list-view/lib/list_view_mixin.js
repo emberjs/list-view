@@ -346,8 +346,16 @@ export default Ember.Mixin.create({
     @method positionForIndex
   */
   positionForIndex: function(index){
-    var elementWidth, width, columnCount, rowHeight, y, x;
+    if (typeof this.heightForIndex !== 'function'){
+      return this._singleHeightPosForIndex(index);
+    }
+    else {
+      return this._multiHeightPosForIndex(index);
+    }
+  },
 
+  _singleHeightPosForIndex: function(index){
+    var elementWidth, width, columnCount, rowHeight, y, x;
     elementWidth = get(this, 'elementWidth') || 1;
     width = get(this, 'width') || 1;
     columnCount = get(this, 'columnCount');
@@ -359,6 +367,26 @@ export default Ember.Mixin.create({
     return {
       y: y,
       x: x
+    };
+  },
+
+  _multiHeightPosForIndex: function(index){
+    var elementWidth, width, columnCount, rowHeight, y, x;
+
+    elementWidth = get(this, 'elementWidth') || 1;
+    width = get(this, 'width') || 1;
+    columnCount = get(this, 'columnCount');
+
+    x = (index % columnCount) * elementWidth;
+    y = 0;
+    // cache previous heights in the future
+    for (var i = index - 1; i >= 0; i--){
+      y += this.heightForIndex(i);
+    }
+
+    return {
+      x: x,
+      y: y
     };
   },
 
