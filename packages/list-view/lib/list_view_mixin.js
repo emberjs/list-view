@@ -270,6 +270,25 @@ export default Ember.Mixin.create({
     @property {Ember.ComputedProperty} totalHeight
   */
   totalHeight: Ember.computed('content.length', 'rowHeight', 'columnCount', 'bottomPadding', function() {
+    if (typeof this.heightForIndex === 'function') {
+      return this._totalHeightWithHeightForIndex();
+    } else {
+      return this._totalHeightWithStaticRowHeight();
+   }
+  }),
+
+  _totalHeightWithHeightForIndex: function() {
+    var totalHeight = 0;
+    var length = this.get('content.length');
+
+    for (var i = 0; i < length; i++) {
+      totalHeight += this.heightForIndex(i);
+    }
+
+    return totalHeight;
+  },
+
+  _totalHeightWithStaticRowHeight: function() {
     var contentLength, rowHeight, columnCount, bottomPadding;
 
     contentLength = get(this, 'content.length');
@@ -278,7 +297,7 @@ export default Ember.Mixin.create({
     bottomPadding = get(this, 'bottomPadding');
 
     return ((ceil(contentLength / columnCount)) * rowHeight) + bottomPadding;
-  }),
+  },
 
   /**
     @private
@@ -293,7 +312,19 @@ export default Ember.Mixin.create({
     @method _reuseChildForContentIndex
   */
   _reuseChildForContentIndex: function(childView, contentIndex) {
-    var content, context, newContext, childsCurrentContentIndex, position, enableProfiling;
+    var content, context, newContext, childsCurrentContentIndex, position, enableProfiling, oldChildView;
+
+    var contentViewClass = this.itemViewForIndex(contentIndex);
+
+    if (childView.constructor !== contentViewClass) {
+      // rather then associative arrays, lets move childView + contentEntry maping to a Map
+      var i = this._childViews.indexOf(childView);
+
+      childView.destroy();
+      childView = this.createChildView(contentViewClass);
+
+      this.insertAt(i, childView);
+    }
 
     content = get(this, 'content');
     enableProfiling = get(this, 'enableProfiling');
@@ -532,11 +563,39 @@ export default Ember.Mixin.create({
   _addItemView: function(contentIndex){
     var itemViewClass, childView;
 
-    itemViewClass = get(this, 'itemViewClass');
+    itemViewClass = this.itemViewForIndex(contentIndex);
     childView = this.createChildView(itemViewClass);
 
     this.pushObject(childView);
-   },
+  },
+
+  /**
+    @public
+
+    Returns a view class for the provided contentIndex. If the view is
+    different then the one currently present it will remove the existing view
+    and replace it with an instance of the class provided
+
+    @param {Number} contentIndex item index in the content array
+    @method _addItemView
+    @returns {Ember.View} ember view class for this index
+  */
+  itemViewForIndex: function(contentIndex) {
+    return get(this, 'itemViewClass');
+  },
+
+  /**
+    @public
+
+    Returns a view class for the provided contentIndex. If the view is
+    different then the one currently present it will remove the existing view
+    and replace it with an instance of the class provided
+
+    @param {Number} contentIndex item index in the content array
+    @method _addItemView
+    @returns {Ember.View} ember view class for this index
+  */
+  heightForIndex: null,
 
   /**
     @private
