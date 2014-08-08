@@ -228,3 +228,84 @@ test("Correct height based on view", function() {
     { x:0, y: 1250 }  // <-- partially in view
   ], 'went beyond scroll max via overscroll');
 });
+
+
+
+
+test("_numChildViewsForViewport + _startingIndex with multi-height", function() {
+  var content = [
+    { id:  1, type: "cat",   name: "Andrew" },
+    { id:  3, type: "cat",   name: "Bruce" },
+    { id:  4, type: "other", name: "Xbar" },
+    { id:  5, type: "dog",   name: "Caroline" },
+    { id:  6, type: "cat",   name: "David" },
+    { id:  7, type: "other", name: "Xbar" },
+    { id:  8, type: "other", name: "Xbar" },
+    { id:  9, type: "dog",   name: "Edward" },
+    { id: 10, type: "dog",   name: "Francis" },
+    { id: 11, type: "dog",   name: "George" },
+    { id: 12, type: "other", name: "Xbar" },
+    { id: 13, type: "dog",   name: "Harry" },
+    { id: 14, type: "cat",   name: "Ingrid" },
+    { id: 15, type: "other", name: "Xbar" },
+    { id: 16, type: "cat",   name: "Jenn" },
+    { id: 17, type: "cat",   name: "Kelly" },
+    { id: 18, type: "other", name: "Xbar" },
+    { id: 19, type: "other", name: "Xbar" },
+    { id: 20, type: "cat",   name: "Larry" },
+    { id: 21, type: "other", name: "Xbar" },
+    { id: 22, type: "cat",   name: "Manny" },
+    { id: 23, type: "dog",   name: "Nathan" },
+    { id: 24, type: "cat",   name: "Ophelia" },
+    { id: 25, type: "dog",   name: "Patrick" },
+    { id: 26, type: "other", name: "Xbar" },
+    { id: 27, type: "other", name: "Xbar" },
+    { id: 28, type: "other", name: "Xbar" },
+    { id: 29, type: "other", name: "Xbar" },
+    { id: 30, type: "other", name: "Xbar" },
+    { id: 31, type: "cat",   name: "Quincy" },
+    { id: 32, type: "dog",   name: "Roger" },
+  ];
+
+  view = Ember.ListView.create({
+    content: Em.A(content),
+    height: 300,
+    width: 500,
+    rowHeight: 100,
+    itemViews: {
+      cat: Ember.ListItemView.extend({
+        rowHeight: 100,
+        template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+      }),
+      dog: Ember.ListItemView.extend({
+        rowHeight: 50,
+        template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+      }),
+      other: Ember.ListItemView.extend({
+        rowHeight: 150,
+        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+      })
+    },
+    itemViewForIndex: function(idx){
+      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
+    },
+    heightForIndex: function(idx) {
+      // proto() is a quick hack, lets just store this on the class..
+      return this.itemViewForIndex(idx).proto().rowHeight;
+    }
+  });
+
+  appendView();
+
+  equal(view._numChildViewsForViewport(), 4, 'expected _numChildViewsForViewport to be correct (before scroll)');
+  equal(view._startingIndex(), 0, 'expected _startingIndex to be correct (before scroll)');
+
+  // entries: 1, 3, 4, 5
+
+  Ember.run(view, 'scrollTo', 1000);
+
+  // entries: 12, 13, 14, 15
+
+  equal(view._numChildViewsForViewport(), 5, 'expected _numChildViewsForViewport to be correct (after scroll)');
+  equal(view._startingIndex(), 10, 'expected _startingIndex to be correct (after scroll)');
+});

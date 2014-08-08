@@ -99,7 +99,7 @@ export default Ember.Mixin.create({
   attributeBindings: ['style'],
   domManager: domManager,
   scrollTop: 0,
-  bottomPadding: 0,
+  bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
   paddingCount: 1,
 
@@ -507,6 +507,15 @@ export default Ember.Mixin.create({
     @method _numChildViewsForViewport
   */
   _numChildViewsForViewport: function() {
+
+    if (this.heightForIndex) {
+      return this._numChildViewsForViewportWithMultiHeight();
+    } else {
+      return this._numChildViewsForViewportWithoutMultiHeight();
+    }
+  },
+
+  _numChildViewsForViewportWithoutMultiHeight:  function() {
     var height, rowHeight, paddingCount, columnCount;
 
     height = get(this, 'height');
@@ -516,6 +525,34 @@ export default Ember.Mixin.create({
 
     return (ceil(height / rowHeight) * columnCount) + (paddingCount * columnCount);
   },
+
+  _numChildViewsForViewportWithMultiHeight:  function() {
+    var rowHeight, paddingCount, columnCount;
+    var scrollTop = this.scrollTop;
+    var viewportHeight = this.get('height');
+    var length = this.get('content.length');
+    var heightfromTop = 0;
+    var padding = get(this, 'paddingCount');
+
+    for (var i = 0; i < length; i++) {
+      heightfromTop += this.heightForIndex(i);
+      if (heightfromTop >= scrollTop) {
+        break;
+      }
+    }
+
+    var currentHeight = 0;
+
+    for (var j = 0; j < length; j++) {
+      currentHeight += this.heightForIndex(i + j);
+      if (currentHeight > viewportHeight) {
+        break;
+      }
+    }
+
+    return j + padding + 1;
+  },
+
 
   /**
     @private
@@ -541,13 +578,35 @@ export default Ember.Mixin.create({
     rowHeight = get(this, 'rowHeight');
     columnCount = get(this, 'columnCount');
 
-    calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
+    if (this.heightForIndex) {
+      calculatedStartingIndex = this._calculatedStartingIndex();
+    } else {
+      calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
+    }
 
     var viewsNeededForViewport = this._numChildViewsForViewport();
     var paddingCount = (1 * columnCount);
     var largestStartingIndex = max(contentLength - viewsNeededForViewport, 0);
 
     return min(calculatedStartingIndex, largestStartingIndex);
+  },
+
+  _calculatedStartingIndex: function() {
+    var rowHeight, paddingCount, columnCount;
+    var scrollTop = this.scrollTop;
+    var viewportHeight = this.get('height');
+    var length = this.get('content.length');
+    var heightfromTop = 0;
+    var padding = get(this, 'paddingCount');
+
+    for (var i = 0; i < length; i++) {
+      heightfromTop += this.heightForIndex(i);
+      if (heightfromTop >= scrollTop) {
+        break;
+      }
+    }
+
+    return i;
   },
 
   /**
