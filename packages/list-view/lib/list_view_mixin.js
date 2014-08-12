@@ -370,6 +370,7 @@ export default Ember.Mixin.create({
     };
   },
 
+  // 0 maps to 0, 1 maps to heightForIndex(i)
   _multiHeightPosForIndex: function(index){
     var elementWidth, width, columnCount, rowHeight, y, x;
 
@@ -378,16 +379,22 @@ export default Ember.Mixin.create({
     columnCount = get(this, 'columnCount');
 
     x = (index % columnCount) * elementWidth;
-    y = 0;
-    // cache previous heights in the future
-    for (var i = index - 1; i >= 0; i--){
-      y += this.heightForIndex(i);
-    }
+    y = this._cachedHeightLookup(index);
 
     return {
       x: x,
       y: y
     };
+  },
+  
+  _cachedHeights: [0],
+  _cachedPos: 0,
+  _cachedHeightLookup: function(index) {
+    for (var i = this._cachedPos; i < index; i++){
+      this._cachedHeights[i + 1] = this._cachedHeights[i] + this.heightForIndex(i);
+    }
+    this._cachedPos = i;
+    return this._cachedHeights[index];
   },
 
   /**

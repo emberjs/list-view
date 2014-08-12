@@ -9,6 +9,7 @@
       }
       .ember-list-item-view {
         position: absolute;
+        width: 500px;
       }
       .dog {
         height: 50px;
@@ -42,18 +43,6 @@
         didInsertElement: function(){
           window.list = Ember.View.views[$('.ember-list-view').attr('id')];
         }
-      });
-
-      var images = [
-        'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
-        'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg',
-        'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg',
-        'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
-        'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
-      ];
-
-      App.AppleView = Ember.View.extend({
-        template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
       });
 
       App.ListView = Ember.ListView.extend({
