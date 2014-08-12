@@ -102,6 +102,8 @@ export default Ember.Mixin.create({
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
   paddingCount: 1,
+  _cachedHeights: [0],
+  _cachedPos: 0,
 
   /**
     @private
@@ -278,14 +280,8 @@ export default Ember.Mixin.create({
   }),
 
   _totalHeightWithHeightForIndex: function() {
-    var totalHeight = 0;
     var length = this.get('content.length');
-
-    for (var i = 0; i < length; i++) {
-      totalHeight += this.heightForIndex(i);
-    }
-
-    return totalHeight;
+    return this._cachedHeightLookup(length);
   },
 
   _totalHeightWithStaticRowHeight: function() {
@@ -387,8 +383,6 @@ export default Ember.Mixin.create({
     };
   },
   
-  _cachedHeights: [0],
-  _cachedPos: 0,
   _cachedHeightLookup: function(index) {
     for (var i = this._cachedPos; i < index; i++){
       this._cachedHeights[i + 1] = this._cachedHeights[i] + this.heightForIndex(i);
@@ -541,23 +535,17 @@ export default Ember.Mixin.create({
     var heightfromTop = 0;
     var padding = get(this, 'paddingCount');
 
-    for (var i = 0; i < length; i++) {
-      heightfromTop += this.heightForIndex(i);
-      if (heightfromTop >= scrollTop) {
-        break;
-      }
-    }
-
+    var startingIndex = this._calculatedStartingIndex();
     var currentHeight = 0;
 
-    for (var j = 0; j < length; j++) {
-      currentHeight += this.heightForIndex(i + j);
-      if (currentHeight > viewportHeight) {
+    var offsetHeight = this._cachedHeightLookup(startingIndex);
+    for (var i = 0; i < length; i++) {
+      if (this._cachedHeightLookup(startingIndex + i + 1) - offsetHeight > viewportHeight) {
         break;
       }
     }
 
-    return j + padding + 1;
+    return i + padding + 1;
   },
 
 
@@ -607,12 +595,11 @@ export default Ember.Mixin.create({
     var padding = get(this, 'paddingCount');
 
     for (var i = 0; i < length; i++) {
-      heightfromTop += this.heightForIndex(i);
-      if (heightfromTop >= scrollTop) {
+      if (this._cachedHeightLookup(i + 1) >= scrollTop){
         break;
       }
     }
-
+    
     return i;
   },
 
