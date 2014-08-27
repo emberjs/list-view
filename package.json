@@ -1,6 +1,6 @@
 {
   "name": "list-view",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "An efficient incremental rendering list view for large lists.",
   "main": "dist/list-view.js",
   "scripts": {
