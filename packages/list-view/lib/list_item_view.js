@@ -65,7 +65,9 @@ function rerender() {
 
     set(this, 'element', element);
 
-    this.transitionTo('inDOM');
+    var transitionTo = this._transitionTo ? this._transitionTo : this.transitionTo;
+
+    transitionTo.call(this, 'inDOM');
 
     if (hasChildViews) {
       this.invokeRecursively(didInsertElementIfNeeded, false);
