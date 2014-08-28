@@ -5,9 +5,12 @@ node_js:
 script: npm run-script test
 install:
   - "npm install"
+after_success:
+  - ember build --environment production
+  - "./bin/publish_bower_dist"
 env:
   global:
   - S3_BUCKET_NAME=builds.emberjs.com
   - secure: WEQDMFMtTnLhxqUVhQz0xo5i8sHuNcbflQlg8Srak0GKRMEe2Undfexlq0WvpyG/ly/dvJHX/v9pBXPeW0M+3QcqX0XAjLZ/Hwe6Ql5a1PI3vud9oZmYoohVUbwe03RZY52qhPfUkJz8MRU1WifSYKEPvlycl1HmQXWfBPwTsL8=
   - secure: Mp9qNHAwuomZJlC2GAhTAwpfQTHQE9k2JU8C0K81n60UOUsvLArDqDo6kyRUfEHOYihaM8887NuX1yH1Eb7GAupx9C+f6bIhF9sbPWg2ELjf2SHP7RyjJa3uiv5g/KC+bOu61IV1B8/LxEjKpq6SjgOLQFgQDGK/iWK3bI01IrM=
-
+  - secure: "Z91XQe01QmjokC+4iNRUEvfThB5rM7xX+sNlxw5UM25YgKKu/oQyBe7Zo4sNRyPdxuUSpNMpytpl2aF3pFEIFQcq81oBvTl+G2TPXqBMJnG1HtY6lN5Nxi6BsLnC3hPNQoq3d4Pf0ohHz3m06HdYYYY054bYYIbqG1AmGM+lzWU="
