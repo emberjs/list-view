@@ -45,6 +45,28 @@ Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin]
 Please, attach code samples or links to [jsbin](http://emberjs.jsbin.com/) or [jsfiddle](http://jsfiddle.net/).
 It would help us greatly to help you and to improve ember list view.
 
+## Installation
+
+
+If you are using [Ember-CLI]() for your project, then installation is as simple
+as adding the dependency to your project's `bower.json` file.  In the `dependencies` section,
+add the following line, then save:
+
+```javascript
+    "list-view": "emberjs/list-view#0.0.5"
+```
+
+Then run:
+
+```bash
+bower install
+```
+
+When it asks you to resolve dependency conflicts, choose the following:
+
+* Answer `!3` for the jQuery choice.
+* Answer `!2` for the quint choice.
+
 ## Usage
 
 First, let's create a template:
