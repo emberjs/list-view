@@ -47,25 +47,36 @@ It would help us greatly to help you and to improve ember list view.
 
 ## Installation
 
+Since `ember-cli` is in transition right now, these instructions are for
+those of you using *version 0.0.40 or below*.
 
-If you are using [Ember-CLI]() for your project, then installation is as simple
-as adding the dependency to your project's `bower.json` file.  In the `dependencies` section,
-add the following line, then save:
+1.  You need to build `list-view`, so in your projects directory:
 
-```javascript
-    "list-view": "emberjs/list-view#0.0.5"
-```
+    ```bash
+    git clone git@github.com:emberjs/list-view.git
+    cd list-view
+    npm install
+    bower install
+    ember build
+    ```
 
-Then run:
+2.  In your project that you want to use `list-view` in:
 
-```bash
-bower install
-```
+    ```bash
+    mkdir vendor/list-view
+    ```
+    
+    then copy the built `list-view`
+    Javascript file from your clone's subdirectory `dist/list-view.js` to
+    your project's `vendor/list-view` folder above.
+    
+3.  Add the line:
 
-When it asks you to resolve dependency conflicts, choose the following:
-
-* Answer `!3` for the jQuery choice.
-* Answer `!2` for the quint choice.
+    ```javascript
+    "list-view": "0.0.5"
+    ```
+    
+    to your `devDependencies` hash in your project's `package.json` file.
 
 ## Usage
 
