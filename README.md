@@ -168,9 +168,10 @@ App.ListView = Ember.ListView.extend({
 ## Build It
 
 1. `git clone https://github.com/emberjs/list-view.git`
-2. `npm install`
-3. `bower install`
-4. `ember build --environment production`
+2. `cd list-view`
+3. `npm install`
+4. `bower install`
+5. `ember build --environment production`
 
 ## How it works
 
