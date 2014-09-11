@@ -81,13 +81,19 @@ globalBuild = concat(merge([globalBuild, licenseJS]), {
   outputFile: '/list-view.js'
 });
 
-var bowerShimFiles = pickFiles(__dirname, {
-  srcDir: '/',
-  files: ['bower.json', 'package.json'],
-  destDir: '/'
-});
+//var bowerShimFiles = pickFiles(__dirname, {
+//  srcDir: '/',
+//  files: ['bower.json', 'package.json'],
+//  destDir: '/'
+//});
 
-var distTree = merge([globalBuild, testFiles, testRunner, bower, bowerShimFiles]);
+var distTree = merge([
+  globalBuild,
+  testFiles,
+  testRunner,
+  bower,
+  //bowerShimFiles
+]);
 
 if (env === 'production') {
   var uglified = uglify(globalBuild, { mangle: true });
