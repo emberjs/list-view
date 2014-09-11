@@ -21,7 +21,7 @@ var perspectiveProp = testProp('perspective');
 var supports2D = transformProp !== null;
 var supports3D = perspectiveProp !== null;
 
-var ListViewHelper = {
+export default {
   transformProp: transformProp,
   applyTransform: (function(){
     if (supports2D) {
@@ -52,5 +52,3 @@ var ListViewHelper = {
     }
   })()
 };
-
-export default ListViewHelper;

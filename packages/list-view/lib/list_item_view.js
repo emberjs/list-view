@@ -4,7 +4,7 @@ import ListItemViewMixin from 'list-view/list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 
-var backportedInnerString = function(buffer) {
+function backportedInnerString(buffer) {
   var content = [], childBuffers = buffer.childBuffers;
 
   Ember.ArrayPolyfills.forEach.call(childBuffers, function(buffer) {
@@ -17,7 +17,7 @@ var backportedInnerString = function(buffer) {
   });
 
   return content.join('');
-};
+}
 
 function willInsertElementIfNeeded(view) {
   if (view.willInsertElement) {
@@ -103,7 +103,7 @@ function rerender() {
   @class ListItemView
   @namespace Ember
 */
-var ListItemView = Ember.View.extend(ListItemViewMixin, {
+export default Ember.View.extend(ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context');
     Ember.instrument('view.updateContext.render', this, function() {
@@ -115,8 +115,8 @@ var ListItemView = Ember.View.extend(ListItemViewMixin, {
       }
     }, this);
   },
-  rerender: function () { Ember.run.scheduleOnce('render', this, rerender); },
+  rerender: function () {
+    Ember.run.scheduleOnce('render', this, rerender);
+  },
   _contextDidChange: Ember.observer(rerender, 'context', 'controller')
 });
-
-export default ListItemView;

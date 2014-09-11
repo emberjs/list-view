@@ -24,7 +24,7 @@ function positionElement() {
   }, this);
 }
 
-var ListItemViewMixin = Ember.Mixin.create({
+export default Ember.Mixin.create({
   init: function(){
     this._super();
     this.one('didInsertElement', positionElement);
@@ -37,5 +37,3 @@ var ListItemViewMixin = Ember.Mixin.create({
   },
   _positionElement: positionElement
 });
-
-export default ListItemViewMixin;

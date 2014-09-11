@@ -93,7 +93,7 @@ function unbindWindow(handlers) {
   window.removeEventListener(cancelEvent, handlers.cancel, true);
 }
 
-var VirtualListScrollerEvents = Ember.Mixin.create({
+export default Ember.Mixin.create({
   init: function() {
     this.on('didInsertElement', this, 'bindScrollerEvents');
     this.on('willDestroyElement', this, 'unbindScrollerEvents');
@@ -136,5 +136,3 @@ function synthesizeClick(e) {
     return target.dispatchEvent(ev);
   }
 }
-
-export default VirtualListScrollerEvents;

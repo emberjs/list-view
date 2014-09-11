@@ -92,7 +92,7 @@ function enableProfilingOutput() {
   @class Ember.ListViewMixin
   @namespace Ember
 */
-var ListViewMixin = Ember.Mixin.create({
+export default Ember.Mixin.create({
   itemViewClass: ReusableListItemView,
   emptyViewClass: Ember.View,
   classNames: ['ember-list-view'],
@@ -712,5 +712,3 @@ var ListViewMixin = Ember.Mixin.create({
     return this;
   }
 });
-
-export default ListViewMixin;

@@ -98,7 +98,7 @@ var get = Ember.get, set = Ember.set;
   @class ListView
   @namespace Ember
 */
-var ListView = Ember.ContainerView.extend(ListViewMixin, {
+export default Ember.ContainerView.extend(ListViewMixin, {
   css: {
     position: 'relative',
     overflow: 'auto',
@@ -167,5 +167,3 @@ var ListView = Ember.ContainerView.extend(ListViewMixin, {
     }
   }
 });
-
-export default ListView;

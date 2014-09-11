@@ -27,7 +27,7 @@ function updateScrollerDimensions(target) {
   @class VirtualListView
   @namespace Ember
 */
-var VirtualListView = Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEvents, {
+export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEvents, {
   _isScrolling: false,
   _mouseWheel: null,
   css: {
@@ -189,5 +189,3 @@ var VirtualListView = Ember.ContainerView.extend(ListViewMixin, VirtualListScrol
     return false;
   }
 });
-
-export default VirtualListView;
