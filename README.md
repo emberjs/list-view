@@ -211,7 +211,10 @@ Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master
 
 ## Running unit tests
 
-Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
+```sh
+npm install
+npm test
+```
 
 ## Caveats
 
