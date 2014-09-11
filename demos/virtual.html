@@ -83,7 +83,7 @@
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
-          for (var i = 0; i < 35; i++) {
+          for (var i = 0; i < 10000; i++) {
             content.push({
               name: 'Item ' + (i + 1),
               imageSrc: images[i%images.length]
