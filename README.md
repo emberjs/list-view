@@ -48,7 +48,7 @@ It would help us greatly to help you and to improve ember list view.
 ## Installation
 
 Since `ember-cli` is in transition right now, these instructions are for
-those of you using *version 0.0.40 or below*.
+those of you using *version 0.0.44 or below*.
 
 1.  You need to build `list-view`, so in your projects directory:
 
@@ -56,8 +56,7 @@ those of you using *version 0.0.40 or below*.
     git clone git@github.com:emberjs/list-view.git
     cd list-view
     npm install
-    bower install
-    ember build
+    npm run build-all
     ```
 
 2.  In your project that you want to use `list-view` in:
@@ -65,17 +64,17 @@ those of you using *version 0.0.40 or below*.
     ```bash
     mkdir vendor/list-view
     ```
-    
+
     then copy the built `list-view`
     Javascript file from your clone's subdirectory `dist/list-view.js` to
     your project's `vendor/list-view` folder above.
-    
+
 3.  Add the line:
 
     ```javascript
     "list-view": "0.0.5"
     ```
-    
+
     to your `devDependencies` hash in your project's `package.json` file.
 
 ## Usage
@@ -154,9 +153,9 @@ directly on ```Ember.ListView``` because it's derived from ```Ember.ContainerVie
 
 ### Changing height and width of ```Ember.ListView``` during runtime
 
-The height and width of the entire ```Ember.ListView``` can be adjusted at run-time. 
-When this occurs the ```Ember.ListView``` will transform existing view items to the new locations, 
-and create and position any new view items that might be needed. 
+The height and width of the entire ```Ember.ListView``` can be adjusted at run-time.
+When this occurs the ```Ember.ListView``` will transform existing view items to the new locations,
+and create and position any new view items that might be needed.
 This is meant to make resizing as cheap as possible.
 
 ``` javascript
@@ -169,7 +168,6 @@ App.ListView = Ember.ListView.extend({
   }
 });
 ```
-
 
 ### Required parameters
 
@@ -202,9 +200,8 @@ App.ListView = Ember.ListView.extend({
 
 1. `git clone https://github.com/emberjs/list-view.git`
 2. `cd list-view`
-3. `npm install`
-4. `bower install`
-5. `ember build --environment production`
+3. `npm install` (implicitly runs `bower install` as a postinstall)
+5. `npm run build-all`
 
 ## How it works
 
@@ -215,7 +212,7 @@ Please look at the [unit tests](https://github.com/emberjs/list-view/blob/master
 ## Running unit tests
 
 Run ```bundle exec rackup``` and open [http://localhost:9292](http://localhost:9292) in a browser.
- 
+
 ## Caveats
 
 Things we are aware about and are on the list to fix.
