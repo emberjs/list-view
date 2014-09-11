@@ -29,8 +29,23 @@
     </style>
     <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
+    <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
+
     <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMMouseScroll", function(e) {
+        e.preventDefault();
+      }, false);
+      document.addEventListener("mousewheel", function(e) {
+        e.preventDefault();
+      }, false);
+      document.ontouchmove = function(event){
+        event.preventDefault();
+      };
+    </script>
+
   </head>
 
   <body>
@@ -48,7 +63,7 @@
         }
       });
 
-      App.ListView = Ember.ListView.extend({
+      App.ListView = Ember.VirtualListView.extend({
         height: 300,
         width: 500,
         rowHeight: 100,

@@ -11,9 +11,6 @@
         position: absolute;
         width: 500px;
       }
-      .row {
-        position: absolute;
-      }
       .dog {
         height: 50px;
         background-color: teal;
@@ -54,25 +51,26 @@
         rowHeight: 100,
         itemViews: {
           "cat" : Ember.ListItemView.extend({
+            classNames: ['cat'],
             rowHeight: 100,
-            template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
+            template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
           }),
-          "dog" : {
+          "dog" : Ember.ListItemView.extend({
+            classNames: ['dog'],
             rowHeight: 50,
-          },
-          "other": {
+            template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+          }),
+          "other" : Ember.ListItemView.extend({
+            classNames: ['other'],
             rowHeight: 150,
-          }
+            template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+          })
         },
         heightForIndex: function(idx){
-          // TODO: cleanup
-          var entry = this.get('content').objectAt(idx);
-          var type = this.itemViews[entry.type];
-
-          return type.rowHeight ? type.rowHeight : type.proto().rowHeight;
+          return this.itemViewForIndex(idx).proto().rowHeight;
         },
         itemViewForIndex: function(idx){
-          return this.itemViews[this.get('content').objectAt(0).type];
+          return this.itemViews[this.get('content').objectAt(idx).type];
         }
       });
 
