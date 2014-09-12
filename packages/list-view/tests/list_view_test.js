@@ -1071,3 +1071,93 @@ test("handle strange ratios between height/rowHeight", function() {
   equal(Ember.$(positionSorted[3]).text(), "Name: Item 14");
   equal(Ember.$(positionSorted[4]).text(), "Name: Item 15");
 });
+
+test("handle bindable rowHeight", function() {
+  view = Ember.ListView.create({
+    content: helper.generateContent(15),
+    height: 400,
+    rowHeight: 100,
+    itemViewClass: Ember.ListItemView.extend({
+      template: Ember.Handlebars.compile("Name: {{name}}")
+    })
+  });
+
+  appendView();
+
+  var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 5);
+  equal(view.get('totalHeight'), 1500);
+
+  // expected
+  // -----
+  // 0   |
+  // 1   |
+  // 2   |
+  // 3   |
+  // -----
+  // 4   | <--- buffer
+  // -----
+  // 5   |
+  // 6   |
+  // 7   |
+  // 8   |
+  // 9   |
+  // 10  |
+  // 11  |
+  // 12  |
+  // 13  |
+  // 14  |
+  // -----
+  //
+  deepEqual(helper.itemPositions(view), [
+    { x:0, y:   0 }, // <- visible
+    { x:0, y: 100 }, // <- visible
+    { x:0, y: 200 }, // <- visible
+    { x:0, y: 300 }, // <- visible
+    { x:0, y: 400 }  // <- buffer
+  ] , "inDOM views are correctly positioned: before rowHeight change");
+
+  equal(Ember.$(positionSorted[0]).text(), "Name: Item 1");
+  equal(Ember.$(positionSorted[1]).text(), "Name: Item 2");
+  equal(Ember.$(positionSorted[2]).text(), "Name: Item 3");
+  equal(Ember.$(positionSorted[3]).text(), "Name: Item 4");
+
+  Ember.run(view, 'set', 'rowHeight', 200);
+
+  positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 3);
+  equal(view.get('totalHeight'), 3000);
+
+  // expected
+  // -----
+  // 0   |
+  // 1   |
+  // ----|
+  // 2   | <--- buffer
+  // ----|
+  // 3   |
+  // 4   |
+  // 5   |
+  // 6   |
+  // 7   |
+  // 8   |
+  // 9   |
+  // 10  |
+  // 11  |
+  // 12  |
+  // 13  |
+  // 14  |
+  // -----
+  deepEqual(helper.itemPositions(view), [
+    { x:0, y:    0 }, // <-- visible
+    { x:0, y:  200 }, // <-- visible
+    { x:0, y:  400 }, // <-- buffer
+  ], "inDOM views are correctly positioned: after rowHeight change");
+
+  equal(Ember.$(positionSorted[0]).text(), "Name: Item 1");
+  equal(Ember.$(positionSorted[1]).text(), "Name: Item 2");
+  equal(Ember.$(positionSorted[2]).text(), "Name: Item 3");
+});
+
+
+

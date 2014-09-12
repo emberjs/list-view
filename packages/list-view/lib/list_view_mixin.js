@@ -283,6 +283,10 @@ export default Ember.Mixin.create({
    }
   }),
 
+  _rowHeightDidChange: Ember.observer('rowHeight', function() {
+    Ember.run.once(this, this._syncChildViews);
+  }),
+
   _totalHeightWithHeightForIndex: function() {
     var length = this.get('content.length');
     return this._cachedHeightLookup(length);
@@ -386,7 +390,7 @@ export default Ember.Mixin.create({
       y: y
     };
   },
-  
+
   _cachedHeightLookup: function(index) {
     for (var i = this._cachedPos; i < index; i++){
       this._cachedHeights[i + 1] = this._cachedHeights[i] + this.heightForIndex(i);
@@ -603,7 +607,7 @@ export default Ember.Mixin.create({
         break;
       }
     }
-    
+
     return i;
   },
 
