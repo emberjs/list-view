@@ -698,10 +698,13 @@ test("elementWidth change", function(){
     equal(Ember.$(positionSorted[i]).text(), "Item " + (i+1));
   }
 
+  ok(view.$().is('.ember-list-view-list'), 'has correct list related class');
+
   Ember.run(function() {
     view.set('width', 200);
   });
 
+  ok(view.$().is('.ember-list-view-grid'), 'has correct grid related class');
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
   equal(view.$('.ember-list-item-view').length, 10, "The correct number of rows were rendered");
   deepEqual(helper.itemPositions(view), [

@@ -97,6 +97,7 @@ export default Ember.Mixin.create({
   emptyViewClass: Ember.View,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
+  classNameBindings: ['_isGrid:ember-list-view-grid:ember-list-view-list'],
   domManager: domManager,
   scrollTop: 0,
   bottomPadding: 0, // TODO: maybe this can go away
@@ -105,6 +106,9 @@ export default Ember.Mixin.create({
   _cachedHeights: [0],
   _cachedPos: 0,
 
+  _isGrid: Ember.computed('columnCount', function() {
+    return this.get('columnCount') > 1;
+  }).readOnly(),
   /**
     @private
 
