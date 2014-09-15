@@ -103,7 +103,6 @@ export default Ember.Mixin.create({
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
   paddingCount: 1,
-  _cachedHeights: [0],
   _cachedPos: 0,
 
   _isGrid: Ember.computed('columnCount', function() {
@@ -120,6 +119,7 @@ export default Ember.Mixin.create({
   */
   init: function() {
     this._super();
+    this._cachedHeights = [0];
     this.on('didInsertElement', this._syncListContainerWidth);
     this.columnCountDidChange();
     this._syncChildViews();
