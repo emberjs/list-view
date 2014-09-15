@@ -344,3 +344,127 @@ test("_cachedHeights is unique per instance", function() {
   equal(viewA._cachedHeights.length, 2);
   equal(viewB._cachedHeights.length, 1, 'expected no addition cached heights, cache should not be shared between instances');
 });
+
+test("handle bindable rowHeight with multi-height (only fallback case)", function() {
+  var content = [
+    { id:  1, type: "cat",   name: "Andrew" },
+    { id:  3, type: "cat",   name: "Bruce" },
+    { id:  4, type: "other", name: "Xbar" },
+    { id:  5, type: "dog",   name: "Caroline" },
+    { id:  6, type: "cat",   name: "David" },
+    { id:  7, type: "other", name: "Xbar" },
+    { id:  8, type: "other", name: "Xbar" },
+    { id:  9, type: "dog",   name: "Edward" },
+    { id: 10, type: "dog",   name: "Francis" },
+    { id: 11, type: "dog",   name: "George" },
+    { id: 12, type: "other", name: "Xbar" },
+    { id: 13, type: "dog",   name: "Harry" },
+    { id: 14, type: "cat",   name: "Ingrid" },
+    { id: 15, type: "other", name: "Xbar" },
+    { id: 16, type: "cat",   name: "Jenn" },
+    { id: 17, type: "cat",   name: "Kelly" },
+    { id: 18, type: "other", name: "Xbar" },
+    { id: 19, type: "other", name: "Xbar" },
+    { id: 20, type: "cat",   name: "Larry" },
+    { id: 21, type: "other", name: "Xbar" },
+    { id: 22, type: "cat",   name: "Manny" },
+    { id: 23, type: "dog",   name: "Nathan" },
+    { id: 24, type: "cat",   name: "Ophelia" },
+    { id: 25, type: "dog",   name: "Patrick" },
+    { id: 26, type: "other", name: "Xbar" },
+    { id: 27, type: "other", name: "Xbar" },
+    { id: 28, type: "other", name: "Xbar" },
+    { id: 29, type: "other", name: "Xbar" },
+    { id: 30, type: "other", name: "Xbar" },
+    { id: 31, type: "cat",   name: "Quincy" },
+    { id: 32, type: "dog",   name: "Roger" }
+  ];
+
+  view = Ember.ListView.create({
+    content: Em.A(content),
+    height: 300,
+    width: 500,
+    rowHeight: 100,
+    itemViews: {
+      other: Ember.ListItemView.extend({
+        rowHeight: 150,
+        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+      })
+    },
+    itemViewForIndex: function(idx){
+      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')] || Ember.ReusableListItemView;
+    },
+
+    heightForIndex: function(idx) {
+      var view = this.itemViewForIndex(idx);
+
+     return view.proto().rowHeight || this.get('rowHeight');
+    }
+  });
+
+  appendView();
+
+  var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 4);
+  equal(view.get('totalHeight'), 3750);
+
+  // expected
+  // -----
+  // 0   |
+  // 1   |
+  // 2   |
+  // -----
+  // 3   | <--- buffer
+  // -----
+  // 4   |
+  // 5   |
+  // 6   |
+  // 7   |
+  // 8   |
+  // 9   |
+  // 10  |
+  // 11  |
+  // 12  |
+  // 13  |
+  // 14  |
+  // -----
+  //
+  deepEqual(helper.itemPositions(view), [
+    { x:0, y:   0 }, // <- visible
+    { x:0, y: 100 }, // <- visible
+    { x:0, y: 200 }, // <- visible
+    { x:0, y: 350 }, // <- buffer
+  ] , "inDOM views are correctly positioned: before rowHeight change");
+
+  Ember.run(view, 'set', 'rowHeight', 200);
+
+  positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
+  equal(view.$('.ember-list-item-view').length, 3);
+  equal(view.get('totalHeight'), 5550);
+
+  // expected
+  // -----
+  // 0   |
+  // 1   |
+  // ----|
+  // 2   | <--- buffer
+  // ----|
+  // 3   |
+  // 4   |
+  // 5   |
+  // 6   |
+  // 7   |
+  // 8   |
+  // 9   |
+  // 10  |
+  // 11  |
+  // 12  |
+  // 13  |
+  // 14  |
+  // -----
+  deepEqual(helper.itemPositions(view), [
+    { x:0, y:    0 }, // <-- visible
+    { x:0, y:  200 }, // <-- visible
+    { x:0, y:  400 }, // <-- buffer
+  ], "inDOM views are correctly positioned: after rowHeight change");
+});

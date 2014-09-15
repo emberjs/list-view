@@ -294,8 +294,14 @@ export default Ember.Mixin.create({
    }
   }),
 
+  _doRowHeightDidChange: function() {
+    this._cachedHeights = [0];
+    this._cachedPos = 0;
+    this._syncChildViews();
+  },
+
   _rowHeightDidChange: Ember.observer('rowHeight', function() {
-    Ember.run.once(this, this._syncChildViews);
+    Ember.run.once(this, this._doRowHeightDidChange);
   }),
 
   _totalHeightWithHeightForIndex: function() {

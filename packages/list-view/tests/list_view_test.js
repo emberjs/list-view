@@ -1158,6 +1158,3 @@ test("handle bindable rowHeight", function() {
   equal(Ember.$(positionSorted[1]).text(), "Name: Item 2");
   equal(Ember.$(positionSorted[2]).text(), "Name: Item 3");
 });
-
-
-
