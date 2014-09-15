@@ -15,16 +15,16 @@ function addContentArrayObserver() {
   }
 }
 
-function removeAndDestroy(object){
+function removeAndDestroy(object) {
   this.removeObject(object);
   object.destroy();
 }
 
-function syncChildViews(){
+function syncChildViews() {
   Ember.run.once(this, '_syncChildViews');
 }
 
-function sortByContentIndex (viewOne, viewTwo){
+function sortByContentIndex (viewOne, viewTwo) {
   return get(viewOne, 'contentIndex') - get(viewTwo, 'contentIndex');
 }
 
@@ -44,7 +44,9 @@ function removeEmptyView() {
 function addEmptyView() {
   var emptyView = get(this, 'emptyView');
 
-  if (!emptyView) { return; }
+  if (!emptyView) {
+    return;
+  }
 
   if ('string' === typeof emptyView) {
     emptyView = get(emptyView) || emptyView;
@@ -108,6 +110,7 @@ export default Ember.Mixin.create({
   _isGrid: Ember.computed('columnCount', function() {
     return this.get('columnCount') > 1;
   }).readOnly(),
+
   /**
     @private
 
@@ -177,10 +180,15 @@ export default Ember.Mixin.create({
 
     style = '';
 
-    if (height) { style += 'height:' + height + 'px;'; }
-    if (width)  { style += 'width:'  + width  + 'px;'; }
+    if (height) {
+      style += 'height:' + height + 'px;';
+    }
 
-    for ( var rule in css ){
+    if (width)  {
+      style += 'width:' + width  + 'px;';
+    }
+
+    for ( var rule in css ) {
       if (css.hasOwnProperty(rule)) {
         style += rule + ':' + css[rule] + ';';
       }
@@ -255,7 +263,7 @@ export default Ember.Mixin.create({
         return;
       } else {
 
-        Ember.run(this, function(){
+        Ember.run(this, function() {
           this._reuseChildren();
 
           this._lastStartingIndex = startingIndex;
@@ -275,7 +283,10 @@ export default Ember.Mixin.create({
 
     @property {Ember.ComputedProperty} totalHeight
   */
-  totalHeight: Ember.computed('content.length', 'rowHeight', 'columnCount', 'bottomPadding', function() {
+  totalHeight: Ember.computed('content.length',
+                              'rowHeight',
+                              'columnCount',
+                              'bottomPadding', function() {
     if (typeof this.heightForIndex === 'function') {
       return this._totalHeightWithHeightForIndex();
     } else {
@@ -338,7 +349,9 @@ export default Ember.Mixin.create({
     set(childView, 'contentIndex', contentIndex);
 
     if (enableProfiling) {
-      Ember.instrument('view._reuseChildForContentIndex', position, function(){}, this);
+      Ember.instrument('view._reuseChildForContentIndex', position, function() {
+
+      }, this);
     }
 
     newContext = content.objectAt(contentIndex);
@@ -349,8 +362,8 @@ export default Ember.Mixin.create({
     @private
     @method positionForIndex
   */
-  positionForIndex: function(index){
-    if (typeof this.heightForIndex !== 'function'){
+  positionForIndex: function(index) {
+    if (typeof this.heightForIndex !== 'function') {
       return this._singleHeightPosForIndex(index);
     }
     else {
@@ -358,8 +371,9 @@ export default Ember.Mixin.create({
     }
   },
 
-  _singleHeightPosForIndex: function(index){
+  _singleHeightPosForIndex: function(index) {
     var elementWidth, width, columnCount, rowHeight, y, x;
+
     elementWidth = get(this, 'elementWidth') || 1;
     width = get(this, 'width') || 1;
     columnCount = get(this, 'columnCount');
@@ -375,7 +389,7 @@ export default Ember.Mixin.create({
   },
 
   // 0 maps to 0, 1 maps to heightForIndex(i)
-  _multiHeightPosForIndex: function(index){
+  _multiHeightPosForIndex: function(index) {
     var elementWidth, width, columnCount, rowHeight, y, x;
 
     elementWidth = get(this, 'elementWidth') || 1;
@@ -392,7 +406,7 @@ export default Ember.Mixin.create({
   },
 
   _cachedHeightLookup: function(index) {
-    for (var i = this._cachedPos; i < index; i++){
+    for (var i = this._cachedPos; i < index; i++) {
       this._cachedHeights[i + 1] = this._cachedHeights[i] + this.heightForIndex(i);
     }
     this._cachedPos = i;
@@ -447,7 +461,7 @@ export default Ember.Mixin.create({
 
     @event columnCountDidChange
   */
-  columnCountDidChange: Ember.observer(function(){
+  columnCountDidChange: Ember.observer(function() {
     var ratio, currentScrollTop, proposedScrollTop, maxScrollTop,
         scrollTop, lastColumnCount, newColumnCount, element;
 
@@ -603,7 +617,7 @@ export default Ember.Mixin.create({
     var padding = get(this, 'paddingCount');
 
     for (var i = 0; i < length; i++) {
-      if (this._cachedHeightLookup(i + 1) >= scrollTop){
+      if (this._cachedHeightLookup(i + 1) >= scrollTop) {
         break;
       }
     }
@@ -756,7 +770,7 @@ export default Ember.Mixin.create({
 
     @method _syncListContainerWidth
    **/
-  _syncListContainerWidth: function(){
+  _syncListContainerWidth: function() {
     var elementWidth, columnCount, containerWidth, element;
 
     elementWidth = get(this, 'elementWidth');
