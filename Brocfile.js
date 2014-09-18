@@ -17,11 +17,16 @@ function testTree(libTree, packageName){
     files: [ '**/*.js' ],
     destDir: '/'
   });
+
   var jshinted = jshint(libTree);
   jshinted = wrap(jshinted, {
     wrapper: [ "if (!QUnit.urlParams.nojshint) {\n", "\n}"]
   });
-  return merge([jshinted, test]);
+
+  return merge([
+    jshinted,
+    test
+  ]);
 }
 
 var testRunner = pickFiles('tests', {
@@ -42,9 +47,13 @@ var listViewFiles = pickFiles('packages/list-view/lib', {
   destDir: '/list-view'
 });
 
-listViewFiles = es6(listViewFiles, {moduleName: true});
+listViewFiles = es6(listViewFiles, {
+  moduleName: true
+});
 
-if (env === 'production'){ listViewFiles = es3SafeRecast(listViewFiles); }
+if (env === 'production') {
+  listViewFiles = es3SafeRecast(listViewFiles);
+}
 
 var testFiles = testTree(listViewFiles, 'list-view');
 
@@ -60,24 +69,39 @@ var licenseJS = pickFiles('generators', {
   destDir: '/'
 });
 
-var globalBuild = concat(merge([listViewFiles, loaderJS]), {
+var globalBuild = concat(merge([
+  listViewFiles,
+  loaderJS
+]), {
   inputFiles: ['loader.js', '**/*.js'],
   outputFile: '/list-view.js'
 });
 
 globalBuild = wrap(globalBuild, {
-  wrapper: [ "(function(global){\n",  "\n requireModule('list-view/main');\n})(this);"]
+  wrapper: [
+    "(function(global){\n",
+    "\n requireModule('list-view/main');\n})(this);"
+  ]
 });
 
 testFiles = concat(testFiles, {
-  inputFiles: ['test_helper.js', '**/*.js'],
-  wrapInEval: true,
+  inputFiles: [
+    'test_helper.js',
+    '**/*.js'
+  ],
+  wrapInEval: false,
   wrapInFunction: true,
   outputFile: '/tests.js'
 });
 
-globalBuild = concat(merge([globalBuild, licenseJS]), {
-  inputFiles: ['LICENSE', 'list-view.js'],
+globalBuild = concat(merge([
+  globalBuild,
+  licenseJS
+]), {
+  inputFiles: [
+    'LICENSE',
+    'list-view.js'
+  ],
   outputFile: '/list-view.js'
 });
 
@@ -96,16 +120,30 @@ var distTree = merge([
 ]);
 
 if (env === 'production') {
-  var uglified = uglify(globalBuild, { mangle: true });
-  var uglified = concat(merge([uglified, licenseJS]), {
-    inputFiles: ['LICENSE', 'list-view.js'],
+  var uglified = uglify(globalBuild, {
+    mangle: true
+  });
+  var uglified = concat(merge([
+    uglified,
+    licenseJS
+  ]), {
+    inputFiles: [
+      'LICENSE',
+      'list-view.js'
+    ],
     outputFile: '/list-view.min.js'
   });
-  distTree = merge([uglified, distTree]);
+  distTree = merge([
+    uglified,
+    distTree
+  ]);
 }
 
 distTree = replace(distTree, {
-  files: [ 'list-view.js', 'list-view.min.js' ],
+  files: [
+    'list-view.js',
+    'list-view.min.js'
+  ],
   pattern: {
     match: /VERSION_STRING_PLACEHOLDER/g,
     replacement: version()
