@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/demos/style.css">
+    <style>
+      .ember-list-view {
+        overflow: auto;
+        position: relative;
+        width: 100%;
+      }
+      .ember-list-item-view {
+        position: absolute;
+        width: 500px;
+      }
+      .row {
+        position: absolute;
+      }
+      .dog {
+        height: 50px;
+        background-color: teal;
+      }
+      .cat {
+        height: 100px;
+        background-color: pink;
+      }
+      .other {
+        height: 150px;
+        background-color: purple;
+      }
+    </style>
+    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
+    <script type="text/javascript" src="/dist/list-view.js"></script>
+  </head>
+
+  <body>
+    <script type="text/x-handlebars">
+      {{view 'list' content=controller}}
+    </script>
+
+    <script>
+      App = Ember.Application.create();
+
+      // for debugging
+      App.ApplicationView = Ember.View.extend({
+        didInsertElement: function(){
+          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
+        }
+      });
+
+      var content = [
+        { id:  1, height: 100, name: "Andrew"   },
+        { id:  2, height: 100, name: "Xbar"     },
+        { id:  3, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
+        { id:  4, height: 100, name: "David"    },
+        { id:  5, height: 100, name: "Xbar"     },
+        { id:  6, height: 100, name: "Xbar"     },
+        { id:  7, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
+        { id:  8, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
+        { id:  9, height: 100, name: "Edward"   },
+        { id: 10, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH}
+      ];
+
+      // rowHeight + elementWidth are fallback dimensions
+      App.ListView = Ember.ListView.extend({
+        height: 100,
+        width: 200,
+        elementWidth: 100,
+        rowHeight: 100,
+        itemViewClass: Ember.ListItemView.extend({
+          template: Ember.Handlebars.compile("{{name}}#{{id}}")
+        }),
+        heightForIndex: function(idx) {
+          return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
+        }
+      });
+
+      App.ApplicationRoute = Ember.Route.extend({
+        model: function() {
+          return content;
+        }
+      });
+    </script>
+  </body>
+</html>
