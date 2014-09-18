@@ -1,8 +1,10 @@
-require('list-view/list_item_view_mixin');
+// jshint validthis: true
+
+import ListItemViewMixin from 'list-view/list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 
-var backportedInnerString = function(buffer) {
+function backportedInnerString(buffer) {
   var content = [], childBuffers = buffer.childBuffers;
 
   Ember.ArrayPolyfills.forEach.call(childBuffers, function(buffer) {
@@ -15,7 +17,7 @@ var backportedInnerString = function(buffer) {
   });
 
   return content.join('');
-};
+}
 
 function willInsertElementIfNeeded(view) {
   if (view.willInsertElement) {
@@ -36,6 +38,7 @@ function rerender() {
   if (!element) { return; }
 
   context = get(this, 'context');
+
 
   // releases action helpers in contents
   // this means though that the ListItemView itself can't use classBindings or attributeBindings
@@ -62,7 +65,9 @@ function rerender() {
 
     set(this, 'element', element);
 
-    this.transitionTo('inDOM');
+    var transitionTo = this._transitionTo ? this._transitionTo : this.transitionTo;
+
+    transitionTo.call(this, 'inDOM');
 
     if (hasChildViews) {
       this.invokeRecursively(didInsertElementIfNeeded, false);
@@ -98,7 +103,7 @@ function rerender() {
   @class ListItemView
   @namespace Ember
 */
-Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
+export default Ember.View.extend(ListItemViewMixin, {
   updateContext: function(newContext){
     var context = get(this, 'context');
     Ember.instrument('view.updateContext.render', this, function() {
@@ -110,6 +115,8 @@ Ember.ListItemView = Ember.View.extend(Ember.ListItemViewMixin, {
       }
     }, this);
   },
-  rerender: function () { Ember.run.scheduleOnce('render', this, rerender); },
+  rerender: function () {
+    Ember.run.scheduleOnce('render', this, rerender);
+  },
   _contextDidChange: Ember.observer(rerender, 'context', 'controller')
 });

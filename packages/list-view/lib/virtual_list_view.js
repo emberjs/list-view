@@ -1,18 +1,21 @@
-/*global Scroller*/
-require('list-view/list_view_mixin');
-require('list-view/list_view_helper');
-require('list-view/virtual_list_scroller_events');
+/*
+  global Scroller
+*/
+
+import ListViewMixin from 'list-view/list_view_mixin';
+import ListViewHelper from 'list-view/list_view_helper';
+import VirtualListScrollerEvents from 'list-view/virtual_list_scroller_events';
 
 var max = Math.max, get = Ember.get, set = Ember.set;
 
 function updateScrollerDimensions(target) {
   var width, height, totalHeight;
 
-  target = target || this;
+  target = target || this; // jshint ignore:line
 
   width = get(target, 'width');
   height = get(target, 'height');
-  totalHeight = get(target, 'totalHeight');
+  totalHeight = get(target, 'totalHeight'); // jshint ignore:line
 
   target.scroller.setDimensions(width, height, width, totalHeight);
   target.trigger('scrollerDimensionsDidChange');
@@ -24,7 +27,7 @@ function updateScrollerDimensions(target) {
   @class VirtualListView
   @namespace Ember
 */
-Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.VirtualListScrollerEvents, {
+export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEvents, {
   _isScrolling: false,
   _mouseWheel: null,
   css: {
@@ -38,7 +41,7 @@ Ember.VirtualListView = Ember.ContainerView.extend(Ember.ListViewMixin, Ember.Vi
     this.setupPullToRefresh();
   },
   _scrollerTop: 0,
-  applyTransform: Ember.ListViewHelper.apply3DTransform,
+  applyTransform: ListViewHelper.apply3DTransform,
 
   setupScroller: function(){
     var view, y;

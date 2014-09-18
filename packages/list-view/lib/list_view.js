@@ -1,5 +1,5 @@
-require('list-view/list_view_helper');
-require('list-view/list_view_mixin');
+import ListViewHelper from 'list-view/list_view_helper';
+import ListViewMixin from 'list-view/list_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 
@@ -98,7 +98,7 @@ var get = Ember.get, set = Ember.set;
   @class ListView
   @namespace Ember
 */
-Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
+export default Ember.ContainerView.extend(ListViewMixin, {
   css: {
     position: 'relative',
     overflow: 'auto',
@@ -106,7 +106,7 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
     'overflow-scrolling': 'touch'
   },
 
-  applyTransform: Ember.ListViewHelper.applyTransform,
+  applyTransform: ListViewHelper.applyTransform,
 
   _scrollTo: function(scrollTop) {
     var element = get(this, 'element');
@@ -115,8 +115,8 @@ Ember.ListView = Ember.ContainerView.extend(Ember.ListViewMixin, {
   },
 
   didInsertElement: function() {
-    var that = this,
-        element = get(this, 'element');
+    var that = this;
+    var element = get(this, 'element');
 
     this._updateScrollableHeight();
 

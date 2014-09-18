@@ -1,32 +1,7 @@
 var css, view, helper, nextTopPosition;
-
-require('list-view/~tests/test_helper');
 helper = window.helper;
 nextTopPosition = 0;
 
-function Scroller(callback, opts){
-  this.callback = callback;
-  this.opts = opts;
-  this.scrollTo = function(left, top, zoom) {
-    view._scrollerTop = top;
-    view._scrollContentTo(Math.max(0, top));
-  };
-  this.setDimensions = function() { };
-  this.doTouchStart = function() {};
-  this.doTouchMove = function() {
-    this.scrollTo(0, nextTopPosition, 1);
-  };
-  this.activatePullToRefresh = function(pullToRefreshHeight, activateCallback, deactivateCallback, startCallback){
-    this.pullToRefreshHeight = pullToRefreshHeight;
-    this.activateCallback = activateCallback;
-    this.deactivateCallback = deactivateCallback;
-    this.startCallback = startCallback;
-  };
-  this.finishPullToRefresh = function(){
-    this.finishPullToRefreshCalled = true;
-  };
-  this.doTouchEnd = function() {};
-}
 
 
 function appendView() {
@@ -58,7 +33,30 @@ function fireEvent(type, target) {
 
 module("Ember.VirtualListView pull to refresh acceptance", {
   setup: function() {
-    window.Scroller = Scroller;
+    window.Scroller = function(callback, opts){
+      this.callback = callback;
+      this.opts = opts;
+      this.scrollTo = function(left, top, zoom) {
+        view._scrollerTop = top;
+        view._scrollContentTo(Math.max(0, top));
+      };
+      this.setDimensions = function() { };
+      this.doTouchStart = function() {};
+      this.doTouchMove = function() {
+        this.scrollTo(0, nextTopPosition, 1);
+      };
+      this.activatePullToRefresh = function(pullToRefreshHeight, activateCallback, deactivateCallback, startCallback){
+        this.pullToRefreshHeight = pullToRefreshHeight;
+        this.activateCallback = activateCallback;
+        this.deactivateCallback = deactivateCallback;
+        this.startCallback = startCallback;
+      };
+      this.finishPullToRefresh = function(){
+        this.finishPullToRefreshCalled = true;
+      };
+      this.doTouchEnd = function() {};
+    };
+
     css = Ember.$("<style>" +
             ".ember-list-view {" +
             "  overflow: auto;" +

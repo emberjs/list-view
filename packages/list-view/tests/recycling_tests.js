@@ -1,5 +1,4 @@
 var css, view, helper;
-require('list-view/~tests/test_helper');
 helper = window.helper;
 function appendView() {
   Ember.run(function() {
@@ -177,7 +176,7 @@ test("recycling complex views short list", function(){
   equal(view.$('.ember-list-item-view').length, 2, "The correct number of rows were rendered (post-scroll to 50)");
 
   equal(innerViewInsertionCount, 0, "expected number of innerView's didInsertElement (post-scroll to 50)");
-  equal(innerViewDestroyCount, 1, "expected number of innerView's willDestroyElement (post-scroll to 50)");
+  equal(innerViewDestroyCount, 0, "expected number of innerView's willDestroyElement (post-scroll to 50)");
 
   equal(listViewInsertionCount, 1, "expected number of listView's didInsertElement (post-scroll to 50)");
   equal(listViewDestroyCount, 0, "expected number of listView's willDestroyElement (post-scroll to 50)");
@@ -191,7 +190,7 @@ test("recycling complex views short list", function(){
 
   equal(view.$('.ember-list-item-view').length, 2, "The correct number of rows were rendered (post-scroll to 0)");
 
-  equal(innerViewInsertionCount, 1, "expected number of innerView's didInsertElement (post-scroll to 0)");
+  equal(innerViewInsertionCount, 0, "expected number of innerView's didInsertElement (post-scroll to 0)");
   equal(innerViewDestroyCount, 0, "expected number of innerView's willDestroyElement (post-scroll to 0)");
 
   equal(listViewInsertionCount, 1, "expected number of listView's didInsertElement (post-scroll to 0)");
@@ -493,7 +492,7 @@ test("recycling complex views with ReusableListItemView, handling empty slots at
   });
 
   equal(view.$('.ember-list-item-view').length, 8, "The correct number of items were rendered (post-scroll to 350)");
-  equal(view.$('.ember-list-item-view:visible').length, 6, "The number of items that are not hidden with display:none (post-scroll to 350)");
+  equal(view.$('.ember-list-item-view:visible').length, 8, "The number of items that are not hidden with display:none (post-scroll to 350)");
 
   equal(listItemViewInsertionCount, 0, "expected number of listItemView's didInsertElement (post-scroll to 350)");
   equal(listItemViewDestroyCount, 0, "expected number of listItemView's willDestroyElement (post-scroll to 350)");
@@ -516,5 +515,5 @@ test("recycling complex views with ReusableListItemView, handling empty slots at
   equal(innerViewInsertionCount, 4, "expected number of innerView's didInsertElement (post-expand to 3 columns)");
   equal(innerViewDestroyCount, 0, "expected number of innerView's willDestroyElement (post-expand to 3 columns)");
 
-  equal(view.$('.ember-list-item-view:visible').length, 8, "The number of items that are not hidden with display:none (post-expand to 3 columns)");
+  equal(view.$('.ember-list-item-view:visible').length, 12, "The number of items that are not hidden with display:none (post-expand to 3 columns)");
 });

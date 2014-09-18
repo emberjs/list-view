@@ -1,0 +1,29 @@
+{
+  "name": "list-view",
+  "version": "0.0.5",
+  "homepage": "https://github.com/emberjs/list-view",
+  "authors": [
+    "Erik Bryn",
+    "Yapp Inc.",
+    "and contributors."
+  ],
+  "description": "An efficient incremental rendering list view for large lists.",
+  "main": "dist/list-view.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ember": "~1.6.0-beta.5",
+    "qunit": "~1.13.0",
+    "jquery": "~1.10.x",
+    "handlebars": "~1.3.0"
+  },
+  "devDependencies": {
+    "loader.js": "~1.0.0"
+  }
+}

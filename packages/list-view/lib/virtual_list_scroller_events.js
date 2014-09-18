@@ -1,3 +1,4 @@
+// jshint validthis: true
 var fieldRegex = /input|textarea|select/i,
   hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
   handleStart, handleMove, handleEnd, handleCancel,
@@ -92,7 +93,7 @@ function unbindWindow(handlers) {
   window.removeEventListener(cancelEvent, handlers.cancel, true);
 }
 
-Ember.VirtualListScrollerEvents = Ember.Mixin.create({
+export default Ember.Mixin.create({
   init: function() {
     this.on('didInsertElement', this, 'bindScrollerEvents');
     this.on('willDestroyElement', this, 'unbindScrollerEvents');

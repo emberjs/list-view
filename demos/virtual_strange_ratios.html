@@ -19,13 +19,13 @@
       .ember-list-item-view {
         position: absolute;
         color: steelblue;
-        width: 100px;
-        height: 100px;
+        width: 73px;
+        height: 73px;
       }
 
       .ember-list-item-view img{
-        width: 100px;
-        height: 100px;
+        width: 73px;
+        height: 73px;
       }
       .ember-list-item-view .text {
         position: absolute;
@@ -58,7 +58,7 @@
 
   <body>
     <script type="text/x-handlebars">
-      {{#collection Ember.VirtualListView content=controller height=500 width=500 elementWidth=100 rowHeight=100}}
+      {{#collection Ember.VirtualListView content=controller height=235 rowHeight=73}}
         <img {{bind-attr src=imageSrc}}/>
         <div class="text"> {{name}}</div>
       {{/collection}}
@@ -83,7 +83,7 @@
       App.ApplicationRoute = Ember.Route.extend({
         model: function() {
           var content = [];
-          for (var i = 0; i < 10000; i++) {
+          for (var i = 0; i < 15; i++) {
             content.push({
               name: 'Item ' + (i + 1),
               imageSrc: images[i%images.length]

@@ -1,23 +1,6 @@
 var css, view, helper, nextTopPosition;
-
-require('list-view/~tests/test_helper');
 helper = window.helper;
 nextTopPosition = 0;
-
-function Scroller(callback, opts){
-  this.callback = callback;
-  this.opts = opts;
-  this.scrollTo = function(left, top, zoom) {
-    view._scrollerTop = top;
-    view._scrollContentTo(Math.max(0, top));
-  };
-  this.setDimensions = function() { };
-  this.doTouchStart = function() {};
-  this.doTouchMove = function() {
-    this.scrollTo(0, nextTopPosition, 1);
-  };
-  this.doTouchEnd = function() {};
-}
 
 
 function appendView() {
@@ -49,7 +32,21 @@ function fireEvent(type, target) {
 
 module("Ember.VirtualListView scrollerstart acceptance", {
   setup: function() {
-    window.Scroller = Scroller;
+    window.Scroller = function(callback, opts){
+      this.callback = callback;
+      this.opts = opts;
+      this.scrollTo = function(left, top, zoom) {
+        view._scrollerTop = top;
+        view._scrollContentTo(Math.max(0, top));
+      };
+      this.setDimensions = function() { };
+      this.doTouchStart = function() {};
+      this.doTouchMove = function() {
+        this.scrollTo(0, nextTopPosition, 1);
+      };
+      this.doTouchEnd = function() {};
+    };
+
     css = Ember.$("<style>" +
             ".ember-list-view {" +
             "  overflow: auto;" +
