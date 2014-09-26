@@ -1,0 +1,19 @@
+{
+  "name": "bin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stefanpenner/pack.git"
+  },
+  "author": "stefan.penner@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefanpenner/pack/issues"
+  },
+  "homepage": "https://github.com/stefanpenner/pack"
+}

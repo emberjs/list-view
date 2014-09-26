@@ -1,0 +1,20 @@
+integrate pack
+--------------
+- init pack
+- add widthForIndex and make pack aware of it
+- invalidate pack cache when width changes
+- invalidate when contentChanges
+  - addContentArrayObserver or syncChildViews?
+-  views needed for viewport needs to be updated
+-  arrayDidChange
+  - if the change occured beyond the range that the pack instance knows about, do nothing
+  - if the change occured within the range that the pack instance knows about, this.positions.flush(index of the change);
+    - trigger a reflow
+
+init: function() {
+  this._positions = new Pack(this.get('width'));
+},
+
+widthDidChange: Ember.observes('width', function() {
+  this._positions.maxWidth = this.get('width');
+});
