@@ -35,7 +35,9 @@ Bin.prototype.position = function position(index, width) {
 };
 
 Bin.prototype.flush = function(index /*, to */) {
-  this._positionEntries.length = index;
+  if (this._positionEntries.length > index) {
+    this._positionEntries.length = index;
+  }
 };
 
 function rangeError(length, index) {
