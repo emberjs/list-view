@@ -192,6 +192,25 @@ Bin.prototype.widthAtIndex = function(index) {
   return this.content[index].width;
 };
 
+function FixedDimension(content, elementWidth, elementHeight) {
+  this._elementWidth =  elementWidth;
+  this._elementHeight =  elementHeight;
+
+  this._super$constructor(content);
+}
+
+FixedDimension.prototype = Object.create(Bin.prototype);
+FixedDimension.prototype._super$constructor = Bin;
+
+FixedDimension.prototype.widthAtIndex = function(index) {
+  return this._elementWidth;
+};
+
+FixedDimension.prototype.heightAtIndex = function(index) {
+  return this._elementWidth;
+};
+
+Bin.FixedDimension = FixedDimension;
 /* global define:true module:true window: true */
 if (typeof define === 'function' && define['amd']) {
   define(function() { return Bin; });

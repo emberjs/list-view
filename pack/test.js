@@ -96,25 +96,7 @@ assert.deepEqual(bin.position(3, 200), {
  y: 25
 });
 
-function FixedDimensionBin(content, elementWidth, elementHeight) {
-  this._elementWidth =  elementWidth;
-  this._elementHeight =  elementHeight;
-
-  this._super$constructor(content);
-}
-
-FixedDimensionBin.prototype = Object.create(Bin.prototype);
-FixedDimensionBin.prototype._super$constructor = Bin;
-
-FixedDimensionBin.prototype.widthAtIndex = function(index) {
-  return this._elementWidth;
-};
-
-FixedDimensionBin.prototype.heightAtIndex = function(index) {
-  return this._elementWidth;
-};
-
-var fixed = new FixedDimensionBin(content, 10, 10);
+var fixed = new Bin.FixedDimension(content, 10, 10);
 
 assert.deepEqual(fixed.position(0, 20), {
   x: 0,
