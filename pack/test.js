@@ -9,7 +9,7 @@ var content = [
 /* y: 175 */ { width:  50, height: 50}                              // y: 175
 ];
 
-var bin = new Bin(content, 100);
+var bin = new Bin.ShelfFirst(content, 100);
 
 assert.equal(bin.visibleStartingIndex(  0, 100), 0);
 assert.equal(bin.visibleStartingIndex( 50, 100), 2);

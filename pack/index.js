@@ -192,6 +192,13 @@ Bin.prototype.widthAtIndex = function(index) {
   return this.content[index].width;
 };
 
+function ShelfFirst(content, width) {
+  this._super$constructor(content, width);
+  this._positionEntries = [];
+}
+
+ShelfFirst.prototype = Object.create(Bin.prototype);
+ShelfFirst.prototype._super$constructor = Bin;
 function FixedDimension(content, elementWidth, elementHeight) {
   this._elementWidth =  elementWidth;
   this._elementHeight =  elementHeight;
@@ -228,6 +235,8 @@ Bin.FixedDimension = FixedDimension;
 
 Bin.Position = Position;
 Bin.Entry = Entry;
+Bin.ShelfFirst = ShelfFirst;
+
 /* global define:true module:true window: true */
 if (typeof define === 'function' && define['amd']) {
   define(function() { return Bin; });
