@@ -29,7 +29,7 @@ debugger
 
 // index 0; given viewport { height: 50 , width: 100}
 assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
-assert.equal(bin.numberVisibleWithin(50, 100, 50), 1);
+assert.equal(bin.numberVisibleWithin(50, 100, 50), 3);
 assert.equal(bin.numberVisibleWithin(75, 100, 50), 2);
 
 assert.deepEqual(bin.position(0, 100), {

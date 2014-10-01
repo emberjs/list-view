@@ -146,21 +146,31 @@ Bin.prototype._numberVisibleWithin = function(startingIndex, height) {
   var length = this.length();
   var entry, position;
   var currentY = 0;
-  var entryHeight = 0;
-  var currentHeight = 0;
+  var yOffset = 0;
 
-  for (var i = startingIndex; i < length && currentHeight <= height; i++) {
+  if (startingIndex > 0 && startingIndex < length) {
+    yOffset = this._entryAt(startingIndex).position.y;
+  } else {
+    yOffset = 0;
+  }
+
+  if (startingIndex < length)
+
+  for (var i = startingIndex; i < length; i++) {
     entry = this._entryAt(i);
     position = entry.position;
 
     if (currentY === position.y) {
       // same row
     } else {
-      currentY = position.y;
-      currentHeight += entryHeight;
+      currentY = position.y - yOffset;
     }
 
-    count++;
+    if (currentY < height) {
+      count++;
+    } else {
+      break;
+    }
   }
 
   return count;
