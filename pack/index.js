@@ -211,6 +211,9 @@ FixedDimension.prototype.heightAtIndex = function(index) {
 };
 
 Bin.FixedDimension = FixedDimension;
+
+Bin.Position = Position;
+Bin.Entry = Entry;
 /* global define:true module:true window: true */
 if (typeof define === 'function' && define['amd']) {
   define(function() { return Bin; });
