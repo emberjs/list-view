@@ -1,7 +1,7 @@
 function Bin(content, width) {
   this.width = width || 0;
-  this._positionEntries = [];
   this.content = content;
+  this._positionEntries = [];
 }
 
 function Position(x, y) {
@@ -28,7 +28,7 @@ Bin.prototype.objectAt = function(collection, index) {
 Bin.prototype.position = function position(index, width) {
   if (width !== this.width) {
     this.flush(0);
-    this.width= width;
+    this.width=  width;
   }
 
   return this._entryAt(index).position;
