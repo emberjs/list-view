@@ -199,6 +199,33 @@ function ShelfFirst(content, width) {
 
 ShelfFirst.prototype = Object.create(Bin.prototype);
 ShelfFirst.prototype._super$constructor = Bin;
+
+ShelfFirst.prototype.height = function() {
+  var length = this.length();
+  if (length === 0) { return 0; }
+
+  // find tallest in last raw, add to Y
+  var tallest  = 0;
+  var currentY = 0;
+  var entry;
+
+  for (var i = length - 1; i >= 0; i--) {
+    entry = this._entryAt(i);
+
+    if (currentY > entry.position.y) {
+      break; // end of last row
+    } else if (tallest < entry.height) {
+      tallest = entry.height;
+    } else {
+      // do nothing
+    }
+
+    currentY = entry.position.y;
+  }
+
+  return currentY + tallest;
+}
+
 function FixedDimension(content, elementWidth, elementHeight) {
   this._elementWidth =  elementWidth;
   this._elementHeight =  elementHeight;

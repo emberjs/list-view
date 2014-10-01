@@ -72,6 +72,8 @@ assert.deepEqual(bin.position(7, 100), {
   y: 175
 });
 
+assert.equal(bin.height(), 225);
+
 assert.throws(function() {
   assert.deepEqual(bin.position(8, 100), {
     x:   0,
