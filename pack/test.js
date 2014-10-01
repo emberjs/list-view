@@ -25,8 +25,6 @@ assert.throws(function() {
   assert.equal(bin.visibleStartingIndex(200, 100), 7);
 }, /Parameter must be within: \[0 and 8\) but was: 8/);
 
-debugger
-
 // index 0; given viewport { height: 50 , width: 100}
 assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
 assert.equal(bin.numberVisibleWithin(50, 100, 50), 3);
