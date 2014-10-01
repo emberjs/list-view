@@ -118,6 +118,8 @@ assert.deepEqual(fixed.position(3, 20), {
   y: 10
 });
 
+assert.deepEqual(fixed.height(), 40);
+
 // index 0; given viewport { height: 20, width: 20 }
 assert.equal(fixed.numberVisibleWithin(0, 20, 20), 4);
 assert.equal(fixed.numberVisibleWithin(10, 20, 20), 4);

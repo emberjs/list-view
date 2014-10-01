@@ -210,6 +210,20 @@ FixedDimension.prototype.heightAtIndex = function(index) {
   return this._elementWidth;
 };
 
+FixedDimension.prototype.height = function() {
+  var length = this.length();
+  if (length === 0) { return 0; }
+
+  var entry = this._entryAt(0);
+  var width = this.width;
+  var columnCount = Math.floor(width/entry.width);
+  var rows = length/columnCount;
+
+  var totalHeight = rows * entry.height;
+
+  return totalHeight;
+}
+
 Bin.FixedDimension = FixedDimension;
 
 Bin.Position = Position;
