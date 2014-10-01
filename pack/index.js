@@ -1,5 +1,5 @@
-function Bin(content) {
-  this.width = 0;
+function Bin(content, width) {
+  this.width = width || 0;
   this._positionEntries = [];
   this.content = content;
 }
@@ -31,7 +31,7 @@ Bin.prototype.position = function position(index, width) {
     this.width= width;
   }
 
-  return this._entryAt(width, index).position;
+  return this._entryAt(index).position;
 };
 
 Bin.prototype.flush = function(index /*, to */) {
@@ -40,14 +40,19 @@ Bin.prototype.flush = function(index /*, to */) {
 
 function rangeError(length, index) {
   throw new RangeError("Parameter must be within: [" + 0 + " and " + length + ") but was: " + index);
-};
+}
+
+function insufficientArguments(actual, expected) {
+  throw new TypeError("Insufficent Arguments expected: " + expected + " but got " + actual + "");
+}
 
 Bin.prototype.length = function() {
   return this.content.length;
 }
 
-Bin.prototype._entryAt = function position(width, index) {
+Bin.prototype._entryAt = function position(index) {
   var length = this.length();
+  var width = this.width;
 
   if (index >= length) {
     rangeError(length, index)
@@ -101,8 +106,27 @@ Bin.prototype._entryAt = function position(width, index) {
   return entry;
 };
 
-Bin.prototype.visibleStartingIndex = function(topOffset, width, height) {
+Bin.prototype.visibleStartingIndex = function(topOffset, width) {
+  if (topOffset === 0 ) { return 0; }
 
+  var top = 0;
+  var position;
+  var previousTop = 0;
+  var index = -1
+
+  while (topOffset > top) {
+    index++;
+    position = this._entryAt(index).position;
+
+    if (position.y === previousTop) {
+      // same row
+    } else {
+      // new row
+      top = position.y;
+    }
+  }
+
+  return index;
 };
 
 Bin.prototype.numberVisibleWithin = function (topOffset, width, height) {
@@ -113,11 +137,33 @@ Bin.prototype.numberVisibleWithin = function (topOffset, width, height) {
 
   var startingIndex = this.visibleStartingIndex(topOffset, width, height);
 
-  return this._numberVisibleWithin(startingIndex, width, height);
+  return this._numberVisibleWithin(startingIndex, height);
 };
 
-Bin.prototype._numberVisibleWithin = function(startingIndex, width, height) {
-  return 4; // fake it till we make it
+Bin.prototype._numberVisibleWithin = function(startingIndex, height) {
+  var width = this.width;
+  var count = 0;
+  var length = this.length();
+  var entry, position;
+  var currentY = 0;
+  var entryHeight = 0;
+  var currentHeight = 0;
+
+  for (var i = startingIndex; i < length && currentHeight <= height; i++) {
+    entry = this._entryAt(i);
+    position = entry.position;
+
+    if (currentY === position.y) {
+      // same row
+    } else {
+      currentY = position.y;
+      currentHeight += entryHeight;
+    }
+
+    count++;
+  }
+
+  return count;
 };
 
 Bin.prototype.heightAtIndex = function(index) {
