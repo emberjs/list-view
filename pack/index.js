@@ -40,6 +40,12 @@ Bin.prototype.flush = function(index /*, to */) {
   }
 };
 
+Bin.prototype.height = function() {
+  throw TypeError("NOT IMPLEMENTED");
+}
+
+
+
 function rangeError(length, index) {
   throw new RangeError("Parameter must be within: [" + 0 + " and " + length + ") but was: " + index);
 }
