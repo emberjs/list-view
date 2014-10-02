@@ -1,7 +1,15 @@
+// I don't think this should have args
 function Bin(content, width) {
   this.width = width || 0;
   this.content = content;
+  // belongs on ShelfFirst
   this._positionEntries = [];
+}
+
+function mustImplement(name) {
+  return function() {
+    throw TypeError("MustImplement: " + name );
+  }
 }
 
 function Position(x, y) {
@@ -16,35 +24,23 @@ function Entry(height, width, x, y) {
   this.position = new Position(x, y);
 }
 
-Bin.prototype.get = function(obj, key) {
-  return obj[key];
-};
-
+// abstract
 Bin.prototype.objectAt = function(collection, index) {
   return collection[index];
 };
 
-// width/height should be optional
-Bin.prototype.position = function position(index, width) {
-  if (width !== this.width) {
-    this.flush(0);
-    this.width=  width;
-  }
+// abstract
+Bin.prototype.position = mustImplement('position');
 
-  return this._entryAt(index).position;
-};
-
+// abstract
 Bin.prototype.flush = function(index /*, to */) {
   if (this._positionEntries.length > index) {
     this._positionEntries.length = index;
   }
 };
 
-Bin.prototype.height = function() {
-  throw TypeError("NOT IMPLEMENTED");
-}
-
-
+// abstract
+Bin.prototype.height = mustImplement('position');
 
 function rangeError(length, index) {
   throw new RangeError("Parameter must be within: [" + 0 + " and " + length + ") but was: " + index);
@@ -54,11 +50,70 @@ function insufficientArguments(actual, expected) {
   throw new TypeError("Insufficent Arguments expected: " + expected + " but got " + actual + "");
 }
 
+// abstract
 Bin.prototype.length = function() {
   return this.content.length;
 }
 
-Bin.prototype._entryAt = function position(index) {
+// abstract
+Bin.prototype.visibleStartingIndex = mustImplement('visibleStartingIndex');
+
+Bin.prototype.numberVisibleWithin = mustImplement('numberVisibleWithin');
+  
+Bin.prototype.heightAtIndex = function(index) {
+  return this.content[index].height;
+};
+
+Bin.prototype.widthAtIndex = function(index) {
+  return this.content[index].width;
+};
+
+function ShelfFirst(content, width) {
+  this._super$constructor(content, width);
+  this._positionEntries = [];
+}
+
+ShelfFirst.prototype = Object.create(Bin.prototype);
+ShelfFirst.prototype._super$constructor = Bin;
+
+ShelfFirst.prototype.height = function() {
+  var length = this.length();
+  if (length === 0) { return 0; }
+
+  // find tallest in last raw, add to Y
+  var tallest  = 0;
+  var currentY = 0;
+  var entry;
+
+  for (var i = length - 1; i >= 0; i--) {
+    entry = this._entryAt(i);
+
+    if (currentY > entry.position.y) {
+      break; // end of last row
+    } else if (tallest < entry.height) {
+      tallest = entry.height;
+    } else {
+      // do nothing
+    }
+
+    currentY = entry.position.y;
+  }
+
+  return currentY + tallest;
+};
+
+ShelfFirst.prototype.numberVisibleWithin = function (topOffset, width, height) {
+  if (width!== this.width) {
+    this.flush(0);
+    this.width = width;
+  }
+
+  var startingIndex = this.visibleStartingIndex(topOffset, width, height);
+
+  return this._numberVisibleWithin(startingIndex, height);
+};
+
+ShelfFirst.prototype._entryAt = function position(index) {
   var length = this.length();
   var width = this.width;
 
@@ -114,41 +169,7 @@ Bin.prototype._entryAt = function position(index) {
   return entry;
 };
 
-Bin.prototype.visibleStartingIndex = function(topOffset, width) {
-  if (topOffset === 0 ) { return 0; }
-
-  var top = 0;
-  var position;
-  var previousTop = 0;
-  var index = -1
-
-  while (topOffset > top) {
-    index++;
-    position = this._entryAt(index).position;
-
-    if (position.y === previousTop) {
-      // same row
-    } else {
-      // new row
-      top = position.y;
-    }
-  }
-
-  return index;
-};
-
-Bin.prototype.numberVisibleWithin = function (topOffset, width, height) {
-  if (width!== this.width) {
-    this.flush(0);
-    this.width = width;
-  }
-
-  var startingIndex = this.visibleStartingIndex(topOffset, width, height);
-
-  return this._numberVisibleWithin(startingIndex, height);
-};
-
-Bin.prototype._numberVisibleWithin = function(startingIndex, height) {
+ShelfFirst.prototype._numberVisibleWithin = function(startingIndex, height) {
   var width = this.width;
   var count = 0;
   var length = this.length();
@@ -184,81 +205,111 @@ Bin.prototype._numberVisibleWithin = function(startingIndex, height) {
   return count;
 };
 
-Bin.prototype.heightAtIndex = function(index) {
-  return this.content[index].height;
-};
+ShelfFirst.prototype.position = function position(index, width) {
+  var length = this.length;
 
-Bin.prototype.widthAtIndex = function(index) {
-  return this.content[index].width;
-};
-
-function ShelfFirst(content, width) {
-  this._super$constructor(content, width);
-  this._positionEntries = [];
-}
-
-ShelfFirst.prototype = Object.create(Bin.prototype);
-ShelfFirst.prototype._super$constructor = Bin;
-
-ShelfFirst.prototype.height = function() {
-  var length = this.length();
-  if (length === 0) { return 0; }
-
-  // find tallest in last raw, add to Y
-  var tallest  = 0;
-  var currentY = 0;
-  var entry;
-
-  for (var i = length - 1; i >= 0; i--) {
-    entry = this._entryAt(i);
-
-    if (currentY > entry.position.y) {
-      break; // end of last row
-    } else if (tallest < entry.height) {
-      tallest = entry.height;
-    } else {
-      // do nothing
-    }
-
-    currentY = entry.position.y;
+  if (length === 0 || index > length) {
+    rangeError(length, index);
   }
 
-  return currentY + tallest;
-}
+  if (width !== this.width) {
+    this.flush(0);
+    this.width =  width;
+  }
 
-function FixedDimension(content, elementWidth, elementHeight) {
+  return this._entryAt(index).position;
+};
+
+ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
+  // part of ShelfFirst
+  if (topOffset === 0 ) { return 0; }
+
+  // TODO: bust cache if width changed
+
+  var top = 0;
+  var position;
+  var previousTop = 0;
+  var index = -1
+
+  while (topOffset > top) {
+    index++;
+    position = this._entryAt(index).position;
+
+    if (position.y === previousTop) {
+      // same row
+    } else {
+      // new row
+      top = position.y;
+    }
+  }
+
+  return index;
+};
+
+function FixedGrid(content, elementWidth, elementHeight) {
   this._elementWidth =  elementWidth;
   this._elementHeight =  elementHeight;
 
   this._super$constructor(content);
 }
 
-FixedDimension.prototype = Object.create(Bin.prototype);
-FixedDimension.prototype._super$constructor = Bin;
+FixedGrid.prototype = Object.create(Bin.prototype);
+FixedGrid.prototype._super$constructor = Bin;
+FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {
+  var columns = Math.floor(width / this._elementWidth);
+  var height = this.height();
 
-FixedDimension.prototype.widthAtIndex = function(index) {
+  return Math.floor(topOffset / height) / columns;
+};
+
+FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {
+  var startingIndex = this.visibleStartingIndex(topOffset, width, height);
+  var columns = Math.floor(width / this._elementWidth);
+  var length = this.length();
+
+  var rows = Math.ceil(height / this._elementHeight);
+  var maxNeeded = rows * columns;
+  var potentialVisible = length - startingIndex;
+
+  return Math.min(maxNeeded, potentialVisible);
+};
+
+FixedGrid.prototype.widthAtIndex = function(index) {
   return this._elementWidth;
 };
 
-FixedDimension.prototype.heightAtIndex = function(index) {
+FixedGrid.prototype.heightAtIndex = function(index) {
   return this._elementWidth;
 };
 
-FixedDimension.prototype.height = function() {
+FixedGrid.prototype.position = function(index, width) {
+  var length = this.length();
+  if (length === 0 || index > length) {
+    rangeError(length, index);
+  }
+
+  var columns = Math.floor(width / this._elementWidth) || 1;
+
+  var x = index % columns * this._elementWidth;
+  var y = Math.floor(index / columns) * this._elementHeight;
+
+  return new Position(x, y);
+};
+
+FixedGrid.prototype.height = function(width) {
   var length = this.length();
   if (length === 0) { return 0; }
 
-  var entry = this._entryAt(0);
-  var width = this.width;
-  var columnCount = Math.floor(width/entry.width);
+  var columnCount = Math.floor(width/this._elementWidth);
+  columnCount = columnCount > 0 ? columnCount : 1;
   var rows = length/columnCount;
 
-  var totalHeight = rows * entry.height;
+  var totalHeight = rows * this._elementWidth;
 
   return totalHeight;
 }
 
-Bin.FixedDimension = FixedDimension;
+Bin.FixedGrid = FixedGrid;
 
 Bin.Position = Position;
 Bin.Entry = Entry;
