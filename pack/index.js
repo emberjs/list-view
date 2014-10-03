@@ -2,8 +2,6 @@
 function Bin(content, width) {
   this.width = width || 0;
   this.content = content;
-  // belongs on ShelfFirst
-  this._positionEntries = [];
 }
 
 function mustImplement(name) {
