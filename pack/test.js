@@ -1,5 +1,31 @@
 var Bin = require('./index');
 var assert = require('assert');
+var contentB = [
+/* y:   0 */ { width:  50, height: 50 }, { width: 60, height: 50 }, // y:   0
+/* y:  50 */ { width: 100, height: 25 },                            // y:  50
+/* y:  75 */ { width:  50, height: 50 }, { width: 50, height: 50 }, // y:  75
+/* y: 125 */ { width:  50, height: 50 }, { width: 50, height: 50 }, // y: 125
+/* y: 175 */ { width:  50, height: 50}                              // y: 175
+];
+
+var bin = new Bin.ShelfFirst(contentB, 100);
+
+assert.deepEqual(bin.position(0, 100), {
+  x: 0,
+  y: 0
+});
+
+assert.deepEqual(bin.position(1, 100), {
+  x:  0,
+  y: 50
+});
+
+assert.deepEqual(bin.position(2, 100), {
+  x:  0,
+  y: 100
+});
+
+var bin = new Bin.ShelfFirst(content, 100);
 
 var content = [
 /* y:   0 */ { width:  50, height: 50 }, { width: 50, height: 50 }, // y:   0
@@ -10,25 +36,6 @@ var content = [
 ];
 
 var bin = new Bin.ShelfFirst(content, 100);
-
-assert.equal(bin.visibleStartingIndex(  0, 100), 0);
-assert.equal(bin.visibleStartingIndex( 50, 100), 2);
-
-assert.equal(bin.visibleStartingIndex( 75, 100), 3);
-assert.equal(bin.visibleStartingIndex(100, 100), 5);
-assert.equal(bin.visibleStartingIndex(125, 100), 5);
-
-assert.equal(bin.visibleStartingIndex(150, 100), 7);
-assert.equal(bin.visibleStartingIndex(175, 100), 7);
-
-assert.throws(function() {
-  assert.equal(bin.visibleStartingIndex(200, 100), 7);
-}, /Parameter must be within: \[0 and 8\) but was: 8/);
-
-// index 0; given viewport { height: 50 , width: 100}
-assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
-assert.equal(bin.numberVisibleWithin(50, 100, 50), 3);
-assert.equal(bin.numberVisibleWithin(75, 100, 50), 2);
 
 assert.deepEqual(bin.position(0, 100), {
   x: 0,
@@ -72,6 +79,24 @@ assert.deepEqual(bin.position(7, 100), {
 
 assert.equal(bin.height(), 225);
 
+assert.equal(bin.visibleStartingIndex(  0, 100), 0);
+assert.equal(bin.visibleStartingIndex( 50, 100), 2);
+assert.equal(bin.visibleStartingIndex( 75, 100), 3);
+
+assert.equal(bin.visibleStartingIndex(100, 100), 5);
+assert.equal(bin.visibleStartingIndex(125, 100), 5);
+
+assert.equal(bin.visibleStartingIndex(150, 100), 7);
+assert.equal(bin.visibleStartingIndex(175, 100), 7);
+
+assert.throws(function() {
+  assert.equal(bin.visibleStartingIndex(200, 100), 7);
+}, /Parameter must be within: \[0 and 8\) but was: 8/);
+
+// index 0; given viewport { height: 50 , width: 100}
+assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
+assert.equal(bin.numberVisibleWithin(50, 100, 50), 3);
+assert.equal(bin.numberVisibleWithin(75, 100, 50), 2);
 assert.throws(function() {
   assert.deepEqual(bin.position(8, 100), {
     x:   0,
@@ -79,11 +104,21 @@ assert.throws(function() {
   });
 }, /Parameter must be within: \[0 and 8\) but was: 8/);
 
-// dimension change
+// dimension change width: 99
+// var content = [
+// /* index: 0, y:   0 */ { width:  50, height:  50 },
+// /* index: 1, y:  50 */ { width:  50, height:  50 },
+// /* index: 2, Y: 100 */ { width: 100, height:  25 },
+// /* index: 3, y: 125 */ { width:  50, height:  50 },
+// /* index: 4, y: 175 */ { width:  50, height:  50 },
+// /* index: 5, y: 225 */ { width:  50, height:  50 },
+// /* index: 6, y: 275 */ { width:  50, height:  50 },
+// /* index: 7, y: 325 */ { width:  50, height:  50}
+// ];
 
 assert.deepEqual(bin.position(7, 99), {
   x:   0,
-  y: 175
+  y: 325
 });
 
 assert.deepEqual(bin.position(2, 200), {
@@ -93,7 +128,7 @@ assert.deepEqual(bin.position(2, 200), {
 
 assert.deepEqual(bin.position(3, 200), {
  x:  0,
- y: 25
+ y: 50
 });
 
 var fixed = new Bin.FixedGrid(content, 10, 10);
@@ -124,3 +159,24 @@ assert.deepEqual(fixed.height(20), 40);
 assert.equal(fixed.numberVisibleWithin(0, 20, 20), 4);
 assert.equal(fixed.numberVisibleWithin(10, 20, 20), 4);
 assert.equal(fixed.numberVisibleWithin(20, 20, 20), 4);
+
+var bin = new Bin.ShelfFirst([
+  { width: 5,        height: 5 },
+  { width: Infinity, height: 5 },
+  { width: 5,        height: 5 }
+], 100);
+
+assert.deepEqual(bin.position(0, 100), {
+  x: 0,
+  y: 0,
+});
+
+assert.deepEqual(bin.position(1, 100), {
+  x: 0,
+  y: 5,
+}); // this one has inifinit width
+
+assert.deepEqual(bin.position(2, 100), {
+  x:  0,
+  y: 10,
+});

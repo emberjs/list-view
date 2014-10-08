@@ -136,21 +136,21 @@ ShelfFirst.prototype._entryAt = function position(index) {
   } else {
     startingIndex = entriesLength - 1;
     entry = this._positionEntries[startingIndex];
+    rowWidth = entry.position.x + entry.width;
     y = entry.position.y;
-    rowWidth = entry.position.x;
+    startingIndex++;
   }
 
   for (i = startingIndex; i < index + 1; i++) {
-
     currentHeight = this.heightAtIndex(i);
     currentWidth = this.widthAtIndex(i);
 
-    if (rowWidth >= width) {
+    if ((currentWidth + rowWidth) > width) {
       // new row
-      y = rowHeight + y;
+      y = entry.position.y + entry.height;
+      x = 0;
+      rowWidth = 0
       rowHeight = currentHeight;
-      x  = 0;
-      rowWidth = 0;
     } else {
       x = rowWidth;
     }
@@ -161,7 +161,7 @@ ShelfFirst.prototype._entryAt = function position(index) {
 
     entry = this._positionEntries[i] = new Entry(rowHeight, currentWidth, x, y);
 
-    rowWidth += currentWidth;
+    rowWidth = x + currentWidth;
   }
 
   return entry;
