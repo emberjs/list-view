@@ -122,11 +122,32 @@ export default Ember.Mixin.create({
   */
   init: function() {
     this._super();
-    this._cachedHeights = [0]; // change
+    this.width = this.width || 0;
+    this._bin = this._setupBin();
     this.on('didInsertElement', this._syncListContainerWidth);
     this.columnCountDidChange();
     this._syncChildViews();
     this._addContentArrayObserver();
+  },
+
+  _setupBin: function() {
+    // detect which bin we need
+    var bin = new Bin.FixedGrid([], 0, 0);
+    var list = this;
+
+    bin.length = function() {
+      return list.get('content.length'); 
+    };
+
+    bin.widthAtIndex = function() {
+      return list.get('elementWidth');
+    };
+
+    bin.heightAtIndex = function() {
+      return list.get('rowHeight');
+    };
+
+    return bin;
   },
 
   _addContentArrayObserver: Ember.beforeObserver(function() {
@@ -287,16 +308,12 @@ export default Ember.Mixin.create({
                               'rowHeight',
                               'columnCount',
                               'bottomPadding', function() {
-    if (typeof this.heightForIndex === 'function') {
-      return this._totalHeightWithHeightForIndex();
-    } else {
-      return this._totalHeightWithStaticRowHeight();
-   }
+    return this._bin.height(this.get('width')) + this.get('bottomPadding');
   }),
 
   _doRowHeightDidChange: function() {
     // flush bin
-    this._cachedHeights = [0];
+    this._bin.flush(0);
     this._cachedPos = 0;
     this._syncChildViews();
   },
@@ -304,22 +321,6 @@ export default Ember.Mixin.create({
   _rowHeightDidChange: Ember.observer('rowHeight', function() {
     Ember.run.once(this, this._doRowHeightDidChange);
   }),
-
-  _totalHeightWithHeightForIndex: function() {
-    var length = this.get('content.length');
-    return this._cachedHeightLookup(length);
-  },
-
-  _totalHeightWithStaticRowHeight: function() {
-    var contentLength, rowHeight, columnCount, bottomPadding;
-
-    contentLength = get(this, 'content.length');
-    rowHeight = get(this, 'rowHeight');
-    columnCount = get(this, 'columnCount');
-    bottomPadding = get(this, 'bottomPadding');
-
-    return ((ceil(contentLength / columnCount)) * rowHeight) + bottomPadding;
-  },
 
   /**
     @private
@@ -370,13 +371,15 @@ export default Ember.Mixin.create({
     @method positionForIndex
   */
   positionForIndex: function(index) {
-    // maybe not the best check?
-    if (typeof this.heightForIndex !== 'function') {
-      return this._singleHeightPosForIndex(index);
+    if (this.get('content.length') === 0) {
+      // TODO: Hack, to handle clearing the array. Actually the views should
+      // just be removed
+      return {
+        x: 0,
+        y: 0
+      };
     }
-    else {
-      return this._multiHeightPosForIndex(index);
-    }
+    return this._bin.position(index, this.get('width'));
   },
 
   _singleHeightPosForIndex: function(index) {
