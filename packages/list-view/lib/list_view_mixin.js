@@ -105,7 +105,6 @@ export default Ember.Mixin.create({
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
   paddingCount: 1,
-  _cachedPos: 0,
 
   _isGrid: Ember.computed('columnCount', function() {
     return this.get('columnCount') > 1;
@@ -314,7 +313,6 @@ export default Ember.Mixin.create({
   _doRowHeightDidChange: function() {
     // flush bin
     this._bin.flush(0);
-    this._cachedPos = 0;
     this._syncChildViews();
   },
 
@@ -380,49 +378,6 @@ export default Ember.Mixin.create({
       };
     }
     return this._bin.position(index, this.get('width'));
-  },
-
-  _singleHeightPosForIndex: function(index) {
-    var elementWidth, width, columnCount, rowHeight, y, x;
-
-    elementWidth = get(this, 'elementWidth') || 1;
-    width = get(this, 'width') || 1;
-    columnCount = get(this, 'columnCount');
-    rowHeight = get(this, 'rowHeight');
-
-    y = (rowHeight * floor(index/columnCount));
-    x = (index % columnCount) * elementWidth;
-
-    return {
-      y: y,
-      x: x
-    };
-  },
-
-  // 0 maps to 0, 1 maps to heightForIndex(i)
-  _multiHeightPosForIndex: function(index) {
-    var elementWidth, width, columnCount, rowHeight, y, x;
-    // ask the bin
-    elementWidth = get(this, 'elementWidth') || 1;
-    width = get(this, 'width') || 1;
-    columnCount = get(this, 'columnCount');
-
-    x = (index % columnCount) * elementWidth;
-    y = this._cachedHeightLookup(index);
-
-    return {
-      x: x,
-      y: y
-    };
-  },
-
-  _cachedHeightLookup: function(index) {
-    // wont be needed
-    for (var i = this._cachedPos; i < index; i++) {
-      this._cachedHeights[i + 1] = this._cachedHeights[i] + this.heightForIndex(i);
-    }
-    this._cachedPos = i;
-    return this._cachedHeights[index];
   },
 
   /**
@@ -542,47 +497,20 @@ export default Ember.Mixin.create({
 
     @method _numChildViewsForViewport
   */
-  _numChildViewsForViewport: function() {
 
-    if (this.heightForIndex) {
-      return this._numChildViewsForViewportWithMultiHeight();
-    } else {
-      return this._numChildViewsForViewportWithoutMultiHeight();
-    }
+  _numChildViewsForViewport:  function() {
+    var height = get(this, 'height');
+    var width = get(this, 'width');
+    var paddingCount = get(this, 'paddingCount');
+    var columnCount = get(this, 'columnCount');
+    var scrollTop = this.get('scrollTop');
+
+    var padding = (paddingCount * columnCount);
+
+    debugger;
+
+    return this._bin.numberVisibleWithin(scrollTop, width, height) + padding;
   },
-
-  _numChildViewsForViewportWithoutMultiHeight:  function() {
-    var height, rowHeight, paddingCount, columnCount;
-
-    height = get(this, 'height');
-    rowHeight = get(this, 'rowHeight');
-    paddingCount = get(this, 'paddingCount');
-    columnCount = get(this, 'columnCount');
-
-    return (ceil(height / rowHeight) * columnCount) + (paddingCount * columnCount);
-  },
-
-  _numChildViewsForViewportWithMultiHeight:  function() {
-    var rowHeight, paddingCount, columnCount;
-    var scrollTop = this.scrollTop;
-    var viewportHeight = this.get('height');
-    var length = this.get('content.length');
-    var heightfromTop = 0;
-    var padding = get(this, 'paddingCount');
-
-    var startingIndex = this._calculatedStartingIndex();
-    var currentHeight = 0;
-
-    var offsetHeight = this._cachedHeightLookup(startingIndex);
-    for (var i = 0; i < length; i++) {
-      if (this._cachedHeightLookup(startingIndex + i + 1) - offsetHeight > viewportHeight) {
-        break;
-      }
-    }
-
-    return i + padding + 1;
-  },
-
 
   /**
     @private

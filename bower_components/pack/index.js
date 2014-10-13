@@ -96,6 +96,15 @@ ShelfFirst.prototype.height = function() {
   return currentY + tallest;
 };
 
+ShelfFirst.prototype.flush = function(position) {
+  var positionEntries = this._positionEntries;
+  var length = positionEntries.length;
+
+  if (positionEntries.length > position) {
+    positionEntries.length = position;
+  }
+}
+
 ShelfFirst.prototype.numberVisibleWithin = function (topOffset, width, height) {
   if (width!== this.width) {
     this.flush(0);
@@ -255,18 +264,19 @@ FixedGrid.prototype.flush = function(index /*, to */) {
 };
 
 FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {
-  var columns = Math.floor(width / this.widthAtIndex(0));
-  var height = this.height();
+  var columns = Math.floor(width / this.widthAtIndex(0)) || 1;
 
-  return Math.floor(topOffset / height) / columns;
+  return Math.floor(topOffset / this.heightAtIndex(0)) / columns;
 };
 
 FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {
   var startingIndex = this.visibleStartingIndex(topOffset, width, height);
-  var columns = Math.floor(width / this.widthAtIndex(0));
+  var columns = Math.floor(width / this.widthAtIndex(0)) || 1;
   var length = this.length();
 
-  var rows = Math.ceil(height / this.heightAtIndex(0));
+  var rowHeight = this.heightAtIndex(0);
+  var rows = Math.ceil(height / rowHeight);
+
   var maxNeeded = rows * columns;
   var potentialVisible = length - startingIndex;
 
