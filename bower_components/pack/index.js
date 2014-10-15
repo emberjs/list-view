@@ -230,20 +230,16 @@ ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
   // TODO: bust cache if width changed
 
   var top = 0;
-  var position;
+  var position, entry;
   var previousTop = 0;
   var index = -1;
 
-  while (topOffset > top) {
+  while (topOffset >= top) {
     index++;
-    position = this._entryAt(index).position;
+    entry = this._entryAt(index);
+    position = entry.position;
 
-    if (position.y === previousTop) {
-      // same row
-    } else {
-      // new row
-      top = position.y;
-    }
+    top = position.y + entry.height;
   }
 
   return index;

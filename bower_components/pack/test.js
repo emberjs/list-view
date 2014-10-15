@@ -80,18 +80,19 @@ assert.deepEqual(bin.position(7, 100), {
 assert.equal(bin.height(), 225);
 
 assert.equal(bin.visibleStartingIndex(  0, 100), 0);
+
 assert.equal(bin.visibleStartingIndex( 50, 100), 2);
 assert.equal(bin.visibleStartingIndex( 75, 100), 3);
 
-assert.equal(bin.visibleStartingIndex(100, 100), 5);
+assert.equal(bin.visibleStartingIndex(100, 100), 3);
 assert.equal(bin.visibleStartingIndex(125, 100), 5);
 
-assert.equal(bin.visibleStartingIndex(150, 100), 7);
+assert.equal(bin.visibleStartingIndex(150, 100), 5);
 assert.equal(bin.visibleStartingIndex(175, 100), 7);
 
-assert.throws(function() {
-  assert.equal(bin.visibleStartingIndex(200, 100), 7);
-}, /Parameter must be within: \[0 and 8\) but was: 8/);
+assert.equal(bin.visibleStartingIndex( 49, 100), 0);
+
+assert.equal(bin.visibleStartingIndex(200, 100), 7);
 
 // index 0; given viewport { height: 50 , width: 100}
 assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
