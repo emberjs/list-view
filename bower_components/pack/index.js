@@ -280,7 +280,7 @@ FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {
   var maxNeeded = rows * columns;
   var potentialVisible = length - startingIndex;
 
-  return Math.min(maxNeeded, potentialVisible);
+  return Math.max(Math.min(maxNeeded, potentialVisible), 0);
 };
 
 FixedGrid.prototype.widthAtIndex = function(index) {

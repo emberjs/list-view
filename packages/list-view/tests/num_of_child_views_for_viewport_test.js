@@ -15,6 +15,13 @@ module("Ember.ListView unit: - numOfChildViewsForViewport", {
   }
 });
 
+var content = [];
+for (var i = 0; i < 20; i++) {
+  content[i] = {
+    id: i
+  };
+}
+
 test("computing the number of child views to create with scrollTop zero", function() {
   view = Ember.ListView.create({
     height: 500,
@@ -22,7 +29,7 @@ test("computing the number of child views to create with scrollTop zero", functi
     content: Ember.A()
   });
 
-  equal(view._numChildViewsForViewport(), 11);
+  equal(view._numChildViewsForViewport(), 0);
 });
 
 test("computing the number of child views to create after when scroll down a bit", function() {
@@ -31,6 +38,26 @@ test("computing the number of child views to create after when scroll down a bit
     rowHeight: 50,
     scrollTop: 51,
     content: Ember.A()
+  });
+  equal(view._numChildViewsForViewport(), 0);
+});
+
+test("computing the number of child views to create with scrollTop zero (With content)", function() {
+  view = Ember.ListView.create({
+    height: 500,
+    rowHeight: 50,
+    content: Ember.A(content)
+  });
+
+  equal(view._numChildViewsForViewport(), 11);
+});
+
+test("computing the number of child views to create after when scroll down a bit (with content)", function() {
+  view = Ember.ListView.create({
+    height: 500,
+    rowHeight: 50,
+    scrollTop: 51,
+    content: Ember.A(content)
   });
   equal(view._numChildViewsForViewport(), 11);
 });

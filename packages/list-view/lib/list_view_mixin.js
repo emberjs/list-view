@@ -507,9 +507,13 @@ export default Ember.Mixin.create({
 
     var padding = (paddingCount * columnCount);
 
-    debugger;
+    var numVisible = this._bin.numberVisibleWithin(scrollTop, width, height);
+    
+    if (numVisible > 0 ) { 
+      numVisible += padding;
+    }
 
-    return this._bin.numberVisibleWithin(scrollTop, width, height) + padding;
+    return numVisible;
   },
 
   /**

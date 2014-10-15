@@ -57,7 +57,7 @@ test("scroll but beyond content length", function(){
     scrollTop: 1000
   });
 
-  equal(view._startingIndex(), 0);
+  equal(view._startingIndex(), 5);
 });
 
 
