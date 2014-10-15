@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/demos/style.css">
+    <style>
+      .ember-list-view {
+        overflow: auto;
+        position: relative;
+        width: 100%;
+      }
+
+      .ember-list-item-view {
+        position: absolute;
+        border: 1px solid black;
+      }
+
+      .row {
+        position: absolute;
+      }
+
+      .dog {
+        height: 50px;
+        width:  300px;
+        display: block;
+        background-color: teal;
+      }
+
+      .cat {
+        height: 150px;
+        width: 150px;
+        display: block;
+        background-color: pink;
+      }
+    </style>
+    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
+    <script type="text/javascript" src="/bower_components/pack/index.js"></script>
+    <script type="text/javascript" src="/dist/list-view.js"></script>
+  </head>
+
+  <body>
+    <script type="text/x-handlebars">
+      {{view 'list' content=controller width=300}}
+    </script>
+
+    <script>
+      App = Ember.Application.create();
+
+      // for debugging
+      App.ApplicationView = Ember.View.extend({
+        didInsertElement: function(){
+          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
+        }
+      });
+
+      App.ListView = Ember.ListView.extend({
+        height: 300,
+        width: 500,
+        rowHeight: 100,
+        itemViews: {
+          "cat" : Ember.ListItemView.extend({
+            rowHeight: 100,
+            width: 150,
+            template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
+          }),
+          "dog" : Ember.ListItemView.extend({
+            rowHeight: 50,
+            width: Infinity,
+            template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
+          })
+        },
+        heightForIndex: function(idx){
+          // TODO: cleanup
+
+          var type = this.get('content').objectAt(idx).type;
+          var height = type === 'dog' ? 50 : 150;
+          console.log('height', height);
+          return height;
+        },
+        widthForIndex: function(idx) {
+          var type = this.get('content').objectAt(idx).type;
+          var width = type === 'dog' ? Infinity : 150;
+          console.log('width', width);
+          return width;
+        },
+        itemViewForIndex: function(idx){
+          return this.itemViews[this.get('content').objectAt(idx).type];
+        }
+      });
+
+      App.ApplicationRoute = Ember.Route.extend({
+        model: function() {
+          var content = [
+            {id:  1, type: "cat",   name: "Andrew"},
+            {id:  5, type: "cat",   name: "Caroline"},
+            {id:  2, type: "cat",   name: "Andrew"},
+            {id:  3, type: "cat",   name: "Bruce"},
+            {id:  5, type: "dog",   name: "Caroline"},
+            {id:  6, type: "cat",   name: "David"},
+            {id:  9, type: "dog",   name: "Edward"},
+            {id: 10, type: "dog",   name: "Francis"},
+            {id: 11, type: "dog",   name: "George"},
+            {id: 13, type: "dog",   name: "Harry"},
+            {id: 14, type: "cat",   name: "Ingrid"},
+            {id: 16, type: "cat",   name: "Jenn"},
+            {id: 17, type: "cat",   name: "Kelly"},
+            {id: 20, type: "cat",   name: "Larry"},
+            {id: 22, type: "cat",   name: "Manny"},
+            {id: 23, type: "dog",   name: "Nathan"},
+            {id: 24, type: "cat",   name: "Ophelia"},
+            {id: 25, type: "dog",   name: "Patrick"},
+            {id: 31, type: "cat",   name: "Quincy"},
+            {id: 32, type: "dog",   name: "Roger"},
+          ];
+          return content;
+        }
+      });
+    </script>
+  </body>
+</html>
