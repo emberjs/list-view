@@ -310,41 +310,6 @@ test("_numChildViewsForViewport + _startingIndex with multi-height", function() 
   equal(view._startingIndex(), 10, 'expected _startingIndex to be correct (after scroll)');
 });
 
-
-test("_cachedHeights is unique per instance", function() {
-  var content = [ ];
-
-  var ParentClass = Ember.ListView.extend({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      other: Ember.ListItemView.extend({
-        rowHeight: 150,
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx){
-      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
-    },
-    heightForIndex: function(idx) {
-      // proto() is a quick hack, lets just store this on the class..
-      return this.itemViewForIndex(idx).proto().rowHeight;
-    }
-  });
-
-  var viewA = ParentClass.create();
-  var viewB = ParentClass.create();
-
-  deepEqual(viewA._cachedHeights, viewB._cachedHeights);
-
-  viewA._cachedHeights.push(1);
-
-  equal(viewA._cachedHeights.length, 2);
-  equal(viewB._cachedHeights.length, 1, 'expected no addition cached heights, cache should not be shared between instances');
-});
-
 test("handle bindable rowHeight with multi-height (only fallback case)", function() {
   var content = [
     { id:  1, type: "cat",   name: "Andrew" },
