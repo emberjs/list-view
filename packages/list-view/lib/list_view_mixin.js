@@ -3,10 +3,9 @@
 import ReusableListItemView from 'list-view/reusable_list_item_view';
 
 var get = Ember.get, set = Ember.set,
-
-min = Math.min, max = Math.max, floor = Math.floor,
-ceil = Math.ceil,
-forEach = Ember.ArrayPolyfills.forEach;
+    min = Math.min, max = Math.max, floor = Math.floor,
+    ceil = Math.ceil,
+    forEach = Ember.EnumerableUtils.forEach;
 
 function addContentArrayObserver() {
   var content = get(this, 'content');
@@ -304,8 +303,8 @@ export default Ember.Mixin.create({
     @property {Ember.ComputedProperty} totalHeight
   */
   totalHeight: Ember.computed('content.length',
+                              'width',
                               'rowHeight',
-                              'columnCount',
                               'bottomPadding', function() {
     return this._bin.height(this.get('width')) + this.get('bottomPadding');
   }),
@@ -543,7 +542,7 @@ export default Ember.Mixin.create({
     if (this.heightForIndex) {
       calculatedStartingIndex = this._calculatedStartingIndex();
     } else {
-      calculatedStartingIndex = floor(scrollTop / rowHeight) * columnCount;
+      calculatedStartingIndex  = this._bin.visibleStartingIndex(scrollTop, this.get('width'));
     }
 
     var viewsNeededForViewport = this._numChildViewsForViewport();
@@ -691,7 +690,7 @@ export default Ember.Mixin.create({
       }
     } else {
       // less views are needed
-      forEach.call(
+      forEach(
         childViews.splice(numberOfChildViewsNeeded, numberOfChildViews),
         removeAndDestroy,
         this
@@ -795,7 +794,7 @@ export default Ember.Mixin.create({
         index = 0;
         // ignore all changes not in the visible range
         // this can re-position many, rather then causing a cascade of re-renders
-        forEach.call(
+        forEach(
           this.positionOrderedChildViews(),
           function(childView) {
             contentIndex = this._lastStartingIndex + index;

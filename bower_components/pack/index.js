@@ -232,7 +232,7 @@ ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
   var top = 0;
   var position;
   var previousTop = 0;
-  var index = -1
+  var index = -1;
 
   while (topOffset > top) {
     index++;
@@ -266,7 +266,7 @@ FixedGrid.prototype.flush = function(index /*, to */) {
 FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {
   var columns = Math.floor(width / this.widthAtIndex(0)) || 1;
 
-  return Math.floor(topOffset / this.heightAtIndex(0)) / columns;
+  return Math.floor(topOffset / this.heightAtIndex(0)) * columns;
 };
 
 FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {

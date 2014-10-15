@@ -42,7 +42,7 @@ test("scroll but within content length", function(){
     scrollTop: 100
   });
 
-  equal(view._startingIndex(), 0);
+  equal(view._startingIndex(), 2);
 });
 
 test("scroll but beyond content length", function(){
@@ -74,7 +74,7 @@ test("larger list", function(){
     scrollTop: 1000
   });
 
-  equal(view._startingIndex(), 28);
+  equal(view._startingIndex(), 38);
 });
 
 test("larger list", function(){
