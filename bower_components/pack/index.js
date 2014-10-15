@@ -150,7 +150,7 @@ ShelfFirst.prototype._entryAt = function position(index) {
     currentHeight = this.heightAtIndex(i);
     currentWidth = this.widthAtIndex(i);
 
-    if ((currentWidth + rowWidth) > width) {
+    if (entry && (currentWidth + rowWidth) > width) {
       // new row
       y = entry.position.y + entry.height;
       x = 0;
