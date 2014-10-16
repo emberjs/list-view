@@ -181,3 +181,68 @@ assert.deepEqual(bin.position(2, 100), {
   x:  0,
   y: 10,
 });
+
+var bin = new Bin.ShelfFirst([
+  /*0*/{ height: 100, width:      100 },
+  /*1*/{ height: 100, width:      100 },
+  /*2*/{ height:  25, width: Infinity },
+  /*3*/{ height: 100, width:      100 },
+  /*4*/{ height: 100, width: Infinity },
+  /*5*/{ height: 100, width: Infinity },
+  /*6*/{ height:  25, width:      100 },
+  /*7*/{ height:  25, width:      100 },
+  /*8*/{ height: 100, width:      100 },
+  /*9*/{ height:  25, width:      100 }
+], 200);
+
+assert.deepEqual(bin.position(0, 200), {
+  x: 0,
+  y: 0,
+});
+
+assert.deepEqual(bin.position(1, 200), {
+  x: 100,
+  y:   0,
+});
+
+assert.deepEqual(bin.position(2, 200), {
+  x:   0,
+  y: 100,
+}); // This one has Infinite width
+
+assert.deepEqual(bin.position(3, 200), {
+  x:   0,
+  y: 125,
+});
+
+assert.deepEqual(bin.position(4, 200), {
+  x:   0,
+  y: 225,
+}); // This one has Infinite width
+
+assert.deepEqual(bin.position(5, 200), {
+  x:   0,
+  y: 325,
+}); // This one has Infinite width
+
+assert.deepEqual(bin.position(6, 200), {
+  x:   0,
+  y: 425,
+});
+
+assert.deepEqual(bin.position(7, 200), {
+  x: 100,
+  y: 425,
+});
+
+assert.deepEqual(bin.position(8, 200), {
+  x:   0,
+  y: 450,
+});
+
+assert.deepEqual(bin.position(9, 200), {
+  x: 100,
+  y: 450,
+});
+
+assert.deepEqual(bin.height(), 550);

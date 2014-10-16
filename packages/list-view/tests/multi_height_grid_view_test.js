@@ -129,68 +129,65 @@ test("Correct height based on content", function() {
   ], 'went beyond scroll max via overscroll');
 });
 
-
-
 test("with 100% width groups", function() {
   var content = [
-    { id:  1, height: 100, name: "Andrew"   },
-    { id:  2, height: 100, name: "Xbar"     },
-    { id:  3, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-    { id:  4, height: 100, name: "David"    },
-    { id:  5, height: 100, name: "Xbar"     },
-    { id:  6, height: 100, name: "Xbar"     },
-    { id:  7, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-    { id:  8, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-    { id:  9, height: 100, name: "Edward"   },
-    { id: 10, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH}
+    { id: 0, height: 100, width:      100, name: "Andrew"   },
+    { id: 1, height: 100, width:      100, name: "Xbar"     },
+    { id: 2, height:  25, width: Infinity, name: "Caroline" },
+    { id: 3, height: 100, width:      100, name: "David"    },
+    { id: 4, height: 100, width: Infinity, name: "Xbar"     },
+    { id: 5, height: 100, width: Infinity, name: "Xbar"     },
+    { id: 6, height:  25, width:      100, name: "Caroline" },
+    { id: 7, height:  25, width:      100, name: "Caroline" },
+    { id: 8, height: 100, width:      100, name: "Edward"   },
+    { id: 9, height:  25, width:      100, name: "Caroline" }
   ];
 
-  debugger;
   // rowHeight + elementWidth are fallback dimensions
   view = Ember.ListView.create({
     content: Em.A(content),
     height: 100,
     width: 200,
-    elementWidth: 100,
-    rowHeight: 100,
     itemViewClass: Ember.ListItemView.extend({
       template: Ember.Handlebars.compile("{{name}}#{{id}}")
     }),
     heightForIndex: function(idx) {
       return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
+    },
+    widthForIndex: function (idx) {
+      return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'width');
     }
   });
 
   appendView();
 
-  equal(view.get('totalHeight'), 500);
+  equal(view.get('totalHeight'), 550);
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  debugger;
   equal(view.$('.ember-list-item-view').length, 3);
 
   var i, contentIdx;
 
-  equal(Ember.$(positionSorted[0]).text(), "Andrew#1");
-  equal(Ember.$(positionSorted[1]).text(), "Xbar#2");
-  equal(Ember.$(positionSorted[2]).text(), "Caroline#3");
+  equal(Ember.$(positionSorted[0]).text(), "Andrew#0");
+  equal(Ember.$(positionSorted[1]).text(), "Xbar#1");
+  equal(Ember.$(positionSorted[2]).text(), "Caroline#2");
 
   deepEqual(helper.itemPositions(view), [
-    { x:0,   y:    0 }, // <-- in view
-    { x:100, y:    0 }, // <-- in view
-    { x:0,   y:  100 }, // <-- buffer
+    { x:   0, y:   0 }, // <-- in view
+    { x: 100, y:   0 }, // <-- in view
+    { x:  0,  y: 100 }, // <-- buffer
   ], '');
 
   Ember.run(view, 'scrollTo', 100);
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
-  equal(Ember.$(positionSorted[0]).text(), 'Caroline#3');
-  equal(Ember.$(positionSorted[1]).text(), 'David#4');
-  equal(Ember.$(positionSorted[2]).text(), 'Xbar#5');
+  equal(Ember.$(positionSorted[0]).text(), 'Caroline#2');
+  equal(Ember.$(positionSorted[1]).text(), 'David#3');
+  equal(Ember.$(positionSorted[2]).text(), 'Xbar#4');
 
   deepEqual(helper.itemPositions(view), [
-    { x:0,   y: 100 }, // <-- in-view
-    { x:0,   y: 200 }, // <-- buffer
-    { x:100, y: 200 }  // <-- buffer
+    { x: 0, y: 100 }, // <-- in-view
+    { x: 0, y: 125 }, // <-- buffer
+    { x: 0, y: 225 }  // <-- buffer
   ], '');
 });

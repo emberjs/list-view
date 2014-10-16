@@ -138,7 +138,7 @@ export default Ember.Mixin.create({
 
   _setupShelfFirstBin: function() {
     // detect which bin we need
-    var bin = new Bin.ShelfFirst([], 0, 0);
+    var bin = new Bin.ShelfFirst([], this.get('width'), 0);
     var list = this;
 
     bin.length = function() {
@@ -201,7 +201,7 @@ export default Ember.Mixin.create({
   },
 
   willInsertElement: function() {
-    if (!this.get("height") || !this.get("rowHeight")) {
+    if (!this.get("height") || !this.get("rowHeight") && !this.heightForIndex) {
       throw new Error("A ListView must be created with a height and a rowHeight.");
     }
     this._super();
