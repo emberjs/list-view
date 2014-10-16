@@ -227,7 +227,10 @@ ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
   // part of ShelfFirst
   if (topOffset === 0 ) { return 0; }
 
-  // TODO: bust cache if width changed
+  if (width!== this.width) {
+    this.flush(0);
+    this.width = width;
+  }
 
   var top = 0;
   var position, entry;
