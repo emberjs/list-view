@@ -229,42 +229,39 @@ test("Correct height based on view", function() {
   ], 'went beyond scroll max via overscroll');
 });
 
-
-
-
 test("_numChildViewsForViewport + _startingIndex with multi-height", function() {
   var content = [
-    { id:  1, type: "cat",   name: "Andrew" },
-    { id:  3, type: "cat",   name: "Bruce" },
-    { id:  4, type: "other", name: "Xbar" },
-    { id:  5, type: "dog",   name: "Caroline" },
-    { id:  6, type: "cat",   name: "David" },
-    { id:  7, type: "other", name: "Xbar" },
-    { id:  8, type: "other", name: "Xbar" },
-    { id:  9, type: "dog",   name: "Edward" },
-    { id: 10, type: "dog",   name: "Francis" },
-    { id: 11, type: "dog",   name: "George" },
-    { id: 12, type: "other", name: "Xbar" },
-    { id: 13, type: "dog",   name: "Harry" },
-    { id: 14, type: "cat",   name: "Ingrid" },
-    { id: 15, type: "other", name: "Xbar" },
-    { id: 16, type: "cat",   name: "Jenn" },
-    { id: 17, type: "cat",   name: "Kelly" },
-    { id: 18, type: "other", name: "Xbar" },
-    { id: 19, type: "other", name: "Xbar" },
-    { id: 20, type: "cat",   name: "Larry" },
-    { id: 21, type: "other", name: "Xbar" },
-    { id: 22, type: "cat",   name: "Manny" },
-    { id: 23, type: "dog",   name: "Nathan" },
-    { id: 24, type: "cat",   name: "Ophelia" },
-    { id: 25, type: "dog",   name: "Patrick" },
-    { id: 26, type: "other", name: "Xbar" },
-    { id: 27, type: "other", name: "Xbar" },
-    { id: 28, type: "other", name: "Xbar" },
-    { id: 29, type: "other", name: "Xbar" },
-    { id: 30, type: "other", name: "Xbar" },
-    { id: 31, type: "cat",   name: "Quincy" },
-    { id: 32, type: "dog",   name: "Roger" },
+  /* index:  0, height: 100 */{ id:  1, type: "cat",   name: "Andrew" },
+  /* index:  1, height: 100 */{ id:  2, type: "cat",   name: "Bruce" },
+  /* index:  2, height: 150 */{ id:  3, type: "other", name: "Xbar" },
+  /* index:  3, height:  50 */{ id:  4, type: "dog",   name: "Caroline" },
+  /* index:  4, height: 100 */{ id:  5, type: "cat",   name: "David" },
+  /* index:  5, height: 150 */{ id:  6, type: "other", name: "Xbar" },
+  /* index:  6, height: 150 */{ id:  7, type: "other", name: "Xbar" },
+  /* index:  7, height:  50 */{ id:  8, type: "dog",   name: "Edward" },
+  /* index:  8, height:  50 */{ id:  9, type: "dog",   name: "Francis" },
+  /* index:  9, height:  50 */{ id: 10, type: "dog",   name: "George" },
+  /* index: 10, height: 150 */{ id: 11, type: "other", name: "Xbar" },
+  /* index: 11, height:  50 */{ id: 12, type: "dog",   name: "Harry" },
+  /* index: 12, height: 100 */{ id: 13, type: "cat",   name: "Ingrid" },
+  /* index: 13, height: 150 */{ id: 14, type: "other", name: "Xbar" },
+  /* index: 14, height: 100 */{ id: 15, type: "cat",   name: "Jenn" },
+  /* index: 15, height: 100 */{ id: 16, type: "cat",   name: "Kelly" },
+  /* index: 16, height: 150 */{ id: 17, type: "other", name: "Xbar" },
+  /* index: 17, height: 150 */{ id: 18, type: "other", name: "Xbar" },
+  /* index: 18, height: 100 */{ id: 19, type: "cat",   name: "Larry" },
+  /* index: 19, height: 150 */{ id: 20, type: "other", name: "Xbar" },
+  /* index: 20, height: 100 */{ id: 21, type: "cat",   name: "Manny" },
+  /* index: 21, height:  50 */{ id: 22, type: "dog",   name: "Nathan" },
+  /* index: 22, height: 100 */{ id: 23, type: "cat",   name: "Ophelia" },
+  /* index: 23, height:  50 */{ id: 24, type: "dog",   name: "Patrick" },
+  /* index: 24, height: 150 */{ id: 25, type: "other", name: "Xbar" },
+  /* index: 25, height: 150 */{ id: 26, type: "other", name: "Xbar" },
+  /* index: 26, height: 150 */{ id: 27, type: "other", name: "Xbar" },
+  /* index: 27, height: 150 */{ id: 28, type: "other", name: "Xbar" },
+  /* index: 28, height: 150 */{ id: 29, type: "other", name: "Xbar" },
+  /* index: 29, height: 100 */{ id: 30, type: "cat",   name: "Quincy" },
+  /* index: 30, height:  50 */{ id: 31, type: "dog",   name: "Roger" },
   ];
 
   view = Ember.ListView.create({
@@ -306,7 +303,7 @@ test("_numChildViewsForViewport + _startingIndex with multi-height", function() 
 
   // entries: 12, 13, 14, 15
 
-  equal(view._numChildViewsForViewport(), 5, 'expected _numChildViewsForViewport to be correct (after scroll)');
+  equal(view._numChildViewsForViewport(), 4, 'expected _numChildViewsForViewport to be correct (after scroll)');
   equal(view._startingIndex(), 10, 'expected _startingIndex to be correct (after scroll)');
 });
 
