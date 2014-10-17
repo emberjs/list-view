@@ -799,6 +799,8 @@ export default Ember.Mixin.create({
     // Support old and new Ember versions
     state = this._state || this.state;
 
+    this._bin.flush(start);
+
     if (state === 'inDOM') {
       // ignore if all changes are out of the visible change
       if (start >= this._lastStartingIndex || start < this._lastEndingIndex) {
