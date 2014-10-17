@@ -800,6 +800,7 @@ export default Ember.Mixin.create({
     state = this._state || this.state;
 
     this._bin.flush(start);
+    var length = this.get('content.length');
 
     if (state === 'inDOM') {
       // ignore if all changes are out of the visible change
@@ -811,7 +812,10 @@ export default Ember.Mixin.create({
           this.positionOrderedChildViews(),
           function(childView) {
             contentIndex = this._lastStartingIndex + index;
-            this._reuseChildForContentIndex(childView, contentIndex);
+            if (contentIndex < length) {
+              // TODO: i would prefer to prune children before this.
+              this._reuseChildForContentIndex(childView, contentIndex);
+            }
             index++;
           },
           this
