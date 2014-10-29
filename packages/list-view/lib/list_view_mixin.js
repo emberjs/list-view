@@ -7,6 +7,21 @@ var get = Ember.get, set = Ember.set,
     ceil = Math.ceil,
     forEach = Ember.EnumerableUtils.forEach;
 
+function integer(key, value) {
+  if (arguments.length > 1) {
+    var ret;
+    if (typeof value === 'string') {
+      ret = parseInt(value, 10);
+    } else {
+      ret = value;
+    }
+    this[key] = ret;
+    return ret;
+  } else {
+    return this[key];
+  }
+}
+
 function addContentArrayObserver() {
   var content = get(this, 'content');
   if (content) {
@@ -199,6 +214,10 @@ export default Ember.Mixin.create({
     this._super(buffer);
     buffer.push('</div>');
   },
+
+  height: Ember.computed(integer),
+  width: Ember.computed(integer),
+  rowHeight: Ember.computed(integer),
 
   willInsertElement: function() {
     if (!this.get("height") || !this.get("rowHeight") && !this.heightForIndex) {
