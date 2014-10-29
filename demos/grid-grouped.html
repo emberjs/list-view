@@ -5,7 +5,10 @@
       .ember-list-item-view {
         position: absolute;
         width: 500px;
+        border-bottom: 1px solid gray;
+        border-top: 1px solid gray;
       }
+
       .row {
         position: absolute;
       }
@@ -27,6 +30,7 @@
     <script type="text/javascript" src="/bower_components/ember/ember.prod.js"></script>
     <script type="text/javascript" src="/bower_components/pack/index.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
+    <script type="text/javascript" src="app.js"></script>
  
   </head>
 
@@ -34,50 +38,89 @@
     <ul id="menu">
       <li><a href="/demos/">< Demos</a></li>
     </ul>
+
+    <script type="text/x-handlebars"
+            data-template-name="list-item">
+      {{name}}#{{id}}
+    </script>
+
     <script type="text/x-handlebars">
-      {{view 'list' content=controller}}
+      <form id="configurator">
+        <ul>
+          <li>
+            <label>
+              <div class="description">Height:</div>
+              {{input type='range' min=50 max=1000 value=height}}
+              {{input type="number" value=height}}
+            </label>
+          </li>
+          <li>
+            <label>
+              <div class="description">Width:</div>
+              {{input type='range' min=50 max=1000 value=width}}
+              {{input type="number" value=width}}
+            </label>
+         </li>
+          <li>
+            <label>
+              <div class="description">ElementWidth:</div>
+              {{input type='range' min=50 max=width value=elementWidth}}
+              {{input type="number" value=elementWidth}}
+            </label>
+          </li>
+          <li>
+            <label>
+              <div class="description">Items:</div>
+              {{input type='range' min=0 max=maxItemCount value=itemCount}}
+              {{input type="number" value=itemCount}}
+            </label>
+          </li>
+        </ul>
+      </form>
+ 
+      {{view 'list' content=controller
+                    height=height
+                    width=width
+                    rowHeight=rowHeight
+                    elementWidth=elementWidth}}
     </script>
 
     <script>
-      App = Ember.Application.create();
-
-      // for debugging
-      App.ApplicationView = Ember.View.extend({
-        didInsertElement: function(){
-          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
-        }
-      });
-
-      var content = [
-        { id:  1, height: 100, name: "Andrew"   },
-        { id:  2, height: 100, name: "Xbar"     },
-        { id:  3, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-        { id:  4, height: 100, name: "David"    },
-        { id:  5, height: 100, name: "Xbar"     },
-        { id:  6, height: 100, name: "Xbar"     },
-        { id:  7, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-        { id:  8, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH},
-        { id:  9, height: 100, name: "Edward"   },
-        { id: 10, height:  25, name: "Caroline", width: Ember.ListView.MAX_WIDTH}
+      window.data = [
+        { height: 100,                  name: "Andrew"   },
+        { height: 100,                  name: "Xbar"     },
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height: 100,                  name: "David"    },
+        { height: 100,                  name: "Xbar"     },
+        { height: 100,                  name: "Xbar"     },
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height: 100,                  name: "Edward"   },
+        { height:  25, width: Infinity, name: "Caroline" }
       ];
 
       // rowHeight + elementWidth are fallback dimensions
-      App.ListView = Ember.ListView.extend({
-        height: 100,
-        width: 200,
-        elementWidth: 100,
-        rowHeight: 100,
-        itemViewClass: Ember.ListItemView.extend({
-          template: Ember.Handlebars.compile("{{name}}#{{id}}")
-        }),
+      App.ListView.reopen({
+        height: 500,
+        width: 500,
         heightForIndex: function(idx) {
-          return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
-        }
-      });
+          var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
+          if (ret === null) {
+            ret = Infinity;
+          }
+          return ret;
+        },
 
-      App.ApplicationRoute = Ember.Route.extend({
-        model: function() {
-          return content;
+        widthForIndex: function(idx) {
+          var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'width');
+
+          if (ret === null) {
+            ret = Infinity; // Infinity doesn't JSON.stringify
+          } else if (ret === undefined) {
+            ret = this.get('elementWidth');
+          }
+
+          return ret;
         }
       });
     </script>

@@ -63,4 +63,10 @@ html {
   box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
+  background: white;
+}
+
+#configurator {
+  float: left;
+  overflow: hidden;
 }

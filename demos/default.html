@@ -13,6 +13,7 @@
     <script type="text/javascript" src="/bower_components/ember/ember.prod.js"></script>
     <script type="text/javascript" src="/bower_components/pack/index.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
+    <script type="text/javascript" src="app.js"></script>
   </head>
 
   <body>
@@ -21,45 +22,65 @@
     </ul>
 
     <script type="text/x-handlebars">
-      {{#ember-list items=controller height=300 width=500 row-height=100}}
-        {{name}}
-      {{/ember-list}}
+      <form id="configurator">
+        <ul>
+          <li>
+            <label>
+              <div class="description">Height:</div>
+              {{input type='range' min=50 max=1000 value=height}}
+              {{input type="number" value=height}}
+            </label>
+          </li>
+          <li>
+            <label>
+              <div class="description">Width:</div>
+              {{input type='range' min=50 max=1000 value=width}}
+              {{input type="number" value=width}}
+            </label>
+         </li>
+          <li>
+            <label>
+              <div class="description">RowHeight:</div>
+              {{input type='range' min=50 max=500 value=rowHeight}}
+              {{input type="number" value=rowHeight}}
+            </label>
+          </li>
+          <li>
+            <label>
+              <div class="description">ElementWidth:</div>
+              {{input type='range' min=50 max=width value=elementWidth}}
+              {{input type="number" value=elementWidth}}
+            </label>
+          </li>
+          <li>
+            <label>
+              <div class="description">Items:</div>
+              {{input type='range' min=0 max=maxItemCount value=itemCount}}
+              {{input type="number" value=itemCount}}
+            </label>
+          </li>
+        </ul>
+      </form>
+      {{view 'list' content=items
+                    height=height
+                    width=width
+                    elementWidth=elementWidth
+                    rowHeight=rowHeight}}
+    </script>
+
+    <script type="text/x-handlebars"
+            data-template-name="list-item">
+      {{name}}
     </script>
 
     <script>
-      App = Ember.Application.create();
-
-      // for debugging
-      App.ApplicationView = Ember.View.extend({
-        didInsertElement: function(){
-          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
-        }
-      });
-
-      var images = [
-        'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
-        'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg',
-        'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg',
-        'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
-        'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
+      window.data = [
+        { name: 'image', imageSrc: 'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png' },
+        { name: 'image', imageSrc: 'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg' },
+        { name: 'image', imageSrc: 'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg' },
+        { name: 'image', imageSrc: 'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png' },
+        { name: 'image', imageSrc: 'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png' },
       ];
-
-      App.AppleView = Ember.View.extend({
-        template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
-      });
-
-      App.ApplicationRoute = Ember.Route.extend({
-        model: function() {
-          var content = [];
-          for (var i = 0; i < 100000; i++) {
-            content.push({
-              name: 'Item ' + (i+1),
-              imageSrc: images[i%images.length]
-            });
-          }
-          return content;
-        }
-      });
     </script>
   </body>
 </html>
