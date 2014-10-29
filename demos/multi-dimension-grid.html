@@ -2,12 +2,6 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/demos/style.css">
     <style>
-      .ember-list-view {
-        overflow: auto;
-        position: relative;
-        width: 100%;
-      }
-
       .ember-list-item-view {
         position: absolute;
         border: 1px solid black;
@@ -31,14 +25,17 @@
         background-color: pink;
       }
     </style>
-    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
-    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/bower_components/ember/ember.prod.js"></script>
     <script type="text/javascript" src="/bower_components/pack/index.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
   </head>
 
   <body>
+    <ul id="menu">
+      <li><a href="/demos/">< Demos</a></li>
+    </ul>
     <script type="text/x-handlebars">
       {{view 'list' content=controller width=300}}
     </script>

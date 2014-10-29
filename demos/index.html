@@ -1,66 +1,23 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/demos/style.css">
-    <style>
-      .ember-list-view {
-        overflow: auto;
-        position: relative;
-        width: 100%;
-      }
-      .ember-list-item-view {
-        position: absolute;
-        border-bottom: 1px solid gray;
-        width: 100%;
-      }
-    </style>
-    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="/dist//bower_components/handlebars/handlebars.js"></script>
-    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
-    <script type="text/javascript" src="/bower_components/pack/index.js"></script>
-    <script type="text/javascript" src="/dist/list-view.js"></script>
   </head>
-
   <body>
-    <script type="text/x-handlebars">
-      {{#ember-list items=controller height=300 width=500 row-height=100}}
-        {{name}}
-      {{/ember-list}}
-    </script>
-
-    <script>
-      App = Ember.Application.create();
-
-      // for debugging
-      App.ApplicationView = Ember.View.extend({
-        didInsertElement: function(){
-          window.list = Ember.View.views[$('.ember-list-view').attr('id')];
-        }
-      });
-
-      var images = [
-        'https://twimg0-a.akamaihd.net/profile_images/2681970778/df2e281f4cec93a73f663a78f92926cd.png',
-        'http://media-cache-ec5.pinterest.com/avatars/bigdatalens-1350281063_600.jpg',
-        'http://www.bigdatabytes.com/wp-content/uploads/2012/01/big-data.jpg',
-        'http://blog.varonis.com/wp-content/uploads/2012/05/big-data-security-1024x800.png',
-        'http://blogs-images.forbes.com/davefeinleib/files/2012/07/Big-Data-Landscape-Jul-4-2012.00111.png',
-      ];
-
-      App.AppleView = Ember.View.extend({
-        template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
-      });
-
-      App.ApplicationRoute = Ember.Route.extend({
-        model: function() {
-          var content = [];
-          for (var i = 0; i < 100000; i++) {
-            content.push({
-              name: 'Item ' + (i+1),
-              imageSrc: images[i%images.length]
-            });
-          }
-          return content;
-        }
-      });
-    </script>
+    <ul>
+      <li><a href="#">#</a></li>
+      <li><a href="default.html">default</a></li>
+      <li><a href="grid-grouped.html">grid grouped</a></li>
+      <li><a href="mobile.html">mobile</a></li>
+      <li><a href="mobile_images_large.html">images large</a></li>
+      <li><a href="mobile_images_small.html">images small</a></li>
+      <li><a href="mobile_images_small_non_recycling_list_item_view.html">images small (non reusable list item)</a></li>
+      <li><a href="multi-dimension-grid.html">multi-dimension-grid</a></li>
+      <li><a href="multi-height-multi-view.html">multi-height-multi-view</a></li>
+      <li><a href="multi-height-virtual.html">multi-height-virtual</a></li>
+      <li><a href="multi-height.html">multi-height</a></li>
+      <li><a href="pull_to_refresh.html">pull to refresh</a></li>
+      <li><a href="virtual.html">Virtual</a></li>
+      <li><a href="virtual_strange_ratios.html">Virtual Strange Ratios</a></li>
+    </ul>
   </body>
 </html>

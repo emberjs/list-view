@@ -23,7 +23,6 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 body {
   line-height: 1;
   color: black;
-  background: white;
 }
 ol, ul {
   list-style: none;
@@ -47,9 +46,21 @@ blockquote, q {
 
 html {
   font-family: sans-serif;
+  background: #dedede;
 }
 
 .hidden {
   display: none;
 }
 
+.ember-list-view {
+  margin: 0 auto;
+  overflow: auto;
+  position: relative;
+  margin-top: 2em;
+  width: 100%;
+  border: 1px solid rgba(128, 128, 128, 0.38);
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}

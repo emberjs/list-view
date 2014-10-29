@@ -6,9 +6,6 @@
     <style>
       .ember-list-view {
         background: white;
-        overflow: auto;
-        position: relative;
-        width: 100%;
         -webkit-overflow-scrolling: touch;
         overflow-scrolling: touch;
         -webkit-user-select: none;
@@ -17,6 +14,7 @@
         -o-user-select: none;
         user-select: none;
       }
+
       .ember-list-item-view {
         position: absolute;
       }
@@ -38,15 +36,19 @@
         box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2px;
       }
     </style>
-    <script type="text/javascript" src="/demos/vendor/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="/dist/bower_components/handlebars/handlebars.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Animate.js"></script>
     <script type="text/javascript" src="/demos/vendor/zynga-scroller/Scroller.js"></script>
-    <script type="text/javascript" src="/dist/bower_components/ember/ember.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/bower_components/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="/bower_components/ember/ember.prod.js"></script>
     <script type="text/javascript" src="/bower_components/pack/index.js"></script>
     <script type="text/javascript" src="/dist/list-view.js"></script>
+ 
   </head>
   <body>
+    <ul id="menu">
+      <li><a href="/demos/">< Demos</a></li>
+    </ul>
     <script type="text/x-handlebars">
       {{#collection Ember.VirtualListView content=controller height=460 width=320 rowHeight=154 elementWidth=154}}
         <div class="photo-grid-list-item">
