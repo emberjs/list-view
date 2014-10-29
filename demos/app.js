@@ -13,6 +13,7 @@ App.ApplicationController = Ember.ArrayController.extend({
     'width',
     'rowHeight',
     'itemCount',
+    'elementWidth'
   ],
   height:    300,
   width:     500,
