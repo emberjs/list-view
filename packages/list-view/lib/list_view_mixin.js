@@ -7,6 +7,22 @@ var get = Ember.get, set = Ember.set,
     ceil = Math.ceil,
     forEach = Ember.EnumerableUtils.forEach;
 
+function DimensionError(name, dimension) {
+  Error.call(this);
+  this.message = "Invalid " + name + ": `" +  dimension+ "`";
+  this.dimension = dimension;
+}
+
+DimensionError.prototype = Object.create(Error.prototype);
+
+function validateDimension(name, dimension) {
+  if (dimension <= 0 || typeof dimension !== 'number' || dimension !== dimension) {
+    throw new DimensionError(name, dimension);
+  }
+
+  return dimension;
+}
+
 function integer(key, value) {
   if (arguments.length > 1) {
     var ret;
@@ -168,14 +184,14 @@ export default Ember.Mixin.create({
 
     bin.widthAtIndex = function(index) {
       if (list.widthForIndex) {
-        return list.widthForIndex(index);
+        return validateDimension('width', list.widthForIndex(index));
       } else {
         return Infinity;
       }
     };
 
     bin.heightAtIndex = function(index) {
-      return list.heightForIndex(index);
+      return validateDimension('height', list.heightForIndex(index));
     };
 
     return bin;
@@ -192,11 +208,11 @@ export default Ember.Mixin.create({
     };
 
     bin.widthAtIndex = function() {
-      return list.get('elementWidth');
+      return validateDimension('elementWidth', list.get('elementWidth'));
     };
 
     bin.heightAtIndex = function() {
-      return list.get('rowHeight');
+      return validateDimension('rowHeight', list.get('rowHeight'));
     };
 
     return bin;
@@ -225,6 +241,7 @@ export default Ember.Mixin.create({
   height: Ember.computed(integer),
   width: Ember.computed(integer),
   rowHeight: Ember.computed(integer),
+  elementWidth: Ember.computed(integer),
 
   willInsertElement: function() {
     if (!this.get("height") || !this.get("rowHeight") && !this.heightForIndex) {
