@@ -616,14 +616,14 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items", fu
 });
 
 test("elementWidth change", function(){
-  var i,
-      positionSorted,
-      content = helper.generateContent(100),
-      height = 200,
-      width = 200,
-      rowHeight = 50,
-      elementWidth = 100,
-      itemViewClass = Ember.ListItemView.extend({
+  var i;
+  var positionSorted;
+  var content = helper.generateContent(100);
+  var height = 200;
+  var width = 200;
+  var rowHeight = 50;
+  var elementWidth = 100;
+  var itemViewClass = Ember.ListItemView.extend({
         template: Ember.Handlebars.compile("{{name}}")
       });
 
@@ -687,11 +687,11 @@ test("elementWidth change", function(){
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
   deepEqual(helper.itemPositions(view), [
-            { x: 0, y: 0},
-            { x: 0, y: 50},
-            { x: 0, y: 100},
-            { x: 0, y: 150},
-            { x: 0, y: 200}
+            { x: 0, y:   0 },
+            { x: 0, y:  50 },
+            { x: 0, y: 100 },
+            { x: 0, y: 150 },
+            { x: 0, y: 200 }
   ], "The rows are in the correct positions");
 
   for(i = 0; i < 5; i++) {
@@ -1020,11 +1020,11 @@ test("handle strange ratios between height/rowHeight", function() {
   equal(view.$('.ember-list-item-view').length, 5);
 
   deepEqual(helper.itemPositions(view), [
-    { x:0, y:   0 },
-    { x:0, y:  73 },
-    { x:0, y: 146 },
-    { x:0, y: 219 },
-    { x:0, y: 292 }
+    { x: 0, y:   0 },
+    { x: 0, y:  73 },
+    { x: 0, y: 146 },
+    { x: 0, y: 219 },
+    { x: 0, y: 292 }
   ] , "went beyond scroll max via overscroll");
 
   var i;
@@ -1039,7 +1039,8 @@ test("handle strange ratios between height/rowHeight", function() {
 
   // expected
   // -----
-  // 0   |
+  // 0   | <-- buffer (since we jump straight to top: 1000)
+  // -----
   // 1   |
   // 2   |
   // 3   |
@@ -1050,7 +1051,7 @@ test("handle strange ratios between height/rowHeight", function() {
   // 8   |
   // 9   |
   // ----
-  // 10  | <- buffer
+  // 10  | <- (would be nice if this was the buffer, but it would be if we scrolled incrementally and didnt jump)
   // ----
   // 11  | <-- partially visible
   // 12  | <--- visible
@@ -1058,14 +1059,15 @@ test("handle strange ratios between height/rowHeight", function() {
   // 14  |
   // ----
   deepEqual(helper.itemPositions(view), [
-    { x:0, y:  730 }, // <-- buffer
-    { x:0, y:  803 }, // <-- partially visible
-    { x:0, y:  876 }, // <-- in view
-    { x:0, y:  949 }, // <-- in view
-    { x:0, y: 1022 }  // <-- in view
+    { x: 0, y:    0 }, // <-- buffer
+    { x: 0, y:  803 }, // <-- partially visible
+    { x: 0, y:  876 }, // <-- in view
+    { x: 0, y:  949 }, // <-- in view
+    { x: 0, y: 1022 }  // <-- in view
   ], "went beyond scroll max via overscroll");
 
-  equal(Ember.$(positionSorted[0]).text(), "Name: Item 11");
+  equal(Ember.$(positionSorted[0]).text(), "Name: Item 1");
+
   equal(Ember.$(positionSorted[1]).text(), "Name: Item 12");
   equal(Ember.$(positionSorted[2]).text(), "Name: Item 13");
   equal(Ember.$(positionSorted[3]).text(), "Name: Item 14");

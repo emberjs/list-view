@@ -48,7 +48,7 @@ test("scroll but within content length", function(){
     scrollTop: 100
   });
 
-  equal(view.get('scrollTop'), 100);
+  equal(view.get('scrollTop'), 0);
 
   Ember.run(function(){
     view.set('width', 150);
@@ -69,7 +69,7 @@ test("scroll but beyond content length", function(){
     scrollTop: 1000
   });
 
-  equal(view.get('scrollTop'), 1000);
+  equal(view.get('scrollTop'), 0);
 
   Ember.run(function(){
     view.set('width', 150);
