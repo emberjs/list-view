@@ -208,7 +208,11 @@ export default Ember.Mixin.create({
     };
 
     bin.widthAtIndex = function() {
-      return validateDimension('elementWidth', list.get('elementWidth'));
+      var ret = list.get('elementWidth');
+      if (ret === undefined) {
+         return ret;
+      }
+      return validateDimension('elementWidth', ret);
     };
 
     bin.heightAtIndex = function() {
@@ -242,13 +246,6 @@ export default Ember.Mixin.create({
   width: Ember.computed(integer),
   rowHeight: Ember.computed(integer),
   elementWidth: Ember.computed(integer),
-
-  willInsertElement: function() {
-    if (!this.get("height") || !this.get("rowHeight") && !this.heightForIndex) {
-      throw new Error("A ListView must be created with a height and a rowHeight.");
-    }
-    this._super();
-  },
 
   /**
     @private

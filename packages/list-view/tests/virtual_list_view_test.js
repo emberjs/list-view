@@ -780,5 +780,5 @@ test("Creating a VirtualListView without height and rowHeight properties should 
 
     appendView();
   },
-  /A ListView must be created with a height and a rowHeight./, "Throws exception.");
+  /Invalid rowHeight: `undefined`/);
 });
