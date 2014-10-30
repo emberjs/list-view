@@ -508,12 +508,12 @@ test("recycling complex views with ReusableListItemView, handling empty slots at
     view.set('width', 150);
   });
 
-  equal(view.$('.ember-list-item-view').length, 11, "The correct number of items were rendered (post-expand to 3 columns)");
+  equal(view.$('.ember-list-item-view').length, 8, "The correct number of items were rendered (post-expand to 3 columns)");
 
-  equal(listItemViewInsertionCount, 3, "expected number of listItemView's didInsertElement (post-expand to 3 columns)");
+  equal(listItemViewInsertionCount, 0, "expected number of listItemView's didInsertElement (post-expand to 3 columns)");
   equal(listItemViewDestroyCount, 0, "expected number of listItemView's willDestroyElement (post-expand to 3 columns)");
-  equal(innerViewInsertionCount, 3, "expected number of innerView's didInsertElement (post-expand to 3 columns)");
+  equal(innerViewInsertionCount, 0, "expected number of innerView's didInsertElement (post-expand to 3 columns)");
   equal(innerViewDestroyCount, 0, "expected number of innerView's willDestroyElement (post-expand to 3 columns)");
 
-  equal(view.$('.ember-list-item-view:visible').length, 11, "The number of items that are not hidden with display:none (post-expand to 3 columns)");
+  equal(view.$('.ember-list-item-view:visible').length, 8, "The number of items that are not hidden with display:none (post-expand to 3 columns)");
 });
