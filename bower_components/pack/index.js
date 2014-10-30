@@ -289,7 +289,7 @@ FixedGrid.prototype.flush = function(index /*, to */) {
 };
 
 FixedGrid.prototype.isGrid = function(width) {
-  return Math.floor(width / this.widthAtIndex(0)) || 1 > 1;
+  return (Math.floor(width / this.widthAtIndex(0)) || 1) > 1;
 };
 
 FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {

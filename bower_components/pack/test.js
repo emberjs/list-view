@@ -148,6 +148,7 @@ assert.deepEqual(bin.position(3, 200), {
 
 var fixed = new Bin.FixedGrid(content, 10, 10);
 
+
 assert.deepEqual(fixed.position(0, 20), {
   x: 0,
   y: 0
@@ -169,6 +170,8 @@ assert.deepEqual(fixed.position(3, 20), {
 });
 
 assert.deepEqual(fixed.height(20), 40);
+
+assert(fixed.isGrid());
 
 // index 0; given viewport { height: 20, width: 20 }
 assert.equal(fixed.numberVisibleWithin(0, 20, 20), 4);
