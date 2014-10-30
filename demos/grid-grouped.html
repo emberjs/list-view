@@ -101,8 +101,6 @@
 
       // rowHeight + elementWidth are fallback dimensions
       App.ListView.reopen({
-        height: 500,
-        width: 500,
         heightForIndex: function(idx) {
           var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
           if (ret === null) {
