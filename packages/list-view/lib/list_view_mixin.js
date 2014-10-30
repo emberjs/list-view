@@ -126,7 +126,8 @@ export default Ember.Mixin.create({
   isShelf: false,
   isFixed: false,
 
-  _isGrid: Ember.computed(function() {
+  // TODO: this needs to be invalidated when content changes.
+  _isGrid: Ember.computed('width', function() {
     return this._bin.isGrid(this.get('width'));
   }).readOnly(),
 
