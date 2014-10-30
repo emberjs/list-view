@@ -97,7 +97,7 @@ test("Correct height based on content", function() {
   equal(view.get('totalHeight'), 3350);
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(view.$('.ember-list-item-view').length, 4);
+  equal(view.$('.ember-list-item-view').length, 5);
 
   var i, contentIdx;
 
@@ -107,10 +107,11 @@ test("Correct height based on content", function() {
   equal(Ember.$(positionSorted[3]).text(), "Woof says Caroline expected: dog === dog 5");
 
   deepEqual(helper.itemPositions(view), [
-    { x:0, y:    0 }, // <-- in view
-    { x:0, y:  100 }, // <-- in view
-    { x:0, y:  200 }, // <-- in view
-    { x:0, y:  350 }  // <-- buffer
+    { x: 0, y:    0 }, // <-- in view
+    { x: 0, y:  100 }, // <-- in view
+    { x: 0, y:  200 }, // <-- in view
+    { x: 0, y:  350 }, // <-- buffer
+    { x: 0, y:  400 }, // <-- buffer
   ], 'went beyond scroll max via overscroll');
 
   Ember.run(view, 'scrollTo', 1000);
@@ -122,10 +123,11 @@ test("Correct height based on content", function() {
   equal(Ember.$(positionSorted[3]).text(), "Potato says Xbar expected: other === other 15");
 
   deepEqual(helper.itemPositions(view), [
-    { x:0, y: 950 }, // <-- partially in view
+    { x:0, y:  950 }, // <-- partially in view
     { x:0, y: 1100 }, // <-- in view
     { x:0, y: 1150 }, // <-- in view
-    { x:0, y: 1250 }  // <-- partially in view
+    { x:0, y: 1250 }, // <-- partially in view
+    { x:0, y: 1400 }  // <-- partially in view
   ], 'went beyond scroll max via overscroll');
 });
 
@@ -197,7 +199,7 @@ test("Correct height based on view", function() {
   equal(view.get('totalHeight'), 3350);
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(view.$('.ember-list-item-view').length, 4);
+  equal(view.$('.ember-list-item-view').length, 5);
 
   var i, contentIdx;
 
@@ -210,7 +212,8 @@ test("Correct height based on view", function() {
     { x:0, y:    0 }, // <-- in view
     { x:0, y:  100 }, // <-- in view
     { x:0, y:  200 }, // <-- in view
-    { x:0, y:  350 }  // <-- buffer
+    { x:0, y:  350 }, // <-- buffer
+    { x:0, y:  400 }  // <-- buffer
   ], 'went beyond scroll max via overscroll');
 
   Ember.run(view, 'scrollTo', 1000);
@@ -225,7 +228,8 @@ test("Correct height based on view", function() {
     { x:0, y:  950 }, // <-- partially in view
     { x:0, y: 1100 }, // <-- in view
     { x:0, y: 1150 }, // <-- in view
-    { x:0, y: 1250 }  // <-- partially in view
+    { x:0, y: 1250 }, // <-- partially in view
+    { x:0, y: 1400 }  // <-- partially in view
   ], 'went beyond scroll max via overscroll');
 });
 
@@ -294,7 +298,7 @@ test("_numChildViewsForViewport + _startingIndex with multi-height", function() 
 
   appendView();
 
-  equal(view._numChildViewsForViewport(), 4, 'expected _numChildViewsForViewport to be correct (before scroll)');
+  equal(view._numChildViewsForViewport(), 5, 'expected _numChildViewsForViewport to be correct (before scroll)');
   equal(view._startingIndex(), 0, 'expected _startingIndex to be correct (before scroll)');
 
   // entries: 1, 3, 4, 5
@@ -303,7 +307,7 @@ test("_numChildViewsForViewport + _startingIndex with multi-height", function() 
 
   // entries: 12, 13, 14, 15
 
-  equal(view._numChildViewsForViewport(), 4, 'expected _numChildViewsForViewport to be correct (after scroll)');
+  equal(view._numChildViewsForViewport(), 5, 'expected _numChildViewsForViewport to be correct (after scroll)');
   equal(view._startingIndex(), 10, 'expected _startingIndex to be correct (after scroll)');
 });
 

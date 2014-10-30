@@ -97,7 +97,7 @@ test("Correct height based on content", function() {
   equal(view.get('totalHeight'), 3350);
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(view.$('.ember-list-item-view').length, 4);
+  equal(view.$('.ember-list-item-view').length, 5);
 
   var i, contentIdx;
 
@@ -110,7 +110,8 @@ test("Correct height based on content", function() {
     { x:0, y:    0 }, // <-- in view
     { x:0, y:  100 }, // <-- in view
     { x:0, y:  200 }, // <-- in view
-    { x:0, y:  350 }  // <-- buffer
+    { x:0, y:  350 }, // <-- buffer
+    { x:0, y:  400 }  // <-- buffer
   ], 'went beyond scroll max via overscroll');
 
   Ember.run(view, 'scrollTo', 1000);
@@ -122,10 +123,11 @@ test("Correct height based on content", function() {
   equal(Ember.$(positionSorted[3]).text(), "Potato says Xbar expected: other === other 15");
 
   deepEqual(helper.itemPositions(view), [
-    { x:0, y: 950 }, // <-- partially in view
+    { x:0, y:  950 }, // <-- partially in view
     { x:0, y: 1100 }, // <-- in view
     { x:0, y: 1150 }, // <-- in view
-    { x:0, y: 1250 }  // <-- partially in view
+    { x:0, y: 1250 }, // <-- partially in view
+    { x:0, y: 1400 }  // <-- partially in view
   ], 'went beyond scroll max via overscroll');
 });
 
@@ -164,7 +166,7 @@ test("with 100% width groups", function() {
   equal(view.get('totalHeight'), 550);
 
   var positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
-  equal(view.$('.ember-list-item-view').length, 3);
+  equal(view.$('.ember-list-item-view').length, 4);
 
   var i, contentIdx;
 
@@ -176,18 +178,21 @@ test("with 100% width groups", function() {
     { x:   0, y:   0 }, // <-- in view
     { x: 100, y:   0 }, // <-- in view
     { x:  0,  y: 100 }, // <-- buffer
+    { x:  0,  y: 125 }, // <-- buffer
   ], '');
 
   Ember.run(view, 'scrollTo', 100);
   positionSorted = helper.sortElementsByPosition(view.$('.ember-list-item-view'));
 
-  equal(Ember.$(positionSorted[0]).text(), 'Caroline#2');
-  equal(Ember.$(positionSorted[1]).text(), 'David#3');
-  equal(Ember.$(positionSorted[2]).text(), 'Xbar#4');
+  equal(Ember.$(positionSorted[0]).text(), 'Xbar#1');
+  equal(Ember.$(positionSorted[1]).text(), 'Caroline#2');
+  equal(Ember.$(positionSorted[2]).text(), 'David#3');
+  equal(Ember.$(positionSorted[3]).text(), 'Xbar#4');
 
   deepEqual(helper.itemPositions(view), [
-    { x: 0, y: 100 }, // <-- in-view
-    { x: 0, y: 125 }, // <-- buffer
-    { x: 0, y: 225 }  // <-- buffer
+    { x: 100, y:   0 }, // <-- in-view
+    { x:   0, y: 100 }, // <-- in-view
+    { x:   0, y: 125 }, // <-- buffer
+    { x:   0, y: 225 }  // <-- buffer
   ], '');
 });

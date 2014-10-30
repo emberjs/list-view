@@ -235,8 +235,8 @@ test("should perform correct number of renders and repositions while short list 
     view.scrollTo(scrollTop);
   });
 
-  equal(renders, 14, "The correct number of renders occured");
-  equal(positions, 21, "The correct number of positions occured");
+  equal(renders, 13, "The correct number of renders occured");
+  equal(positions, 20, "The correct number of positions occured");
 });
 
 test("should perform correct number of renders and repositions on long list init", function () {
