@@ -25,6 +25,8 @@ assert.deepEqual(bin.position(2, 100), {
   y: 100
 });
 
+assert(bin.isGrid(), true);
+
 var bin = new Bin.ShelfFirst(content, 100);
 
 var content = [
@@ -36,6 +38,8 @@ var content = [
 ];
 
 var bin = new Bin.ShelfFirst(content, 100);
+
+assert(bin.isGrid(), true);
 
 assert.deepEqual(bin.position(0, 100), {
   x: 0,
@@ -261,3 +265,10 @@ assert.deepEqual(bin.position(9, 200), {
 });
 
 assert.deepEqual(bin.height(), 550);
+assert(bin.isGrid(), true);
+assert.deepEqual(bin.position(9, 100), {
+  x:   0,
+  y: 675,
+});
+
+assert(!bin.isGrid());

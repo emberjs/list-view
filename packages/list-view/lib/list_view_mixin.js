@@ -113,15 +113,22 @@ export default Ember.Mixin.create({
   emptyViewClass: Ember.View,
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
-  classNameBindings: ['_isGrid:ember-list-view-grid:ember-list-view-list'],
+  classNameBindings: [
+    '_isGrid:ember-list-view-grid:ember-list-view-list',
+    '_isShelf:ember-list-view-shelf',
+    '_isFixed:ember-list-view-fixed'
+  ],
   domManager: domManager,
   scrollTop: 0,
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
   paddingCount: 1,
 
+  isShelf: false,
+  isFixed: false,
+
   _isGrid: Ember.computed(function() {
-    return false;
+    return this._bin.isGrid(this.get('width'));
   }).readOnly(),
 
   /**
@@ -150,6 +157,7 @@ export default Ember.Mixin.create({
   },
 
   _setupShelfFirstBin: function() {
+    set(this, '_isShelf', true);
     // detect which bin we need
     var bin = new Bin.ShelfFirst([], this.get('width'), 0);
     var list = this;
@@ -174,6 +182,7 @@ export default Ember.Mixin.create({
   },
 
   _setupFixedGridBin: function() {
+    set(this, '_isFixed', true);
     // detect which bin we need
     var bin = new Bin.FixedGrid([], 0, 0);
     var list = this;
@@ -345,6 +354,7 @@ export default Ember.Mixin.create({
   _doElementDimensionChange: function() {
     // flush bin
     this._bin.flush(0);
+    Ember.propertyDidChange(this, 'isGrid');
     Ember.run.once(this, this._syncChildViews);
   },
 
@@ -749,6 +759,7 @@ export default Ember.Mixin.create({
     state = this._state || this.state;
 
     this._bin.flush(start);
+    Ember.propertyDidChange(this, 'isGrid');
     var length = this.get('content.length');
 
     if (state === 'inDOM') {

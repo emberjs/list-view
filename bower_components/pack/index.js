@@ -36,6 +36,9 @@ Bin.prototype.flush = mustImplement('flush');
 // abstract
 Bin.prototype.height = mustImplement('position');
 
+// abstract
+Bin.prototype.isGrid = mustImplement('isGrid');
+
 function rangeError(length, index) {
   throw new RangeError("Parameter must be within: [" + 0 + " and " + length + ") but was: " + index);
 }
@@ -69,6 +72,23 @@ function ShelfFirst(content, width) {
 
 ShelfFirst.prototype = Object.create(Bin.prototype);
 ShelfFirst.prototype._super$constructor = Bin;
+ShelfFirst.prototype.isGrid = function ShelfFirst_isGrid(width) {
+  var result = false;
+
+  var length = this.length();
+  var entry;
+
+  // TODO: cache/memoize
+
+  for (var i = 0; i < length; i++) {
+    entry = this._entryAt(i);
+    if (entry.position.x > 0) {
+      return true
+    }
+  }
+
+  return false;
+};
 
 ShelfFirst.prototype.height = function() {
   var length = this.length();
@@ -266,6 +286,10 @@ FixedGrid.prototype._super$constructor = Bin;
 
 FixedGrid.prototype.flush = function(index /*, to */) {
 
+};
+
+FixedGrid.prototype.isGrid = function(width) {
+  return Math.floor(width / this.widthAtIndex(0)) || 1 > 1;
 };
 
 FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {
