@@ -4,9 +4,8 @@
     <style>
       .ember-list-item-view {
         position: absolute;
-        width: 500px;
-        border-bottom: 1px solid gray;
-        border-top: 1px solid gray;
+        border: 1px solid gray;
+        width: 100px;
       }
 
       .row {
@@ -23,6 +22,15 @@
       .other {
         height: 150px;
         background-color: purple;
+      }
+      .group {
+        height: 25px;
+        background: gray;
+        width: 100%;
+      }
+
+      .item {
+        height: 100px;
       }
     </style>
     <script type="text/javascript" src="/bower_components/jquery/jquery.js"></script>
@@ -77,7 +85,9 @@
           </li>
         </ul>
       </form>
- 
+      <button {{action 'changeData'}}>
+        ChangeData
+      </button>
       {{view 'list' content=controller
                     height=height
                     width=width
@@ -99,8 +109,39 @@
         { height:  25, width: Infinity, name: "Caroline" }
       ];
 
+    window.data2 = [
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height: 100,                  name: "Andrew"   },
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height:  25, width: Infinity, name: "Caroline" },
+        { height: 100,                  name: "Xbar"     },
+        { height: 100,                  name: "David"    },
+        { height: 100,                  name: "Xbar"     },
+        { height: 100,                  name: "Xbar"     },
+        { height: 100,                  name: "Edward"   },
+        { height:  25, width: Infinity, name: "Caroline" }
+      ];
+
+
+      var Group = Ember.ListItemView.extend({
+        classNames: ['group'],
+        templateName: 'list-item'
+      });
+
+      var Item = Ember.ListItemView.extend({
+        classNames: ['item'],
+        templateName: 'list-item'
+      });
+
       // rowHeight + elementWidth are fallback dimensions
       App.ListView.reopen({
+        /* TODO this API blows */
+        itemViewForIndex: function(idx) {
+          var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'width');
+
+          return ret === null ? Group : Item;
+        },
+
         heightForIndex: function(idx) {
           var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
           if (ret === null) {

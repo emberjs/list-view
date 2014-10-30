@@ -32,6 +32,7 @@ App.ListView = Ember.ListView.extend({
   }),
 });
 
+var toggler = false;
 App.ApplicationRoute = Ember.Route.extend({
   model: function() {
     var content = [], entry;
@@ -43,5 +44,11 @@ App.ApplicationRoute = Ember.Route.extend({
       content.push(entry);
     }
     return content;
+  },
+  actions: {
+    changeData: function() {
+      this.controllerFor('application').set('model', toggler ? window.data :  window.data2);
+      toggler = !toggler;
+    }
   }
 });
