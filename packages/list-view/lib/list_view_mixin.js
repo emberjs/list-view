@@ -25,11 +25,16 @@ function validateDimension(name, dimension) {
 
 function integer(key, value) {
   if (arguments.length > 1) {
+    var ret;
     if (typeof value === 'string') {
-      return parseInt(value, 10);
+      ret = parseInt(value, 10);
     } else {
-      return value;
+      ret = value;
     }
+    this[key] = ret;
+    return ret;
+  } else {
+    return this[key];
   }
 }
 
