@@ -105,7 +105,7 @@ ShelfFirst.prototype.flush = function(position) {
   }
 }
 
-ShelfFirst.prototype.numberVisibleWithin = function (topOffset, width, height) {
+ShelfFirst.prototype.numberVisibleWithin = function (topOffset, width, height, withPadding) {
   if (width!== this.width) {
     this.flush(0);
     this.width = width;
@@ -113,7 +113,7 @@ ShelfFirst.prototype.numberVisibleWithin = function (topOffset, width, height) {
 
   var startingIndex = this.visibleStartingIndex(topOffset, width, height);
 
-  return this._numberVisibleWithin(startingIndex, height);
+  return this._numberVisibleWithin(startingIndex, height, withPadding);
 };
 
 ShelfFirst.prototype._entryAt = function position(index) {
@@ -172,7 +172,7 @@ ShelfFirst.prototype._entryAt = function position(index) {
   return entry;
 };
 
-ShelfFirst.prototype._numberVisibleWithin = function(startingIndex, height) {
+ShelfFirst.prototype._numberVisibleWithin = function(startingIndex, height, withPadding) {
   var width = this.width;
   var count = 0;
   var length = this.length();
@@ -186,8 +186,7 @@ ShelfFirst.prototype._numberVisibleWithin = function(startingIndex, height) {
     yOffset = 0;
   }
 
-  if (startingIndex < length)
-
+  var firstRowHeight;
   for (var i = startingIndex; i < length; i++) {
     entry = this._entryAt(i);
     position = entry.position;
@@ -196,9 +195,16 @@ ShelfFirst.prototype._numberVisibleWithin = function(startingIndex, height) {
       // same row
     } else {
       currentY = position.y - yOffset;
+      if (withPadding && !firstRowHeight) {
+        firstRowHeight = entry.height;
+      }
     }
 
     if (currentY < height) {
+      count++;
+    } else if (withPadding) {
+      withPadding = false;
+      height += Math.max(firstRowHeight, entry.height) + 1;
       count++;
     } else {
       break;
@@ -268,7 +274,7 @@ FixedGrid.prototype.visibleStartingIndex = function(topOffset, width) {
   return Math.floor(topOffset / this.heightAtIndex(0)) * columns;
 };
 
-FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {
+FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height, withPadding) {
   var startingIndex = this.visibleStartingIndex(topOffset, width, height);
   var columns = Math.floor(width / this.widthAtIndex(0)) || 1;
   var length = this.length();
@@ -277,6 +283,11 @@ FixedGrid.prototype.numberVisibleWithin = function (topOffset, width, height) {
   var rows = Math.ceil(height / rowHeight);
 
   var maxNeeded = rows * columns;
+
+  if (withPadding) {
+    maxNeeded += columns;
+  }
+
   var potentialVisible = length - startingIndex;
 
   return Math.max(Math.min(maxNeeded, potentialVisible), 0);

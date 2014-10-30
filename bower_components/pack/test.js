@@ -98,6 +98,16 @@ assert.equal(bin.visibleStartingIndex(200, 100), 7);
 assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
 assert.equal(bin.numberVisibleWithin(50, 100, 50), 3);
 assert.equal(bin.numberVisibleWithin(75, 100, 50), 2);
+assert.equal(bin.numberVisibleWithin(125, 100, 50), 2);
+assert.equal(bin.numberVisibleWithin(175, 100, 50), 1);
+
+// with padding
+assert.equal(bin.numberVisibleWithin( 0, 100, 50, true), 5);
+assert.equal(bin.numberVisibleWithin(50, 100, 50, true), 5);
+assert.equal(bin.numberVisibleWithin(75, 100, 50, true), 5);
+assert.equal(bin.numberVisibleWithin(125, 100, 50, true), 3);
+assert.equal(bin.numberVisibleWithin(175, 100, 50, true), 1);
+
 assert.throws(function() {
   assert.deepEqual(bin.position(8, 100), {
     x:   0,
@@ -160,6 +170,11 @@ assert.deepEqual(fixed.height(20), 40);
 assert.equal(fixed.numberVisibleWithin(0, 20, 20), 4);
 assert.equal(fixed.numberVisibleWithin(10, 20, 20), 4);
 assert.equal(fixed.numberVisibleWithin(20, 20, 20), 4);
+
+// with padding
+assert.equal(fixed.numberVisibleWithin(0, 20, 20, true), 6);
+assert.equal(fixed.numberVisibleWithin(10, 20, 20, true), 6);
+assert.equal(fixed.numberVisibleWithin(20, 20, 20, true), 4);
 
 var bin = new Bin.ShelfFirst([
   { width: 5,        height: 5 },
