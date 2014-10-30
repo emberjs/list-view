@@ -122,7 +122,6 @@ export default Ember.Mixin.create({
   scrollTop: 0,
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
-  paddingCount: 1,
 
   isShelf: false,
   isFixed: false,
@@ -496,10 +495,7 @@ export default Ember.Mixin.create({
     var height = get(this, 'height');
     var width = get(this, 'width');
     // TODO: defer padding calculation to the bin
-    var paddingCount = get(this, 'paddingCount');
     var scrollTop = this.get('scrollTop');
-
-    var padding = paddingCount;
 
     var numVisible = this._bin.numberVisibleWithin(scrollTop, width, height, true);
 
@@ -532,7 +528,6 @@ export default Ember.Mixin.create({
     calculatedStartingIndex  = this._bin.visibleStartingIndex(scrollTop, this.get('width'));
 
     var viewsNeededForViewport = this._numChildViewsForViewport();
-    var paddingCount = this.get('paddingCount');
     var largestStartingIndex = max(contentLength - viewsNeededForViewport, 0);
 
     return min(calculatedStartingIndex, largestStartingIndex);
