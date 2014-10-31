@@ -139,7 +139,7 @@
         itemViewForIndex: function(idx) {
           var ret = Ember.get(Ember.A(this.get('content')).objectAt(idx), 'width');
 
-          return ret === null ? Group : Item;
+          return ret === null  || ret === Infinity ? Group : Item;
         },
 
         heightForIndex: function(idx) {
