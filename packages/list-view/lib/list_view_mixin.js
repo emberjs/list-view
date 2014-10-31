@@ -625,11 +625,7 @@ export default Ember.Mixin.create({
 
   /**
     @private
-
-    Intelligently manages the number of childviews.
-
-    @method _syncChildViews
-   **/
+  */
   _syncScrollTop: function() {
     var newNumber = this._numChildViewsForViewport();
     var oldNumber = this._oldNumberOfViewsNeededForViewport;
@@ -654,6 +650,14 @@ export default Ember.Mixin.create({
 
   },
 
+
+  /**
+    @private
+
+    Intelligently manages the number of childviews.
+
+    @method _syncChildViews
+   **/
   _syncChildViews: function(){
     var childViews, childViewCount,
         numberOfChildViews, numberOfChildViewsNeeded,
