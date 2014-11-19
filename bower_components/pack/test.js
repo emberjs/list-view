@@ -171,7 +171,8 @@ assert.deepEqual(fixed.position(3, 20), {
 
 assert.deepEqual(fixed.height(20), 40);
 
-assert(fixed.isGrid());
+assert(fixed.isGrid(20));
+assert(!fixed.isGrid(10));
 
 // index 0; given viewport { height: 20, width: 20 }
 assert.equal(fixed.numberVisibleWithin(0, 20, 20), 4);
