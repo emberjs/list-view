@@ -263,6 +263,9 @@ ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
   var previousTop = 0;
   var index = -1;
 
+  // TODO: implement fuzzy binary search for large N to reduce cost when search
+  // space is large. Should get this closer to O(log n)
+
   while (topOffset >= top) {
     index++;
     entry = this._entryAt(index);
