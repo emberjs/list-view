@@ -250,7 +250,6 @@ ShelfFirst.prototype.position = function position(index, width) {
 };
 
 ShelfFirst.prototype.visibleStartingIndex = function(topOffset, width) {
-  // part of ShelfFirst
   if (topOffset === 0 ) { return 0; }
 
   if (width!== this.width) {
