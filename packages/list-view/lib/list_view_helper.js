@@ -1,23 +1,44 @@
 // TODO - remove this!
 var el = document.createElement('div'), style = el.style;
+var set = Ember.set;
 
-var propPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
-
-function testProp(prop) {
-  if (prop in style) return prop;
+function testProp (prop) {
   var uppercaseProp = prop.charAt(0).toUpperCase() + prop.slice(1);
-  for (var i=0; i<propPrefixes.length; i++) {
-    var prefixedProp = propPrefixes[i] + uppercaseProp;
-    if (prefixedProp in style) {
-      return prefixedProp;
+
+  var dic = {
+    webkit: '-webkit-' + prop,
+    moz: '-moz-' + prop,
+    ms: 'ms' + uppercaseProp
+  };
+
+  var props = [
+    prop,
+    'webkit' + prop,
+    'webkit' + uppercaseProp,
+    'Moz' + uppercaseProp,
+    'moz' + uppercaseProp,
+    'ms' + uppercaseProp,
+    'ms' + prop
+  ];
+
+  for (var i=0; i < props.length; i++) {
+    var property = props[i];
+    var prefix;
+
+    if (property in style) {
+      prefix = property.toLowerCase().replace(prop, '');
+      if (prefix && dic[prefix]) {
+        return dic[prefix];
+      }
+      return property;
     }
   }
+
   return null;
 }
 
 var transformProp = testProp('transform');
 var perspectiveProp = testProp('perspective');
-
 var supports2D = transformProp !== null;
 var supports3D = perspectiveProp !== null;
 
@@ -25,29 +46,27 @@ export default {
   transformProp: transformProp,
   applyTransform: (function(){
     if (supports2D) {
-      return function(element, x, y){
-        element.style[transformProp] = 'translate(' + x + 'px, ' + y + 'px)';
+      return function(childView, x, y){
+        set(childView, 'style', transformProp + ': translate(' + x + 'px, ' + y + 'px);');
       };
     } else {
-      return function(element, x, y){
-        element.style.top  = y + 'px';
-        element.style.left = x + 'px';
+      return function(childView, x, y){
+        set(childView, 'style', 'top: ' + y + 'px; left: ' + x + 'px;');
       };
     }
   })(),
   apply3DTransform: (function(){
     if (supports3D) {
-      return function(element, x, y){
-        element.style[transformProp] = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+      return function(childView, x, y){
+        set(childView, 'style', transformProp + ': translate3d(' + x + 'px, ' + y + 'px, 0);');
       };
     } else if (supports2D) {
-      return function(element, x, y){
-        element.style[transformProp] = 'translate(' + x + 'px, ' + y + 'px)';
+      return function(childView, x, y){
+        set(childView, 'style', transformProp + ': translate(' + x + 'px, ' + y + 'px);');
       };
     } else {
-      return function(element, x, y){
-        element.style.top  = y + 'px';
-        element.style.left = x + 'px';
+      return function(childView, x, y){
+        set(childView, 'style', 'top: ' + y + 'px; left: ' + x + 'px;');
       };
     }
   })()

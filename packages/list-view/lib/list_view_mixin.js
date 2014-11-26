@@ -65,13 +65,6 @@ function addEmptyView() {
   this.unshiftObject(emptyView);
 }
 
-var domManager = Ember.create(Ember.ContainerView.proto().domManager);
-
-domManager.prepend = function(view, html) {
-  view.$('.ember-list-container').prepend(html);
-  notifyMutationListeners();
-};
-
 function enableProfilingOutput() {
   function before(name, time, payload) {
     console.time(name);
@@ -103,7 +96,6 @@ export default Ember.Mixin.create({
   classNames: ['ember-list-view'],
   attributeBindings: ['style'],
   classNameBindings: ['_isGrid:ember-list-view-grid:ember-list-view-list'],
-  domManager: domManager,
   scrollTop: 0,
   bottomPadding: 0, // TODO: maybe this can go away
   _lastEndingIndex: 0,
@@ -147,9 +139,15 @@ export default Ember.Mixin.create({
     @param {Ember.RenderBuffer} buffer The render buffer
   */
   render: function(buffer) {
-    buffer.push('<div class="ember-list-container">');
+    buffer.push('<div class="ember-list-container"></div>');
     this._super(buffer);
-    buffer.push('</div>');
+  },
+
+  createChildViewsMorph: function (element) {
+    var children = element.children;
+    element = children[0];
+    this._childViewsMorph = this._renderer._dom.createMorph(element, children[children.length - 1], null);
+    return element;
   },
 
   willInsertElement: function() {
@@ -876,7 +874,9 @@ export default Ember.Mixin.create({
   },
 
   destroy: function () {
-    if (!this._super()) { return; }
+    if (!this._super()) {
+      return;
+    }
 
     if (this._createdEmptyView) {
       this._createdEmptyView.destroy();
