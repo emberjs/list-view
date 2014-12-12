@@ -3,7 +3,6 @@
 */
 
 import ListViewMixin from 'list-view/list_view_mixin';
-import { TransformMixin } from 'list-view/list_item_view_mixin';
 import ListViewHelper from 'list-view/list_view_helper';
 import VirtualListScrollerEvents from 'list-view/virtual_list_scroller_events';
 
@@ -81,15 +80,14 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
     this._activateScrollerPullToRefresh();
   },
   _insertPullToRefreshView: function(){
-    var pulldownClass = this.pullToRefreshViewClass.extend(TransformMixin);
-    this.pullToRefreshView = this.createChildView(pulldownClass);
+    this.pullToRefreshView = this.createChildView(this.pullToRefreshViewClass);
     this.insertAt(0, this.pullToRefreshView);
 
     var view = this;
 
-    this.pullToRefreshView.on('didInsertElement', function(){
-      Ember.run.schedule('afterRender', this, function(){
-        view.applyTransform(this, 0, -1 * view.pullToRefreshViewHeight);
+    this.pullToRefreshView.on('didInsertElement', function() {
+      Ember.run.scheduleOnce('afterRender', this, function(){
+        view.applyTransform(get(this, 'element'), 0, -1 * view.pullToRefreshViewHeight);
       });
     });
   },
