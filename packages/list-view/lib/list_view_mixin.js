@@ -567,6 +567,7 @@ export default Ember.Mixin.create({
     @event contentDidChange
   */
   contentDidChange: Ember.observer(function() {
+    this._bin.flush(0);
     addContentArrayObserver.call(this);
     syncChildViews.call(this);
   }, 'content'),
