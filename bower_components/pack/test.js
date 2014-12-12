@@ -97,6 +97,7 @@ assert.equal(bin.visibleStartingIndex(175, 100), 7);
 assert.equal(bin.visibleStartingIndex( 49, 100), 0);
 
 assert.equal(bin.visibleStartingIndex(200, 100), 7);
+assert.equal(bin.visibleStartingIndex(400, 100), 0); // TODO: eventually this should be 7
 
 // index 0; given viewport { height: 50 , width: 100}
 assert.equal(bin.numberVisibleWithin( 0, 100, 50), 2);
