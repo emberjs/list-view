@@ -123,7 +123,7 @@ test("When pulling below zero, show the pull to refresh view", function() {
   ok(pullToRefreshElement, 'pullToRefreshElement was rendered');
 
   equal(view.scroller.pullToRefreshHeight, 75, 'informs scroller of pullToRefreshHeight');
-  equal(helper.extractPosition(pullToRefreshElement).y, -75, 'positions pullToRefreshElement');
+  equal(helper.extractPosition(view._childViews[0].get('element')).y, -75, 'positions pullToRefreshElement');
 
   view.scroller.activateCallback();
   ok(view.pullToRefreshActivated, 'triggers hook function on activateCallback');
@@ -136,4 +136,3 @@ test("When pulling below zero, show the pull to refresh view", function() {
   view.scroller.startCallback();
   ok(view.pullToRefreshStarted, 'triggers hook function on startCallback');
 });
-
