@@ -31,7 +31,7 @@ var get = Ember.get, set = Ember.set;
   @namespace Ember
 */
 export default Ember.View.extend(ListItemViewMixin, {
-  updateContext: function(newContext){
+  updateContext: function(newContext) {
     var context = get(this, 'context');
 
     Ember.instrument('view.updateContext.render', this, function() {
@@ -45,8 +45,7 @@ export default Ember.View.extend(ListItemViewMixin, {
   },
 
   rerender: function () {
-    // todo: work around for tests.  investigate a real fix.
-    if(get(this, 'isDestroying') || get(this, 'isDestroyed')) {
+    if (this.isDestroying || this.isDestroyed) {
       return;
     }
 

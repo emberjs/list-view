@@ -39,11 +39,9 @@ export default Ember.Mixin.create(TransformMixin, {
   classNames: ['ember-list-item-view'],
   _positionElement: positionElement,
 
-  init: function(){
-    this._super();
-
+  positionElementWhenInserted: Ember.on('init', function(){
     this.one('didInsertElement', positionElement);
-  },
+  }),
 
   updatePosition: function(position) {
     this.position = position;
