@@ -31,7 +31,7 @@ function positionElement() {
 
 export var TransformMixin = Ember.Mixin.create({
   style: '',
-  attributeBindings: ['style'],
+  attributeBindings: ['style']
 });
 
 export default Ember.Mixin.create(TransformMixin, {
