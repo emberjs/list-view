@@ -3,20 +3,24 @@ import ListItemViewMixin from 'list-view/list_item_view_mixin';
 var get = Ember.get, set = Ember.set;
 
 export default Ember.View.extend(ListItemViewMixin, {
-  init: function(){
+  prepareForReuse: Ember.K,
+
+  init: function () {
     this._super();
     var context = Ember.ObjectProxy.create();
     this.set('context', context);
     this._proxyContext = context;
   },
-  isVisible: Ember.computed('context.content', function(){
+
+  isVisible: Ember.computed('context.content', function () {
     return !!this.get('context.content');
   }),
-  updateContext: function(newContext){
-    var context = get(this._proxyContext, 'content'), state;
+
+  updateContext: function (newContext) {
+    var context = get(this._proxyContext, 'content');
 
     // Support old and new Ember versions
-    state = this._state || this.state;
+    var state = this._state || this.state;
 
     if (context !== newContext) {
       if (state === 'inDOM') {
@@ -29,6 +33,5 @@ export default Ember.View.extend(ListItemViewMixin, {
         set(this, 'controller', newContext);
       }
     }
-  },
-  prepareForReuse: Ember.K
+  }
 });

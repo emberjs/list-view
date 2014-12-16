@@ -1,4 +1,5 @@
-// jshint validthis: true
+/*jshint validthis:true */
+
 var fieldRegex = /input|textarea|select/i,
   hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
   handleStart, handleMove, handleEnd, handleCancel,

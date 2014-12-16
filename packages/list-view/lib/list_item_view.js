@@ -1,4 +1,4 @@
-// jshint validthis: true
+/*jshint validthis:true */
 
 import ListItemViewMixin from 'list-view/list_item_view_mixin';
 

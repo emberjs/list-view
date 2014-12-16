@@ -1,4 +1,7 @@
-export default function emberList(options) {
+import EmberListView from './list_view';
+import EmberVirtualListView from './virtual_list_view';
+
+function createHelper (view, options) {
   var hash = options.hash;
   var types = options.hashTypes;
 
@@ -9,8 +12,8 @@ export default function emberList(options) {
   delete types.items;
 
   if (!hash.content) {
-    hash.content = "this";
-    types.content = "ID";
+    hash.content = 'this';
+    types.content = 'ID';
   }
 
   for (var prop in hash) {
@@ -23,5 +26,16 @@ export default function emberList(options) {
     }
   }
 
-  return Ember.Handlebars.helpers.collection.call(this, 'Ember.ListView', options);
-};
+  /*jshint validthis:true */
+  return Ember.Handlebars.helpers.collection.call(this, view, options);
+}
+
+export function EmberList (options) {
+  return createHelper.call(this, EmberListView, options);
+}
+
+export default EmberList;
+
+export function EmberVirtualList (options) {
+  return createHelper.call(this, EmberVirtualListView, options);
+}

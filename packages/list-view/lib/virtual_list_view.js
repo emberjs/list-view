@@ -6,7 +6,7 @@ import ListViewMixin from 'list-view/list_view_mixin';
 import ListViewHelper from 'list-view/list_view_helper';
 import VirtualListScrollerEvents from 'list-view/virtual_list_scroller_events';
 
-var max = Math.max, get = Ember.get, set = Ember.set;
+var get = Ember.get;
 
 function updateScrollerDimensions(target) {
   var width, height, totalHeight;
@@ -44,11 +44,9 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
   applyTransform: ListViewHelper.apply3DTransform,
 
   setupScroller: function(){
-    var view, y;
+    var view = this;
 
-    view = this;
-
-    view.scroller = new Scroller(function(left, top, zoom) {
+    view.scroller = new Scroller(function(left, top/*, zoom*/) {
       // Support old and new Ember versions
       var state = view._state || view.state;
 
@@ -87,7 +85,7 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
 
     this.pullToRefreshView.on('didInsertElement', function() {
       Ember.run.scheduleOnce('afterRender', this, function(){
-        view.applyTransform(get(this, 'element'), 0, -1 * view.pullToRefreshViewHeight);
+        view.applyTransform(this.element, 0, -1 * view.pullToRefreshViewHeight);
       });
     });
   },
