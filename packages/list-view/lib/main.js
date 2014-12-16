@@ -12,3 +12,13 @@ Ember.ListView             = ListView;
 Ember.ListViewHelper       = ListViewHelper;
 
 Ember.Handlebars.registerHelper('ember-list', EmberList);
+
+export {
+  ListView,
+  ListViewHelper,
+  ListItemView,
+  VirtualListView,
+  ReusableListItemView
+};
+
+export default ListView;
