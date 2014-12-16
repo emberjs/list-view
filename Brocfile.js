@@ -60,6 +60,11 @@ var licenseJS = pickFiles('generators', {
   destDir: '/'
 });
 
+var amdBuild = concat(merge([licenseJS, listViewFiles]), {
+  inputFiles: ['LICENSE', '**/*.js'],
+  outputFile: '/list-view.amd.js'
+});
+
 var globalBuild = concat(merge([listViewFiles, loaderJS]), {
   inputFiles: ['loader.js', '**/*.js'],
   outputFile: '/list-view.js'
@@ -92,6 +97,7 @@ var distTree = merge([
   testFiles,
   testRunner,
   bower,
+  amdBuild
   //bowerShimFiles
 ]);
 
@@ -105,7 +111,7 @@ if (env === 'production') {
 }
 
 distTree = replace(distTree, {
-  files: [ 'list-view.js', 'list-view.min.js' ],
+  files: [ 'list-view.js', 'list-view.min.js', 'list-view.amd.js' ],
   pattern: {
     match: /VERSION_STRING_PLACEHOLDER/g,
     replacement: version()
