@@ -1,12 +1,14 @@
-// jshint validthis: true
+/*jshint validthis:true */
 
 import ReusableListItemView from 'list-view/reusable_list_item_view';
 
-var get = Ember.get, set = Ember.set,
-
-min = Math.min, max = Math.max, floor = Math.floor,
-ceil = Math.ceil,
-forEach = Ember.ArrayPolyfills.forEach;
+var get     = Ember.get;
+var set     = Ember.set;
+var min     = Math.min;
+var max     = Math.max;
+var floor   = Math.floor;
+var ceil    = Math.ceil;
+var forEach = Ember.ArrayPolyfills.forEach;
 
 function addContentArrayObserver() {
   var content = get(this, 'content');
@@ -26,12 +28,6 @@ function syncChildViews() {
 
 function sortByContentIndex (viewOne, viewTwo) {
   return get(viewOne, 'contentIndex') - get(viewTwo, 'contentIndex');
-}
-
-function notifyMutationListeners() {
-  if (Ember.View.notifyMutationListeners) {
-    Ember.run.once(Ember.View, 'notifyMutationListeners');
-  }
 }
 
 function removeEmptyView() {
@@ -66,11 +62,11 @@ function addEmptyView() {
 }
 
 function enableProfilingOutput() {
-  function before(name, time, payload) {
+  function before(name, time/*, payload*/) {
     console.time(name);
   }
 
-  function after (name, time, payload) {
+  function after (name, time/*, payload*/) {
     console.timeEnd(name);
   }
 
@@ -138,21 +134,26 @@ export default Ember.Mixin.create({
     @method render
     @param {Ember.RenderBuffer} buffer The render buffer
   */
-  render: function(buffer) {
-    buffer.push('<div class="ember-list-container"></div>');
-    this._super(buffer);
+  render: function (buffer) {
+    var element          = buffer.element();
+    var dom              = buffer.dom;
+    var container        = dom.createElement('div');
+    container.className  = 'ember-list-container';
+    element.appendChild(container);
+
+    this._childViewsMorph = dom.createMorph(container, container, null);
+
+    return container;
   },
 
   createChildViewsMorph: function (element) {
-    var children = element.children;
-    element = children[0];
-    this._childViewsMorph = this._renderer._dom.createMorph(element, children[children.length - 1], null);
+    this._childViewsMorph = this._renderer._dom.createMorph(element.lastChild, element.lastChild, null);
     return element;
   },
 
   willInsertElement: function() {
-    if (!this.get("height") || !this.get("rowHeight")) {
-      throw new Error("A ListView must be created with a height and a rowHeight.");
+    if (!this.get('height') || !this.get('rowHeight')) {
+      throw new Error('A ListView must be created with a height and a rowHeight.');
     }
     this._super();
   },
@@ -329,6 +330,10 @@ export default Ember.Mixin.create({
     childView.prepareForReuse();
   },
 
+  createChildView: function (_view) {
+    return this._super(_view, this._itemViewProps || {});
+  },
+
   /**
     @private
     @method _reuseChildForContentIndex
@@ -341,16 +346,14 @@ export default Ember.Mixin.create({
     if (childView.constructor !== contentViewClass) {
       // rather then associative arrays, lets move childView + contentEntry maping to a Map
       var i = this._childViews.indexOf(childView);
-
       childView.destroy();
       childView = this.createChildView(contentViewClass);
-
       this.insertAt(i, childView);
     }
 
-    content = get(this, 'content');
+    content         = get(this, 'content');
     enableProfiling = get(this, 'enableProfiling');
-    position = this.positionForIndex(contentIndex);
+    position        = this.positionForIndex(contentIndex);
     childView.updatePosition(position);
 
     set(childView, 'contentIndex', contentIndex);
@@ -477,7 +480,7 @@ export default Ember.Mixin.create({
     currentScrollTop = this.scrollTop;
     newColumnCount = get(this, 'columnCount');
     maxScrollTop = get(this, 'maxScrollTop');
-    element = get(this, 'element');
+    element = this.element;
 
     this._lastColumnCount = newColumnCount;
 
@@ -637,9 +640,7 @@ export default Ember.Mixin.create({
     @event contentWillChange
   */
   contentWillChange: Ember.beforeObserver(function() {
-    var content;
-
-    content = get(this, 'content');
+    var content = get(this, 'content');
 
     if (content) {
       content.removeArrayObserver(this);
@@ -670,12 +671,11 @@ export default Ember.Mixin.create({
     @param {Number} contentIndex item index in the content array
     @method _addItemView
   */
-  _addItemView: function(contentIndex){
+  _addItemView: function (contentIndex) {
     var itemViewClass, childView;
 
     itemViewClass = this.itemViewForIndex(contentIndex);
     childView = this.createChildView(itemViewClass);
-
     this.pushObject(childView);
   },
 
@@ -714,13 +714,13 @@ export default Ember.Mixin.create({
 
     @method _syncChildViews
    **/
-  _syncChildViews: function(){
+  _syncChildViews: function () {
     var childViews, childViewCount,
         numberOfChildViews, numberOfChildViewsNeeded,
         contentIndex, startingIndex, endingIndex,
         contentLength, emptyView, count, delta;
 
-    if (get(this, 'isDestroyed') || get(this, 'isDestroying')) {
+    if (this.isDestroyed || this.isDestroying) {
       return;
     }
 
@@ -800,18 +800,18 @@ export default Ember.Mixin.create({
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd, scrollTop;
 
-    scrollTop = this.scrollTop;
-    contentLength = get(this, 'content.length');
-    maxContentIndex = max(contentLength - 1, 0);
-    childViews = this.getReusableChildViews();
-    childViewsLength =  childViews.length;
+    scrollTop          = this.scrollTop;
+    contentLength      = get(this, 'content.length');
+    maxContentIndex    = max(contentLength - 1, 0);
+    childViews         = this.getReusableChildViews();
+    childViewsLength   =  childViews.length;
 
-    startingIndex = this._startingIndex();
+    startingIndex      = this._startingIndex();
     visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
 
-    endingIndex = min(maxContentIndex, visibleEndingIndex);
+    endingIndex        = min(maxContentIndex, visibleEndingIndex);
 
-    contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
+    contentIndexEnd    = min(visibleEndingIndex, startingIndex + childViewsLength);
 
     for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
       childView = childViews[contentIndex % childViewsLength];
@@ -846,7 +846,7 @@ export default Ember.Mixin.create({
     var index, contentIndex, state;
 
     if (this._isChildEmptyView()) {
-        removeEmptyView.call(this);
+      removeEmptyView.call(this);
     }
 
     // Support old and new Ember versions

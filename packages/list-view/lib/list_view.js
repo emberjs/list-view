@@ -1,7 +1,7 @@
 import ListViewHelper from 'list-view/list_view_helper';
 import ListViewMixin from 'list-view/list_view_mixin';
 
-var get = Ember.get, set = Ember.set;
+var get = Ember.get;
 
 /**
   The `Ember.ListView` view class renders a
@@ -109,36 +109,30 @@ export default Ember.ContainerView.extend(ListViewMixin, {
   applyTransform: ListViewHelper.applyTransform,
 
   _scrollTo: function(scrollTop) {
-    var element = get(this, 'element');
+    var element = this.element;
 
     if (element) { element.scrollTop = scrollTop; }
   },
 
   didInsertElement: function() {
     var that = this;
-    var element = get(this, 'element');
 
     this._updateScrollableHeight();
 
     this._scroll = function(e) { that.scroll(e); };
 
-    Ember.$(element).on('scroll', this._scroll);
+    Ember.$(this.element).on('scroll', this._scroll);
   },
 
   willDestroyElement: function() {
-    var element;
-
-    element = get(this, 'element');
-
-    Ember.$(element).off('scroll', this._scroll);
+    Ember.$(this.element).off('scroll', this._scroll);
   },
 
   scroll: function(e) {
     this.scrollTo(e.target.scrollTop);
   },
 
-  scrollTo: function(y){
-    var element = get(this, 'element');
+  scrollTo: function(y) {
     this._scrollTo(y);
     this._scrollContentTo(y);
   },
