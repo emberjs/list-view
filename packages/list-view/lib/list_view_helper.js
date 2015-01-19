@@ -55,7 +55,7 @@ function setStyle (optionalStyleString) {
     var isElement = obj instanceof Element;
 
     if (optionalStyleString && (supports2D || supports3D)) {
-      var style = Ember.String.fmt(optionalStyleString, x, y);
+      var style = Ember.String.fmt(optionalStyleString, [x, y]);
 
       if (isElement) {
         obj.style[styleAttributeName] = style;
