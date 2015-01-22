@@ -1,81 +1,8 @@
-// jshint validthis: true
+/*jshint validthis:true */
 
 import ListItemViewMixin from 'list-view/list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
-
-function backportedInnerString(buffer) {
-  var content = [], childBuffers = buffer.childBuffers;
-
-  Ember.ArrayPolyfills.forEach.call(childBuffers, function(buffer) {
-    var stringy = typeof buffer === 'string';
-    if (stringy) {
-      content.push(buffer);
-    } else {
-      buffer.array(content);
-    }
-  });
-
-  return content.join('');
-}
-
-function willInsertElementIfNeeded(view) {
-  if (view.willInsertElement) {
-    view.willInsertElement();
-  }
-}
-
-function didInsertElementIfNeeded(view) {
-  if (view.didInsertElement) {
-    view.didInsertElement();
-  }
-}
-
-function rerender() {
-  var element, buffer, context, hasChildViews;
-  element = get(this, 'element');
-
-  if (!element) { return; }
-
-  context = get(this, 'context');
-
-
-  // releases action helpers in contents
-  // this means though that the ListItemView itself can't use classBindings or attributeBindings
-  // need support for rerender contents in ember
-  this.triggerRecursively('willClearRender');
-
-  if (this.lengthAfterRender > this.lengthBeforeRender) {
-    this.clearRenderedChildren();
-    this._childViews.length = this.lengthBeforeRender; // triage bug in ember
-  }
-
-  if (context) {
-    buffer = Ember.RenderBuffer();
-    buffer = this.renderToBuffer(buffer);
-
-    // check again for childViews, since rendering may have added some
-    hasChildViews = this._childViews.length > 0;
-
-    if (hasChildViews) {
-      this.invokeRecursively(willInsertElementIfNeeded, false);
-    }
-
-    element.innerHTML = buffer.innerString ? buffer.innerString() : backportedInnerString(buffer);
-
-    set(this, 'element', element);
-
-    var transitionTo = this._transitionTo ? this._transitionTo : this.transitionTo;
-
-    transitionTo.call(this, 'inDOM');
-
-    if (hasChildViews) {
-      this.invokeRecursively(didInsertElementIfNeeded, false);
-    }
-  } else {
-    element.innerHTML = ''; // when there is no context, this view should be completely empty
-  }
-}
 
 /**
   The `Ember.ListItemView` view class renders a
@@ -104,8 +31,9 @@ function rerender() {
   @namespace Ember
 */
 export default Ember.View.extend(ListItemViewMixin, {
-  updateContext: function(newContext){
+  updateContext: function(newContext) {
     var context = get(this, 'context');
+
     Ember.instrument('view.updateContext.render', this, function() {
       if (context !== newContext) {
         set(this, 'context', newContext);
@@ -115,8 +43,16 @@ export default Ember.View.extend(ListItemViewMixin, {
       }
     }, this);
   },
+
   rerender: function () {
-    Ember.run.scheduleOnce('render', this, rerender);
+    if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
+
+    return this._super.apply(this, arguments);
   },
-  _contextDidChange: Ember.observer(rerender, 'context', 'controller')
+
+  _contextDidChange: Ember.observer(function () {
+    Ember.run.once(this, this.rerender);
+  }, 'context', 'controller')
 });

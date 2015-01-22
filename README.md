@@ -16,8 +16,7 @@ we need to work on for future releases of `Ember.ListView`.
 ### Downloads
 
 Latest:
-* [development](http://builds.emberjs.com/list-view/list-view-latest.js)
-* [minified](http://builds.emberjs.com/list-view/list-view-latest.min.js)
+* [development](https://rawgit.com/rondale-sc/list-view-dist/canary/list-view.js)
 
 ### Table of Contents
 

@@ -6,7 +6,7 @@ import ListViewMixin from 'list-view/list_view_mixin';
 import ListViewHelper from 'list-view/list_view_helper';
 import VirtualListScrollerEvents from 'list-view/virtual_list_scroller_events';
 
-var max = Math.max, get = Ember.get, set = Ember.set;
+var get = Ember.get;
 
 function updateScrollerDimensions(target) {
   var width, height, totalHeight;
@@ -44,15 +44,15 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
   applyTransform: ListViewHelper.apply3DTransform,
 
   setupScroller: function(){
-    var view, y;
+    var view = this;
 
-    view = this;
-
-    view.scroller = new Scroller(function(left, top, zoom) {
+    view.scroller = new Scroller(function(left, top/*, zoom*/) {
       // Support old and new Ember versions
       var state = view._state || view.state;
 
-      if (state !== 'inDOM') { return; }
+      if (state !== 'inDOM') {
+        return;
+      }
 
       if (view.listContainerElement) {
         view._scrollerTop = top;
@@ -70,17 +70,22 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
     updateScrollerDimensions(view);
   },
   setupPullToRefresh: function() {
-    if (!this.pullToRefreshViewClass) { return; }
+    if (!this.pullToRefreshViewClass) {
+      return;
+    }
+
     this._insertPullToRefreshView();
     this._activateScrollerPullToRefresh();
   },
   _insertPullToRefreshView: function(){
     this.pullToRefreshView = this.createChildView(this.pullToRefreshViewClass);
     this.insertAt(0, this.pullToRefreshView);
+
     var view = this;
-    this.pullToRefreshView.on('didInsertElement', function(){
-      Ember.run.schedule('afterRender', this, function(){
-        view.applyTransform(this.get('element'), 0, -1 * view.pullToRefreshViewHeight);
+
+    this.pullToRefreshView.on('didInsertElement', function() {
+      Ember.run.scheduleOnce('afterRender', this, function(){
+        view.applyTransform(this.element, 0, -1 * view.pullToRefreshViewHeight);
       });
     });
   },

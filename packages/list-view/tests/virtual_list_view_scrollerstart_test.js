@@ -2,6 +2,8 @@ var css, view, helper, nextTopPosition;
 helper = window.helper;
 nextTopPosition = 0;
 
+var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch;
+
 
 function appendView() {
   Ember.run(function() {
@@ -10,19 +12,19 @@ function appendView() {
 }
 
 function fireEvent(type, target) {
-  var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
-    events = hasTouch ? {
-      start: 'touchstart',
-      move: 'touchmove',
-      end: 'touchend'
-    } : {
-      start: 'mousedown',
-      move: 'mousemove',
-      end: 'mouseend'
-    },
-    e = document.createEvent('Event');
+  var events = hasTouch ? {
+    start: 'touchstart',
+    move: 'touchmove',
+    end: 'touchend'
+  } : {
+    start: 'mousedown',
+    move: 'mousemove',
+    end: 'mouseend'
+  };
+  var e = document.createEvent('Event');
   if (hasTouch) {
     e.touches = [{target: target}];
+    e.changedTouches = [{target: target}];
   } else {
     e.which = 1;
   }
@@ -187,5 +189,32 @@ test("When pulling below zero, still fire a scrollerstart event", function() {
   });
 
   Ember.$(document).off("scrollerstart");
+});
+
+test("triggers a click event when no scroll happened", function(){
+  expect(1);
+
+  view = Ember.VirtualListView.create({
+    content: helper.generateContent(10),
+    height: 150,
+    rowHeight: 50
+  });
+
+  appendView();
+  var $childElement = view.$('.ember-list-item-view');
+  var childElement = $childElement[0];
+
+  $childElement.one('click', function(e){
+    ok(hasTouch, "click event synthesized for touch device only");
+  });
+
+  Ember.run(function(){
+    fireEvent('start', childElement);
+    fireEvent('end', childElement);
+  });
+
+  if (!hasTouch) {
+    ok(true, "click event not synthesized for non-touch device");
+  }
 });
 

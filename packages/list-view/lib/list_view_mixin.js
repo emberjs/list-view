@@ -1,4 +1,4 @@
-// jshint validthis: true
+/*jshint validthis:true */
 
 import ReusableListItemView from 'list-view/reusable_list_item_view';
 
@@ -31,10 +31,10 @@ function integer(key, value) {
     } else {
       ret = value;
     }
-    this[key] = ret;
+    Ember.meta(this).cache[key] = ret;
     return ret;
   } else {
-    return this[key];
+    return Ember.meta(this).cache[key];
   }
 }
 
@@ -58,16 +58,13 @@ function sortByContentIndex (viewOne, viewTwo) {
   return get(viewOne, 'contentIndex') - get(viewTwo, 'contentIndex');
 }
 
-function notifyMutationListeners() {
-  if (Ember.View.notifyMutationListeners) {
-    Ember.run.once(Ember.View, 'notifyMutationListeners');
-  }
-}
-
 function removeEmptyView() {
   var emptyView = get(this, 'emptyView');
   if (emptyView && emptyView instanceof Ember.View) {
     emptyView.removeFromParent();
+    if (this.totalHeightDidChange !== undefined) {
+        this.totalHeightDidChange();
+    }
   }
 }
 
@@ -92,19 +89,12 @@ function addEmptyView() {
   this.unshiftObject(emptyView);
 }
 
-var domManager = Ember.create(Ember.ContainerView.proto().domManager);
-
-domManager.prepend = function(view, html) {
-  view.$('.ember-list-container').prepend(html);
-  notifyMutationListeners();
-};
-
 function enableProfilingOutput() {
-  function before(name, time, payload) {
+  function before(name, time/*, payload*/) {
     console.time(name);
   }
 
-  function after (name, time, payload) {
+  function after (name, time/*, payload*/) {
     console.timeEnd(name);
   }
 
@@ -134,7 +124,6 @@ export default Ember.Mixin.create({
     '_isShelf:ember-list-view-shelf',
     '_isFixed:ember-list-view-fixed'
   ],
-  domManager: domManager,
   scrollTop: 0,
   bottomPadding: 0,
   _lastEndingIndex: 0,
@@ -158,7 +147,7 @@ export default Ember.Mixin.create({
   */
   init: function() {
     this._super();
-    this.width = this.width || 0;
+    this.set('width', this.get('width') || 0);
     this._bin = this._setupBin();
     this._syncChildViews();
     this._addContentArrayObserver();
@@ -175,7 +164,7 @@ export default Ember.Mixin.create({
   _setupShelfFirstBin: function() {
     set(this, '_isShelf', true);
     // detect which bin we need
-    var bin = new Bin.ShelfFirst([], this.get('width'), 0);
+    var bin = new window.Bin.ShelfFirst([], this.get('width'), 0);
     var list = this;
 
     bin.length = function() {
@@ -200,7 +189,7 @@ export default Ember.Mixin.create({
   _setupFixedGridBin: function() {
     set(this, '_isFixed', true);
     // detect which bin we need
-    var bin = new Bin.FixedGrid([], 0, 0);
+    var bin = new window.Bin.FixedGrid([], 0, 0);
     var list = this;
 
     bin.length = function() {
@@ -236,10 +225,17 @@ export default Ember.Mixin.create({
     @method render
     @param {Ember.RenderBuffer} buffer The render buffer
   */
-  render: function(buffer) {
-    buffer.push('<div class="ember-list-container">');
-    this._super(buffer);
-    buffer.push('</div>');
+  render: function (buffer) {
+    var element          = buffer.element();
+    var dom              = buffer.dom;
+    var container        = dom.createElement('div');
+
+    container.className  = 'ember-list-container';
+    element.appendChild(container);
+
+    this._childViewsMorph = dom.appendMorph(container, container);
+
+    return container;
   },
 
   height: Ember.computed(integer),
@@ -400,6 +396,10 @@ export default Ember.Mixin.create({
     childView.prepareForReuse();
   },
 
+  createChildView: function (_view) {
+    return this._super(_view, this._itemViewProps || {});
+  },
+
   /**
     @private
     @method _reuseChildForContentIndex
@@ -412,16 +412,14 @@ export default Ember.Mixin.create({
     if (childView.constructor !== contentViewClass) {
       // rather then associative arrays, lets move childView + contentEntry maping to a Map
       var i = this._childViews.indexOf(childView);
-
       childView.destroy();
       childView = this.createChildView(contentViewClass);
-
       this.insertAt(i, childView);
     }
 
-    content = get(this, 'content');
+    content         = get(this, 'content');
     enableProfiling = get(this, 'enableProfiling');
-    position = this.positionForIndex(contentIndex);
+    position        = this.positionForIndex(contentIndex);
     childView.updatePosition(position);
 
     set(childView, 'contentIndex', contentIndex);
@@ -553,9 +551,7 @@ export default Ember.Mixin.create({
     @event contentWillChange
   */
   contentWillChange: Ember.beforeObserver(function() {
-    var content;
-
-    content = get(this, 'content');
+    var content = get(this, 'content');
 
     if (content) {
       content.removeArrayObserver(this);
@@ -587,12 +583,11 @@ export default Ember.Mixin.create({
     @param {Number} contentIndex item index in the content array
     @method _addItemView
   */
-  _addItemView: function(contentIndex){
+  _addItemView: function (contentIndex) {
     var itemViewClass, childView;
 
     itemViewClass = this.itemViewForIndex(contentIndex);
     childView = this.createChildView(itemViewClass);
-
     this.pushObject(childView);
   },
 
@@ -659,13 +654,13 @@ export default Ember.Mixin.create({
 
     @method _syncChildViews
    **/
-  _syncChildViews: function(){
+  _syncChildViews: function () {
     var childViews, childViewCount,
         numberOfChildViews, numberOfChildViewsNeeded,
         contentIndex, startingIndex, endingIndex,
         contentLength, emptyView, count, delta;
 
-    if (get(this, 'isDestroyed') || get(this, 'isDestroying')) {
+    if (this.isDestroyed || this.isDestroying) {
       return;
     }
 
@@ -727,18 +722,18 @@ export default Ember.Mixin.create({
         contentIndex, visibleEndingIndex, maxContentIndex,
         contentIndexEnd, scrollTop;
 
-    scrollTop = this.scrollTop;
-    contentLength = get(this, 'content.length');
-    maxContentIndex = max(contentLength - 1, 0);
-    childViews = this.getReusableChildViews();
-    childViewsLength =  childViews.length;
+    scrollTop          = this.scrollTop;
+    contentLength      = get(this, 'content.length');
+    maxContentIndex    = max(contentLength - 1, 0);
+    childViews         = this.getReusableChildViews();
+    childViewsLength   =  childViews.length;
 
-    startingIndex = this._startingIndex();
+    startingIndex      = this._startingIndex();
     visibleEndingIndex = startingIndex + this._numChildViewsForViewport();
 
-    endingIndex = min(maxContentIndex, visibleEndingIndex);
+    endingIndex        = min(maxContentIndex, visibleEndingIndex);
 
-    contentIndexEnd = min(visibleEndingIndex, startingIndex + childViewsLength);
+    contentIndexEnd    = min(visibleEndingIndex, startingIndex + childViewsLength);
 
     for (contentIndex = startingIndex; contentIndex < contentIndexEnd; contentIndex++) {
       childView = childViews[contentIndex % childViewsLength];
@@ -772,7 +767,9 @@ export default Ember.Mixin.create({
   arrayDidChange: function(content, start, removedCount, addedCount) {
     var index, contentIndex, state;
 
-    removeEmptyView.call(this);
+    if (this._isChildEmptyView()) {
+      removeEmptyView.call(this);
+    }
 
     // Support old and new Ember versions
     state = this._state || this.state;
@@ -806,7 +803,9 @@ export default Ember.Mixin.create({
   },
 
   destroy: function () {
-    if (!this._super()) { return; }
+    if (!this._super()) {
+      return;
+    }
 
     if (this._createdEmptyView) {
       this._createdEmptyView.destroy();

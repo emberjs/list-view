@@ -1,4 +1,5 @@
-// jshint validthis: true
+/*jshint validthis:true */
+
 var fieldRegex = /input|textarea|select/i,
   hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
   handleStart, handleMove, handleEnd, handleCancel,
@@ -39,7 +40,9 @@ if (hasTouch) {
 } else {
   startEvent = 'mousedown';
   handleStart = function (e) {
-    if (e.which !== 1) return;
+    if (e.which !== 1) {
+      return;
+    }
     var target = e.target;
     // avoid e.preventDefault() on fields
     if (target && fieldRegex.test(target.tagName)) {
@@ -60,7 +63,9 @@ if (hasTouch) {
   };
   cancelEvent = 'mouseout';
   handleCancel = function (e) {
-    if (e.relatedTarget) return;
+    if (e.relatedTarget) {
+      return;
+    }
     unbindWindow(this.scrollerEventHandlers);
     this.endScroll(e.timeStamp);
   };
@@ -130,7 +135,7 @@ function synthesizeClick(e) {
   var point = e.changedTouches[0],
     target = point.target,
     ev;
-  if (target && fieldRegex.test(target.tagName)) {
+  if (target && !fieldRegex.test(target.tagName)) {
     ev = document.createEvent('MouseEvents');
     ev.initMouseEvent('click', true, true, e.view, 1, point.screenX, point.screenY, point.clientX, point.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, 0, null);
     return target.dispatchEvent(ev);
