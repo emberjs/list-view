@@ -21,7 +21,8 @@
     "ember": "~1.9.0",
     "qunit": "~1.13.0",
     "jquery": "~1.10.x",
-    "handlebars": "~2.0.0"
+    "handlebars": "~2.0.0",
+    "pack": "git://github.com/stefanpenner/pack.git"
   },
   "devDependencies": {
     "loader.js": "~1.0.0"
