@@ -61,27 +61,29 @@
             width: 150,
             template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
           }),
+
           "dog" : Ember.ListItemView.extend({
             rowHeight: 50,
             width: Infinity,
             template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
           })
         },
-        heightForIndex: function(idx){
-          // TODO: cleanup
 
+        heightForIndex: function(idx) {
           var type = this.get('content').objectAt(idx).type;
           var height = type === 'dog' ? 50 : 150;
           console.log('height', height);
           return height;
         },
+
         widthForIndex: function(idx) {
           var type = this.get('content').objectAt(idx).type;
           var width = type === 'dog' ? Infinity : 150;
           console.log('width', width);
           return width;
         },
-        itemViewForIndex: function(idx){
+
+        itemViewForIndex: function(idx) {
           return this.itemViews[this.get('content').objectAt(idx).type];
         }
       });
