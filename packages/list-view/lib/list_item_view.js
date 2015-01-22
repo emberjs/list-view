@@ -42,17 +42,5 @@ export default Ember.View.extend(ListItemViewMixin, {
         }
       }
     }, this);
-  },
-
-  rerender: function () {
-    if (this.isDestroying || this.isDestroyed) {
-      return;
-    }
-
-    return this._super.apply(this, arguments);
-  },
-
-  _contextDidChange: Ember.observer(function () {
-    Ember.run.once(this, this.rerender);
-  }, 'context', 'controller')
+  }
 });
