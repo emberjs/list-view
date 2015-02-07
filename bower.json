@@ -25,5 +25,8 @@
   },
   "devDependencies": {
     "loader.js": "~1.0.0"
+  },
+  "resolutions": {
+    "handlebars": "~2.0.0"
   }
 }
