@@ -11,53 +11,60 @@ var pickFiles = require('broccoli-static-compiler');
 var version = require('./lib/calculate_version');
 var replace = require('broccoli-string-replace');
 
-function testTree(libTree, packageName){
+function testTree(libTree, packageName) {
   var test = pickFiles('packages/' + packageName + '/tests', {
     srcDir: '/',
-    files: [ '**/*.js' ],
+    files: ['**/*.js'],
     destDir: '/'
   });
   var jshinted = jshint(libTree);
   jshinted = wrap(jshinted, {
-    wrapper: [ "if (!QUnit.urlParams.nojshint) {\n", "\n}"]
+    wrapper: ["if (!QUnit.urlParams.nojshint) {\n", "\n}"]
   });
   return merge([jshinted, test]);
 }
 
 var testRunner = pickFiles('tests', {
   srcDir: '/',
-  inputFiles: [ '**/*' ],
+  inputFiles: ['**/*'],
   destDir: '/'
 });
 
 var bower = pickFiles('bower_components', {
   srcDir: '/',
-  inputFiles: [ '**/*' ],
+  inputFiles: ['**/*'],
   destDir: '/bower_components'
 });
 
 var listViewFiles = pickFiles('packages/list-view/lib', {
   srcDir: '/',
-  files: [ '**/*.js' ],
+  files: ['**/*.js'],
   destDir: '/list-view'
 });
 
 listViewFiles = es6(listViewFiles, {moduleName: true});
 
-if (env === 'production'){ listViewFiles = es3SafeRecast(listViewFiles); }
+if (env === 'production') {
+  listViewFiles = es3SafeRecast(listViewFiles);
+}
 
 var testFiles = testTree(listViewFiles, 'list-view');
 
 var loaderJS = pickFiles('bower_components/loader.js', {
   srcDir: '/',
-  files: [ 'loader.js' ],
+  files: ['loader.js'],
   destDir: '/'
 });
 
 var licenseJS = pickFiles('generators', {
   srcDir: '/',
-  files: [ 'LICENSE' ],
+  files: ['LICENSE'],
   destDir: '/'
+});
+
+var amdBuild = concat(merge([licenseJS, listViewFiles]), {
+  inputFiles: ['LICENSE', '**/*.js'],
+  outputFile: '/list-view.amd.js'
 });
 
 var globalBuild = concat(merge([listViewFiles, loaderJS]), {
@@ -66,7 +73,7 @@ var globalBuild = concat(merge([listViewFiles, loaderJS]), {
 });
 
 globalBuild = wrap(globalBuild, {
-  wrapper: [ "(function(global){\n",  "\n requireModule('list-view/main');\n})(this);"]
+  wrapper: ["(function(global){\n", "\n requireModule('list-view/main');\n})(this);"]
 });
 
 testFiles = concat(testFiles, {
@@ -92,11 +99,12 @@ var distTree = merge([
   testFiles,
   testRunner,
   bower,
+  amdBuild
   //bowerShimFiles
 ]);
 
 if (env === 'production') {
-  var uglified = uglify(globalBuild, { mangle: true });
+  var uglified = uglify(globalBuild, {mangle: true});
   var uglified = concat(merge([uglified, licenseJS]), {
     inputFiles: ['LICENSE', 'list-view.js'],
     outputFile: '/list-view.min.js'
@@ -105,7 +113,7 @@ if (env === 'production') {
 }
 
 distTree = replace(distTree, {
-  files: [ 'list-view.js', 'list-view.min.js' ],
+  files: ['list-view.js', 'list-view.min.js', 'list-view.amd.js'],
   pattern: {
     match: /VERSION_STRING_PLACEHOLDER/g,
     replacement: version()
