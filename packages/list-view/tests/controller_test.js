@@ -6,7 +6,7 @@ function appendView() {
     view.appendTo('#qunit-fixture');
   });
 }
-var template = Ember.Handlebars.compile("<a {{action 'wat'}}" +
+var template = helper.compile("<a {{action 'wat'}}" +
     " href='#'><span class='controller'>{{foo}}</span>" +
     "<span class='context'>{{name}}</span></a>");
 
@@ -43,31 +43,40 @@ module("Ember.ListView controllers", {
 
 test("parent controller", function() {
   var watWasCalled = false;
-  var controller = Ember.Controller.extend({
-    foo: 'bar',
-    actions: {
-      wat: function() {
-        watWasCalled = true;
-      }
-    }
-  }).create();
+  var controller;
 
-  view = Ember.ContainerView.create({
-    controller: controller
+  Ember.run(function(){
+    controller = Ember.Controller.extend({
+      foo: 'bar',
+      actions: {
+        wat: function() {
+          watWasCalled = true;
+        }
+      }
+    }).create();
+  });
+
+  Ember.run(function(){
+    view = Ember.ContainerView.create({
+      controller: controller
+    });
   });
 
   var content = Ember.A([
     { name: 'entry' }
   ]);
 
-  var listView = view.createChildView(Ember.ListView.extend({
-    itemViewClass: Ember.ReusableListItemView.extend({
-      template: template
-    }),
-    height: 500,
-    rowHeight: 50,
-    content: content
-  }));
+  var listView;
+  Ember.run(function(){
+    listView = view.createChildView(Ember.ListView.extend({
+      itemViewClass: Ember.ReusableListItemView.extend({
+        template: template
+      }),
+      height: 500,
+      rowHeight: 50,
+      content: content
+    }));
+  });
 
   appendView();
 
@@ -99,23 +108,27 @@ test("itemController", function() {
     }
   }));
 
-  var controller = Ember.ArrayController.create({
-    content: Ember.A([ { name: 'entry' } ]),
-    itemController: 'item',
-    container: container
+  var controller, listView;
+
+  Ember.run(function(){
+    controller = Ember.ArrayController.create({
+      content: Ember.A([ { name: 'entry' } ]),
+      itemController: 'item',
+      container: container
+    });
+
+    view = Ember.ContainerView.create();
+
+    listView = view.createChildView(Ember.ListView.extend({
+      itemViewClass: Ember.ReusableListItemView.extend({
+        template: template
+      }),
+      height: 500,
+      rowHeight: 50,
+      content: controller,
+      container: container
+    }));
   });
-
-  view = Ember.ContainerView.create();
-
-  var listView = view.createChildView(Ember.ListView.extend({
-    itemViewClass: Ember.ReusableListItemView.extend({
-      template: template
-    }),
-    height: 500,
-    rowHeight: 50,
-    content: controller,
-    container: container
-  }));
 
   appendView();
 

@@ -61,14 +61,16 @@ test("should render a subset of the full content, based on the height, in the co
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.VirtualListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -90,7 +92,7 @@ test("should update dimensions of scroller when totalHeight changes", function()
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -115,26 +117,28 @@ test("lifecycle events", function(){
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       }),
     scrollingDidCompleteCount = 0,
     didInitializeScrollerCount = 0,
     scrollerDimensionsDidChangeCount = 0;
 
-  view = Ember.VirtualListView.extend({
-    init: function(){
-      // Some hooks for testing
-      this.on('didInitializeScroller', function(){ didInitializeScrollerCount++; });
-      this.on('scrollingDidComplete',  function(){ scrollingDidCompleteCount++;  });
-      this.on('scrollerDimensionsDidChange',  function(){ scrollerDimensionsDidChangeCount++;  });
-      this._super();
-    }
-  }).create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 475
+  Ember.run(function(){
+    view = Ember.VirtualListView.extend({
+      init: function(){
+        // Some hooks for testing
+        this.on('didInitializeScroller', function(){ didInitializeScrollerCount++; });
+        this.on('scrollingDidComplete',  function(){ scrollingDidCompleteCount++;  });
+        this.on('scrollerDimensionsDidChange',  function(){ scrollerDimensionsDidChangeCount++;  });
+        this._super();
+      }
+    }).create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 475
+    });
   });
 
   equal(didInitializeScrollerCount, 1, 'didInitializeScroller event was fired on create');
@@ -166,15 +170,17 @@ test("should render correctly with an initial scrollTop", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.VirtualListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 475
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 475
+    });
   });
 
   appendView();
@@ -194,7 +200,7 @@ test("should be programatically scrollable", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -227,7 +233,7 @@ test("height change", function(){
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -279,10 +285,10 @@ test("height and width change after with scroll – simple", function(){
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 
@@ -377,10 +383,10 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items", fu
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 
@@ -461,7 +467,7 @@ test("elementWidth change", function(){
       rowHeight = 50,
       elementWidth = 100,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -546,7 +552,7 @@ test("elementWidth change with scroll", function(){
       rowHeight = 50,
       elementWidth = 100,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -630,7 +636,7 @@ test("A property of an item can be changed", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   view = Ember.VirtualListView.create({
@@ -682,10 +688,12 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
 test("When destroyed, short-circuits syncChildViews", function() {
   expect(1);
 
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(4),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -714,10 +722,10 @@ test("adding a column, when everything is already within viewport", function(){
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 

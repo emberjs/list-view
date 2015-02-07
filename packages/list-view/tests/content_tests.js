@@ -34,9 +34,13 @@ module("Ember.ListView integration - Content", {
 test("the ember-list helper", function() {
   var content = helper.generateContent(100);
 
-  view = Ember.View.create({
-    controller: content,
-    template: Ember.Handlebars.compile("{{#ember-list height=500 row-height=50}}{{name}}{{/ember-list}}")
+  Ember.run(function(){
+    view = Ember.View.create({
+      controller: {
+        model: content
+      },
+      template: helper.compile("{{#ember-list items=model height=500 rowHeight=50}}{{name}}{{/ember-list}}")
+    });
   });
 
   appendView();
@@ -48,9 +52,11 @@ test("the ember-list helper", function() {
 test("the ember-list helper uses items=", function() {
   var content = helper.generateContent(100);
 
-  view = Ember.View.create({
-    controller: { itemz: content },
-    template: Ember.Handlebars.compile("{{#ember-list items=itemz height=500 row-height=50}}{{name}}{{/ember-list}}")
+  Ember.run(function(){
+    view = Ember.View.create({
+      controller: { itemz: content },
+      template: helper.compile("{{#ember-list items=itemz height=500 rowHeight=50}}{{name}}{{/ember-list}}")
+    });
   });
 
   appendView();
@@ -64,14 +70,16 @@ test("replacing the list content", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -89,14 +97,16 @@ test("adding to the front of the list content", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -115,14 +125,16 @@ test("inserting in the middle of visible content", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -141,14 +153,16 @@ test("clearing the content", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -166,14 +180,16 @@ test("deleting the first element", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();

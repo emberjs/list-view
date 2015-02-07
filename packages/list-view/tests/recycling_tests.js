@@ -43,7 +43,7 @@ test("recycling complex views long list", function(){
             innerViewDestroyCount++;
           }
         }),
-        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+        template: helper.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
       });
 
   var listViewInsertionCount, listViewDestroyCount,
@@ -55,18 +55,20 @@ test("recycling complex views long list", function(){
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0,
-    didInsertElement: function() {
-      listViewInsertionCount++;
-    },
-    willDestroyElement: function() {
-      listViewDestroyCount++;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyCount++;
+      }
+    });
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement");
@@ -127,7 +129,7 @@ test("recycling complex views short list", function(){
             innerViewDestroyCount++;
           }
         }),
-        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+        template: helper.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
       });
 
   var listViewInsertionCount, listViewDestroyCount,
@@ -139,18 +141,20 @@ test("recycling complex views short list", function(){
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0,
-    didInsertElement: function() {
-      listViewInsertionCount++;
-    },
-    willDestroyElement: function() {
-      listViewDestroyCount++;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyCount++;
+      }
+    });
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement (pre-append)");
@@ -219,7 +223,7 @@ test("recycling complex views long list, with ReusableListItemView", function(){
           this._super();
           listItemViewDestroyCount++;
         },
-        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+        template: helper.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
       });
 
   var listViewInsertionCount, listViewDestroyCount,
@@ -235,18 +239,20 @@ test("recycling complex views long list, with ReusableListItemView", function(){
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0,
-    didInsertElement: function() {
-      listViewInsertionCount++;
-    },
-    willDestroyElement: function() {
-      listViewDestroyCount++;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyCount++;
+      }
+    });
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement (pre-append)");
@@ -323,7 +329,7 @@ test("recycling complex views short list, with ReusableListItemView", function()
           this._super();
           listItemViewDestroyCount++;
         },
-        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+        template: helper.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
       });
 
   var listViewInsertionCount, listViewDestroyCount,
@@ -339,18 +345,20 @@ test("recycling complex views short list, with ReusableListItemView", function()
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0,
-    didInsertElement: function() {
-      listViewInsertionCount++;
-    },
-    willDestroyElement: function() {
-      listViewDestroyCount++;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyCount++;
+      }
+    });
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement (pre-append)");
@@ -429,7 +437,7 @@ test("recycling complex views with ReusableListItemView, handling empty slots at
           this._super();
           listItemViewDestroyCount++;
         },
-        template: Ember.Handlebars.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
+        template: helper.compile("{{name}} {{#view view.innerViewClass}}{{/view}}")
       });
 
   var listViewInsertionCount, listViewDestroyCount,
@@ -445,20 +453,22 @@ test("recycling complex views with ReusableListItemView, handling empty slots at
   innerViewInsertionCount = 0;
   innerViewDestroyCount = 0;
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    width: width,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0,
-    didInsertElement: function() {
-      listViewInsertionCount++;
-    },
-    willDestroyElement: function() {
-      listViewDestroyCount++;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      width: width,
+      elementWidth: elementWidth,
+      itemViewClass: itemViewClass,
+      scrollTop: 0,
+      didInsertElement: function() {
+        listViewInsertionCount++;
+      },
+      willDestroyElement: function() {
+        listViewDestroyCount++;
+      }
+    });
   });
 
   equal(listViewInsertionCount, 0, "expected number of listView's didInsertElement (pre-append)");

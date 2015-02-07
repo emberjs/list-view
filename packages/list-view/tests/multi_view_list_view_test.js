@@ -68,25 +68,27 @@ test("Correct view is used for right data type", function() {
     { id: 32, type: "dog",   name: "Roger" },
   ];
 
-  view = Ember.ListView.create({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      cat: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
-      }),
-      dog: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
-      }),
-      other: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx){
-      return this.itemViews[this.get('content').objectAt(idx).type];
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Em.A(content),
+      height: 300,
+      width: 500,
+      rowHeight: 100,
+      itemViews: {
+        cat: Ember.ListItemView.extend({
+          template: helper.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+        }),
+        dog: Ember.ListItemView.extend({
+          template: helper.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+        }),
+        other: Ember.ListItemView.extend({
+          template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        })
+      },
+      itemViewForIndex: function(idx){
+        return this.itemViews[this.get('content').objectAt(idx).type];
+      }
+    });
   });
 
   appendView();

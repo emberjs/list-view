@@ -34,9 +34,11 @@ module("Ember.ListView Acceptance", {
 });
 
 test("should exist", function() {
-  view = Ember.ListView.create({
-    height: 500,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: 500,
+      rowHeight: 50
+    });
   });
   appendView();
   ok(view);
@@ -48,7 +50,7 @@ test("should render an empty view when there is no content", function() {
       rowHeight = 50,
       emptyViewHeight = 175,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       }),
       emptyView = Ember.View.extend({
         attributeBindings: ['style'],
@@ -56,13 +58,15 @@ test("should render an empty view when there is no content", function() {
         style: 'height:' + emptyViewHeight + 'px;'
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    emptyView: emptyView
-  });
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      emptyView: emptyView
+    });
+  })
 
   appendView();
 
@@ -108,14 +112,16 @@ test("should render a subset of the full content, based on the height, in the co
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -137,15 +143,17 @@ test("should render correctly with an initial scrollTop", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 475
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 475
+    });
   });
 
   appendView();
@@ -168,7 +176,7 @@ test("should perform correct number of renders and repositions on short list ini
       positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   Ember.subscribe("view.updateContext.render", {
@@ -185,13 +193,15 @@ test("should perform correct number of renders and repositions on short list ini
     }
   });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -209,7 +219,7 @@ test("should perform correct number of renders and repositions while short list 
       positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   if (window.console) {
@@ -230,13 +240,15 @@ test("should perform correct number of renders and repositions while short list 
     }
   });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -257,7 +269,7 @@ test("should perform correct number of renders and repositions on long list init
       positions = 0,
       renders = 0,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
   Ember.subscribe("view.updateContext.render", {
@@ -274,13 +286,15 @@ test("should perform correct number of renders and repositions on long list init
     }
   });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -294,14 +308,16 @@ test("should be programatically scrollable", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -327,14 +343,16 @@ test("height change", function(){
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -377,21 +395,23 @@ test("adding a column, when everything is already within viewport", function(){
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    width: width,
-    height: height,
-    rowHeight: rowHeight,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      width: width,
+      height: height,
+      rowHeight: rowHeight,
+      elementWidth: elementWidth,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -451,21 +471,23 @@ test("height and width change after with scroll – simple", function(){
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    width: width,
-    height: height,
-    rowHeight: rowHeight,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      width: width,
+      height: height,
+      rowHeight: rowHeight,
+      elementWidth: elementWidth,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -549,21 +571,23 @@ test("height and width change after with scroll – 1x2 -> 2x2 with 5 items", fu
       rowHeight = 50,
       elementWidth = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("A:{{name}}{{view view.NestedViewClass}}"),
+        template: helper.compile("A:{{name}}{{view view.NestedViewClass}}"),
         NestedViewClass: Ember.View.extend({
           tagName: 'span',
-          template: Ember.Handlebars.compile("B:{{name}}")
+          template: helper.compile("B:{{name}}")
         })
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    width: width,
-    height: height,
-    rowHeight: rowHeight,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      width: width,
+      height: height,
+      rowHeight: rowHeight,
+      elementWidth: elementWidth,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();
@@ -634,16 +658,18 @@ test("elementWidth change", function(){
       rowHeight = 50,
       elementWidth = 100,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      elementWidth: elementWidth
+    });
   });
 
   appendView();
@@ -743,16 +769,18 @@ test("elementWidth change with scroll", function(){
       rowHeight = 50,
       elementWidth = 100,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      elementWidth: elementWidth
+    });
   });
 
   appendView();
@@ -827,14 +855,16 @@ test("A property of an item can be changed", function() {
       height = 500,
       rowHeight = 50,
       itemViewClass = Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("{{name}}")
+        template: helper.compile("{{name}}")
       });
 
-  view = Ember.ListView.create({
-    content: content,
-    height: height,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: content,
+      height: height,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass
+    });
   });
 
   appendView();
@@ -864,10 +894,12 @@ test("A property of an item can be changed", function() {
 });
 
 test("The list view is wrapped in an extra div to support JS-emulated scrolling", function() {
-  view = Ember.ListView.create({
-    content: Ember.A(),
-    height: 100,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Ember.A(),
+      height: 100,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -876,13 +908,15 @@ test("The list view is wrapped in an extra div to support JS-emulated scrolling"
 });
 
 test("When scrolled past the totalHeight, views should not be recycled in. This is to support overscroll", function() {
-  view = Ember.ListView.create({
-    content: helper.generateContent(2),
-    height:100,
-    rowHeight: 50,
-    itemViewClass: Ember.ListItemView.extend({
-      template: Ember.Handlebars.compile("Name: {{name}}")
-    })
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: helper.generateContent(2),
+      height:100,
+      rowHeight: 50,
+      itemViewClass: Ember.ListItemView.extend({
+        template: helper.compile("Name: {{name}}")
+      })
+    });
   });
 
   appendView();
@@ -904,13 +938,15 @@ test("When scrolled past the totalHeight, views should not be recycled in. This 
 
 
 test("When list-view is unable to scroll, scrollTop should be zero", function() {
-  view = Ember.ListView.create({
-    content: helper.generateContent(2),
-    height:400,
-    rowHeight: 100,
-    itemViewClass: Ember.ListItemView.extend({
-      template: Ember.Handlebars.compile("Name: {{name}}")
-    })
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: helper.generateContent(2),
+      height:400,
+      rowHeight: 100,
+      itemViewClass: Ember.ListItemView.extend({
+        template: helper.compile("Name: {{name}}")
+      })
+    });
   });
 
   appendView();
@@ -926,10 +962,11 @@ test("When list-view is unable to scroll, scrollTop should be zero", function() 
 
 test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
   throws(function() {
-    view = Ember.ListView.create({
-      content: helper.generateContent(4)
+    Ember.run(function(){
+      view = Ember.ListView.create({
+        content: helper.generateContent(4)
+      });
     });
-
     appendView();
   },
   /A ListView must be created with a height and a rowHeight./, "Throws exception.");
@@ -937,8 +974,10 @@ test("Creating a ListView without height and rowHeight properties should throw a
 
 test("Creating a ListView without height and rowHeight properties should throw an exception", function() {
   throws(function() {
-    view = Ember.ListView.create({
-      content: helper.generateContent(4)
+    Ember.run(function(){
+      view = Ember.ListView.create({
+        content: helper.generateContent(4)
+      });
     });
 
     appendView();
@@ -949,21 +988,23 @@ test("Creating a ListView without height and rowHeight properties should throw a
 test("should trigger scrollYChanged correctly", function () {
   var scrollYChanged = 0, reuseChildren = 0;
 
-  view = Ember.ListView.extend({
-    init: function () {
-      this.on('scrollYChanged', function () {
-        scrollYChanged++;
-      });
-      this._super();
-    },
-    _reuseChildren: function () {
-      reuseChildren++;
-      this._super();
-    }
-  }).create({
-    content: helper.generateContent(10),
-    height: 100,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.ListView.extend({
+      init: function () {
+        this.on('scrollYChanged', function () {
+          scrollYChanged++;
+        });
+        this._super();
+      },
+      _reuseChildren: function () {
+        reuseChildren++;
+        this._super();
+      }
+    }).create({
+      content: helper.generateContent(10),
+      height: 100,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -986,15 +1027,17 @@ test("should trigger scrollYChanged correctly", function () {
 test("should trigger reuseChildren correctly", function () {
   var scrollYChanged = 0, reuseChildren = 0;
 
-  view = Ember.ListView.extend({
-    _reuseChildren: function () {
-      reuseChildren++;
-      this._super();
-    }
-  }).create({
-    content: helper.generateContent(10),
-    height: 100,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.ListView.extend({
+      _reuseChildren: function () {
+        reuseChildren++;
+        this._super();
+      }
+    }).create({
+      content: helper.generateContent(10),
+      height: 100,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -1015,13 +1058,15 @@ test("should trigger reuseChildren correctly", function () {
 });
 
 test("handle strange ratios between height/rowHeight", function() {
-  view = Ember.ListView.create({
-    content: helper.generateContent(15),
-    height: 235,
-    rowHeight: 73,
-    itemViewClass: Ember.ListItemView.extend({
-      template: Ember.Handlebars.compile("Name: {{name}}")
-    })
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: helper.generateContent(15),
+      height: 235,
+      rowHeight: 73,
+      itemViewClass: Ember.ListItemView.extend({
+        template: helper.compile("Name: {{name}}")
+      })
+    });
   });
 
   appendView();
@@ -1083,13 +1128,15 @@ test("handle strange ratios between height/rowHeight", function() {
 });
 
 test("handle bindable rowHeight", function() {
-  view = Ember.ListView.create({
-    content: helper.generateContent(15),
-    height: 400,
-    rowHeight: 100,
-    itemViewClass: Ember.ListItemView.extend({
-      template: Ember.Handlebars.compile("Name: {{name}}")
-    })
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: helper.generateContent(15),
+      height: 400,
+      rowHeight: 100,
+      itemViewClass: Ember.ListItemView.extend({
+        template: helper.compile("Name: {{name}}")
+      })
+    });
   });
 
   appendView();

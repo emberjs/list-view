@@ -83,5 +83,6 @@ window.helper = {
   itemPositions: itemPositions,
   generateContent: generateContent,
   sortElementsByPosition: sortElementsByPosition,
-  extractPosition: extractPosition
+  extractPosition: extractPosition,
+  compile: Ember.Handlebars.compile
 };

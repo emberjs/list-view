@@ -19,7 +19,7 @@
 
   <body>
     <script type="text/x-handlebars">
-      {{#ember-list items=controller height=300 width=500 row-height=100 element-width=100}}
+      {{#ember-list items=controller height=300 width=500 rowHeight=100 element-width=100}}
         {{name}}
       {{/ember-list}}
     </script>
@@ -43,7 +43,7 @@
       ];
 
       App.AppleView = Ember.View.extend({
-        template: Ember.Handlebars.compile("{{id}}{{name}}-bro")
+        template: Ember.HTMLBars.compile("{{id}}{{name}}-bro")
       });
 
       App.ApplicationRoute = Ember.Route.extend({
