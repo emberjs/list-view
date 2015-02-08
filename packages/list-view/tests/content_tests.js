@@ -39,7 +39,7 @@ test("the ember-list helper", function() {
       controller: {
         model: content
       },
-      template: helper.compile("{{#ember-list items=model height=500 rowHeight=50}}{{name}}{{/ember-list}}")
+      template: helper.compile("{{#ember-list items=model height=500 row-height=50}}{{name}}{{/ember-list}}")
     });
   });
 
