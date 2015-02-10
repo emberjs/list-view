@@ -470,13 +470,15 @@ test("elementWidth change", function(){
         template: helper.compile("{{name}}")
       });
 
-  view = Ember.VirtualListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      elementWidth: elementWidth
+    });
   });
 
   appendView();
@@ -555,13 +557,15 @@ test("elementWidth change with scroll", function(){
         template: helper.compile("{{name}}")
       });
 
-  view = Ember.VirtualListView.create({
-    content: content,
-    height: height,
-    width: width,
-    rowHeight: rowHeight,
-    itemViewClass: itemViewClass,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: content,
+      height: height,
+      width: width,
+      rowHeight: rowHeight,
+      itemViewClass: itemViewClass,
+      elementWidth: elementWidth
+    });
   });
 
   appendView();
@@ -729,14 +733,16 @@ test("adding a column, when everything is already within viewport", function(){
         })
       });
 
-  view = Ember.VirtualListView.create({
-    content: content,
-    width: width,
-    height: height,
-    rowHeight: rowHeight,
-    elementWidth: elementWidth,
-    itemViewClass: itemViewClass,
-    scrollTop: 0
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: content,
+      width: width,
+      height: height,
+      rowHeight: rowHeight,
+      elementWidth: elementWidth,
+      itemViewClass: itemViewClass,
+      scrollTop: 0
+    });
   });
 
   appendView();

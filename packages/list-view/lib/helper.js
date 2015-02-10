@@ -6,20 +6,23 @@ var EmberList = createHelper(EmberListView);
 
 function createHelper(view) {
   if (Ember.HTMLBars) {
-    return function htmlBarsHelper(params, hash, options, env) {
-      hash.content = hash.items;
-      delete hash.items;
+    return {
+      isHTMLBars: true,
+      helperFunction: function listViewHTMLBarsHelper(params, hash, options, env) {
+        hash.content = hash.items;
+        delete hash.items;
 
-      for (var prop in hash) {
-        if (/-/.test(prop)) {
-          var camelized = Ember.String.camelize(prop);
-          hash[camelized] = hash[prop];
-          delete hash[prop];
+        for (var prop in hash) {
+          if (/-/.test(prop)) {
+            var camelized = Ember.String.camelize(prop);
+            hash[camelized] = hash[prop];
+            delete hash[prop];
+          }
         }
-      }
 
-      /*jshint validthis:true */
-      return Ember.HTMLBars.helpers.collection.helperFunction.call(this, [view], hash, options, env);
+        /*jshint validthis:true */
+        return Ember.Handlebars.helpers.collection.helperFunction.call(this, [view], hash, options, env);
+      }
     };
   }
   return function handelbarsHelperFactory(options) {

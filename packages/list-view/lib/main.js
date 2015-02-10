@@ -11,5 +11,5 @@ Ember.ListItemView         = ListItemView;
 Ember.ListView             = ListView;
 Ember.ListViewHelper       = ListViewHelper;
 
-(Ember.HTMLBars || Ember.Handlebars).registerHelper('ember-list', EmberList);
-(Ember.HTMLBars || Ember.Handlebars).registerHelper('ember-virtual-list', EmberVirtualList);
+Ember.Handlebars.registerHelper('ember-list', EmberList);
+Ember.Handlebars.registerHelper('ember-virtual-list', EmberVirtualList);

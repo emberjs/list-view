@@ -7,7 +7,6 @@
     <script src="/bower_components/qunit/qunit/qunit.js"></script>
     <script src="/testem.js"></script>
     <script src="qunit_configuration.js"></script>
-    <script src="/bower_components/handlebars/handlebars.js"></script>
 
     <script type="text/javascript">
       window.loadScript = function(url) {
@@ -35,14 +34,17 @@
     <script src="ember_configuration.js"></script>
 
     <script type="text/javascript">
-      var emberChannel = QUnit.urlParams.emberchannel || "release", emberPath;
+      var emberChannel = QUnit.urlParams.emberchannel || "release", emberPath, compilerPath;
 
       if (emberChannel === "release") {
-        emberPath = "/bower_components/ember/ember.js";
+        emberPath = "/bower_components/ember/ember.debug.js";
+        compilerPath = "/bower_components/ember/ember-template-compiler.js"
       } else {
-        emberPath = 'https://s3.amazonaws.com/builds.emberjs.com/' + emberChannel + '/ember.js';
+        emberPath = 'https://s3.amazonaws.com/builds.emberjs.com/' + emberChannel + '/ember.debug.js';
+        compilerPath = 'https://s3.amazonaws.com/builds.emberjs.com/' + emberChannel + '/ember-template-compiler.js';
       }
 
+      loadScript(compilerPath);
       loadScript(emberPath);
     </script>
 
