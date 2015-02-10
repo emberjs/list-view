@@ -68,28 +68,30 @@ test("Correct height based on content", function() {
     { id: 32, type: "dog",   height:  50, name: "Roger" },
   ];
 
-  view = Ember.ListView.create({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      cat: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
-      }),
-      dog: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
-      }),
-      other: Ember.ListItemView.extend({
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx) {
-      return this.itemViews[Ember.A(this.get('content')).objectAt(idx).type];
-    },
-    heightForIndex: function(idx) {
-      return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Em.A(content),
+      height: 300,
+      width: 500,
+      rowHeight: 100,
+      itemViews: {
+        cat: Ember.ListItemView.extend({
+          template: helper.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+        }),
+        dog: Ember.ListItemView.extend({
+          template: helper.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+        }),
+        other: Ember.ListItemView.extend({
+          template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        })
+      },
+      itemViewForIndex: function(idx) {
+        return this.itemViews[Ember.A(this.get('content')).objectAt(idx).type];
+      },
+      heightForIndex: function(idx) {
+        return Ember.get(Ember.A(this.get('content')).objectAt(idx), 'height');
+      }
+    });
   });
 
   appendView();
@@ -164,32 +166,34 @@ test("Correct height based on view", function() {
     { id: 32, type: "dog",   name: "Roger" },
   ];
 
-  view = Ember.ListView.create({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      cat: Ember.ListItemView.extend({
-        rowHeight: 100,
-        template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
-      }),
-      dog: Ember.ListItemView.extend({
-        rowHeight: 50,
-        template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
-      }),
-      other: Ember.ListItemView.extend({
-        rowHeight: 150,
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx){
-      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
-    },
-    heightForIndex: function(idx) {
-      // proto() is a quick hack, lets just store this on the class..
-      return this.itemViewForIndex(idx).proto().rowHeight;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Em.A(content),
+      height: 300,
+      width: 500,
+      rowHeight: 100,
+      itemViews: {
+        cat: Ember.ListItemView.extend({
+          rowHeight: 100,
+          template: helper.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+        }),
+        dog: Ember.ListItemView.extend({
+          rowHeight: 50,
+          template: helper.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+        }),
+        other: Ember.ListItemView.extend({
+          rowHeight: 150,
+          template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        })
+      },
+      itemViewForIndex: function(idx){
+        return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
+      },
+      heightForIndex: function(idx) {
+        // proto() is a quick hack, lets just store this on the class..
+        return this.itemViewForIndex(idx).proto().rowHeight;
+      }
+    });
   });
 
   appendView();
@@ -230,8 +234,6 @@ test("Correct height based on view", function() {
 });
 
 
-
-
 test("_numChildViewsForViewport + _startingIndex with multi-height", function() {
   var content = [
     { id:  1, type: "cat",   name: "Andrew" },
@@ -267,32 +269,34 @@ test("_numChildViewsForViewport + _startingIndex with multi-height", function() 
     { id: 32, type: "dog",   name: "Roger" },
   ];
 
-  view = Ember.ListView.create({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      cat: Ember.ListItemView.extend({
-        rowHeight: 100,
-        template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
-      }),
-      dog: Ember.ListItemView.extend({
-        rowHeight: 50,
-        template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
-      }),
-      other: Ember.ListItemView.extend({
-        rowHeight: 150,
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx){
-      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
-    },
-    heightForIndex: function(idx) {
-      // proto() is a quick hack, lets just store this on the class..
-      return this.itemViewForIndex(idx).proto().rowHeight;
-    }
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Em.A(content),
+      height: 300,
+      width: 500,
+      rowHeight: 100,
+      itemViews: {
+        cat: Ember.ListItemView.extend({
+          rowHeight: 100,
+          template: helper.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+        }),
+        dog: Ember.ListItemView.extend({
+          rowHeight: 50,
+          template: helper.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+        }),
+        other: Ember.ListItemView.extend({
+          rowHeight: 150,
+          template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        })
+      },
+      itemViewForIndex: function(idx){
+        return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')];
+      },
+      heightForIndex: function(idx) {
+        // proto() is a quick hack, lets just store this on the class..
+        return this.itemViewForIndex(idx).proto().rowHeight;
+      }
+    });
   });
 
   appendView();
@@ -322,7 +326,7 @@ test("_cachedHeights is unique per instance", function() {
     itemViews: {
       other: Ember.ListItemView.extend({
         rowHeight: 150,
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
       })
     },
     itemViewForIndex: function(idx){
@@ -334,8 +338,11 @@ test("_cachedHeights is unique per instance", function() {
     }
   });
 
-  var viewA = ParentClass.create();
-  var viewB = ParentClass.create();
+  var viewA, viewB;
+  Ember.run(function(){
+    viewA = ParentClass.create();
+    viewB = ParentClass.create();
+  });
 
   deepEqual(viewA._cachedHeights, viewB._cachedHeights);
 
@@ -380,26 +387,28 @@ test("handle bindable rowHeight with multi-height (only fallback case)", functio
     { id: 32, type: "dog",   name: "Roger" }
   ];
 
-  view = Ember.ListView.create({
-    content: Em.A(content),
-    height: 300,
-    width: 500,
-    rowHeight: 100,
-    itemViews: {
-      other: Ember.ListItemView.extend({
-        rowHeight: 150,
-        template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
-      })
-    },
-    itemViewForIndex: function(idx){
-      return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')] || Ember.ReusableListItemView;
-    },
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      content: Em.A(content),
+      height: 300,
+      width: 500,
+      rowHeight: 100,
+      itemViews: {
+        other: Ember.ListItemView.extend({
+          rowHeight: 150,
+          template: helper.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+        })
+      },
+      itemViewForIndex: function(idx){
+        return this.itemViews[Ember.get(Ember.A(this.get('content')).objectAt(idx), 'type')] || Ember.ReusableListItemView;
+      },
 
-    heightForIndex: function(idx) {
-      var view = this.itemViewForIndex(idx);
+      heightForIndex: function(idx) {
+        var view = this.itemViewForIndex(idx);
 
-     return view.proto().rowHeight || this.get('rowHeight');
-    }
+        return view.proto().rowHeight || this.get('rowHeight');
+      }
+    });
   });
 
   appendView();

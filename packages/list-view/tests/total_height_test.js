@@ -18,10 +18,12 @@ module("Ember.ListView unit - totalHeight", {
 test("single column", function(){
   var height = 500, rowHeight = 50;
 
-  view = Ember.ListView.create({
-    height: height,
-    rowHeight: rowHeight,
-    content: helper.generateContent(20)
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: helper.generateContent(20)
+    });
   });
 
   equal(view.get('totalHeight'), 1000);
@@ -30,12 +32,14 @@ test("single column", function(){
 test("even", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  view = Ember.ListView.create({
-    height: height,
-    rowHeight: rowHeight,
-    content: helper.generateContent(20),
-    width: width,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: helper.generateContent(20),
+      width: width,
+      elementWidth: elementWidth
+    });
   });
 
   equal(view.get('totalHeight'), 500);
@@ -44,12 +48,14 @@ test("even", function(){
 test("odd", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  view = Ember.ListView.create({
-    height: height,
-    rowHeight: rowHeight,
-    content: helper.generateContent(21),
-    width: width,
-    elementWidth: elementWidth
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: helper.generateContent(21),
+      width: width,
+      elementWidth: elementWidth
+    });
   });
 
   equal(view.get('totalHeight'), 550);
@@ -58,13 +64,15 @@ test("odd", function(){
 test("with bottomPadding", function(){
   var height = 500, rowHeight = 50, width = 100, elementWidth = 50;
 
-  view = Ember.ListView.create({
-    height: height,
-    rowHeight: rowHeight,
-    content: helper.generateContent(20),
-    width: width,
-    elementWidth: elementWidth,
-    bottomPadding: 25
+  Ember.run(function(){
+    view = Ember.ListView.create({
+      height: height,
+      rowHeight: rowHeight,
+      content: helper.generateContent(20),
+      width: width,
+      elementWidth: elementWidth,
+      bottomPadding: 25
+    });
   });
 
   equal(view.get('totalHeight'), 525);

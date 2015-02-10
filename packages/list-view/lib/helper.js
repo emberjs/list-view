@@ -1,7 +1,33 @@
 import EmberListView from './list_view';
 import EmberVirtualListView from './virtual_list_view';
 
-function createHelper (view, options) {
+var EmberVirtualList = createHelper(EmberVirtualListView);
+var EmberList = createHelper(EmberListView);
+
+function createHelper(view) {
+  if (Ember.HTMLBars) {
+    return function htmlBarsHelper(params, hash, options, env) {
+      hash.content = hash.items;
+      delete hash.items;
+
+      for (var prop in hash) {
+        if (/-/.test(prop)) {
+          var camelized = Ember.String.camelize(prop);
+          hash[camelized] = hash[prop];
+          delete hash[prop];
+        }
+      }
+
+      /*jshint validthis:true */
+      return Ember.HTMLBars.helpers.collection.helperFunction.call(this, [view], hash, options, env);
+    };
+  }
+  return function handelbarsHelperFactory(options) {
+    return createHandlebarsHelper.call(this, view, options);
+  };
+}
+
+function createHandlebarsHelper(view, options) {
   var hash = options.hash;
   var types = options.hashTypes;
 
@@ -30,12 +56,4 @@ function createHelper (view, options) {
   return Ember.Handlebars.helpers.collection.call(this, view, options);
 }
 
-export function EmberList (options) {
-  return createHelper.call(this, EmberListView, options);
-}
-
-export default EmberList;
-
-export function EmberVirtualList (options) {
-  return createHelper.call(this, EmberVirtualListView, options);
-}
+export { EmberList as default, EmberVirtualList};

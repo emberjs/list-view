@@ -1,5 +1,5 @@
 (function() {
-var get = Ember.get, set = Ember.set, EmberHandlebars = Ember.Handlebars;
+var get = Ember.get, set = Ember.set, EmberHandlebars = Ember.HTMLBars;
 
 EmberHandlebars.registerHelper('group', function(options) {
   var data = options.data,

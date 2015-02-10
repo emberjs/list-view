@@ -81,33 +81,35 @@ module("Ember.VirtualListView pull to refresh acceptance", {
 
 test("When pulling below zero, show the pull to refresh view", function() {
   expect(12);
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(6),
-    height: 150,
-    rowHeight: 50,
-    pullToRefreshViewClass: Ember.View.extend({
-      classNames: ['pull-to-refresh'],
-      template: Ember.Handlebars.compile("Pull to refresh...")
-    }),
-    pullToRefreshViewHeight: 75,
-    activatePullToRefresh: function() {
-      this.pullToRefreshActivated = true;
-    },
-    deactivatePullToRefresh: function() {
-      this.pullToRefreshDeactivated = true;
-    },
-    startRefresh: function(finishRefresh) {
-      this.pullToRefreshStarted = true;
-      var view = this;
-      stop();
-      setTimeout(function(){
-        start();
-        ok(view.pullToRefreshView.get('refreshing'), 'sets refreshing property on refresh view');
-        finishRefresh();
-        ok(view.scroller.finishPullToRefreshCalled, 'calls back to scroller');
-        ok(!view.pullToRefreshView.get('refreshing'), 'unsets refreshing property on refresh view');
-      }, 0);
-    }
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(6),
+      height: 150,
+      rowHeight: 50,
+      pullToRefreshViewClass: Ember.View.extend({
+        classNames: ['pull-to-refresh'],
+        template: helper.compile("Pull to refresh...")
+      }),
+      pullToRefreshViewHeight: 75,
+      activatePullToRefresh: function() {
+        this.pullToRefreshActivated = true;
+      },
+      deactivatePullToRefresh: function() {
+        this.pullToRefreshDeactivated = true;
+      },
+      startRefresh: function(finishRefresh) {
+        this.pullToRefreshStarted = true;
+        var view = this;
+        stop();
+        setTimeout(function(){
+          start();
+          ok(view.pullToRefreshView.get('refreshing'), 'sets refreshing property on refresh view');
+          finishRefresh();
+          ok(view.scroller.finishPullToRefreshCalled, 'calls back to scroller');
+          ok(!view.pullToRefreshView.get('refreshing'), 'unsets refreshing property on refresh view');
+        }, 0);
+      }
+    });
   });
 
   appendView();

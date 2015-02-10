@@ -70,7 +70,7 @@
         itemViews: {
           "cat" : Ember.ListItemView.extend({
             rowHeight: 100,
-            template: Ember.Handlebars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
+            template: Ember.HTMLBars.compile("<div {{bind-attr class='type :row'}}>Meow says {{name}} expected: cat === {{type}} {{id}}</div>")
           }),
           "dog" : {
             rowHeight: 50,

@@ -73,10 +73,12 @@ module("Ember.VirtualListView scrollerstart acceptance", {
 
 test("When scrolling begins, fire a scrollerstart event on the original target", function() {
   expect(1);
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(4),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -96,10 +98,12 @@ test("When scrolling begins, fire a scrollerstart event on the original target",
 });
 
 test("fire scrollerstart event only once per scroll session", function() {
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(4),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -134,10 +138,12 @@ test("fire scrollerstart event only once per scroll session", function() {
 });
 
 test("doesn't fire scrollerstart event when view did not actually scroll vertically", function() {
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(4),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -169,10 +175,12 @@ test("doesn't fire scrollerstart event when view did not actually scroll vertica
 
 test("When pulling below zero, still fire a scrollerstart event", function() {
   expect(1);
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(4),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(4),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();
@@ -194,10 +202,12 @@ test("When pulling below zero, still fire a scrollerstart event", function() {
 test("triggers a click event when no scroll happened", function(){
   expect(1);
 
-  view = Ember.VirtualListView.create({
-    content: helper.generateContent(10),
-    height: 150,
-    rowHeight: 50
+  Ember.run(function(){
+    view = Ember.VirtualListView.create({
+      content: helper.generateContent(10),
+      height: 150,
+      rowHeight: 50
+    });
   });
 
   appendView();

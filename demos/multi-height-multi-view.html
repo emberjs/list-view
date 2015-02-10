@@ -53,17 +53,17 @@
           "cat" : Ember.ListItemView.extend({
             classNames: ['cat'],
             rowHeight: 100,
-            template: Ember.Handlebars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
+            template: Ember.HTMLBars.compile("Meow says {{name}} expected: cat === {{type}} {{id}}")
           }),
           "dog" : Ember.ListItemView.extend({
             classNames: ['dog'],
             rowHeight: 50,
-            template: Ember.Handlebars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
+            template: Ember.HTMLBars.compile("Woof says {{name}} expected: dog === {{type}} {{id}}")
           }),
           "other" : Ember.ListItemView.extend({
             classNames: ['other'],
             rowHeight: 150,
-            template: Ember.Handlebars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
+            template: Ember.HTMLBars.compile("Potato says {{name}} expected: other === {{type}} {{id}}")
           })
         },
         heightForIndex: function(idx){
