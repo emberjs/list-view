@@ -7,6 +7,7 @@ var EmberList = createHelper(EmberListView);
 function createHelper(view) {
   if (Ember.HTMLBars) {
     return {
+      isHelper: true,
       isHTMLBars: true,
       helperFunction: function listViewHTMLBarsHelper(params, hash, options, env) {
         hash.content = hash.items;
@@ -21,11 +22,11 @@ function createHelper(view) {
         }
 
         /*jshint validthis:true */
-        return Ember.Handlebars.helpers.collection.helperFunction.call(this, [view], hash, options, env);
+        return env.helpers.collection.helperFunction.call(this, [view], hash, options, env);
       }
     };
   }
-  return function handelbarsHelperFactory(options) {
+  return function handlebarsHelperFactory(options) {
     return createHandlebarsHelper.call(this, view, options);
   };
 }
