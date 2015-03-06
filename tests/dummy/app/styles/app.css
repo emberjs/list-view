@@ -1,0 +1,8 @@
+.ember-list-view {
+  overflow: auto;
+  position: relative;
+  width: 100%;
+}
+.ember-list-item-view {
+  position: absolute;
+}
