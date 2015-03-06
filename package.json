@@ -1,7 +1,7 @@
 {
   "name": "list-view",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.5",
+  "description": "An efficient incremental rendering list view for large lists.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,12 +11,16 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "",
-  "engines": {
-    "node": ">= 0.10.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emberjs/list-view"
   },
-  "author": "",
+  "author": "Erik Bryn, Yapp Inc., and contributors.",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emberjs/list-view/issues"
+  },
+  "homepage": "https://github.com/emberjs/list-view",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.0",
     "ember-cli": "0.2.0-beta.1",
