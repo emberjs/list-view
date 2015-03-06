@@ -18,4 +18,7 @@ var app = new EmberAddon();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
+app.import('vendor/zynga-scroller/Animate.js');
+app.import('vendor/zynga-scroller/Scroller.js');
+
 module.exports = app.toTree();
