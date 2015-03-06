@@ -1,6 +1,5 @@
-/*jshint validthis:true */
-
-import ListItemViewMixin from 'list-view/list_item_view_mixin';
+import Ember from 'ember';
+import ListItemViewMixin from './list_item_view_mixin';
 
 var get = Ember.get, set = Ember.set;
 

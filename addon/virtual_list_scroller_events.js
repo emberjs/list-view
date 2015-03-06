@@ -1,4 +1,4 @@
-/*jshint validthis:true */
+import Ember from 'ember';
 
 var fieldRegex = /input|textarea|select/i,
   hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,

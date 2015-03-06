@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 // TODO - remove this!
 var el    = document.body || document.createElement('div');
 var style = el.style;

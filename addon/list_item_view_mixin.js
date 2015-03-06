@@ -1,4 +1,4 @@
-/*jshint validthis:true */
+import Ember from 'ember';
 
 function samePosition(a, b) {
   return a && b && a.x === b.x && a.y === b.y;

@@ -1,6 +1,7 @@
-/*jshint validthis:true */
-
-import ReusableListItemView from 'list-view/reusable_list_item_view';
+// TODO: remove unused: false
+/* jshint unused: false*/
+import Ember from 'ember';
+import ReusableListItemView from './reusable_list_item_view';
 
 var get     = Ember.get;
 var set     = Ember.set;

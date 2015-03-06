@@ -1,10 +1,10 @@
 /*
   global Scroller
 */
-
-import ListViewMixin from 'list-view/list_view_mixin';
-import ListViewHelper from 'list-view/list_view_helper';
-import VirtualListScrollerEvents from 'list-view/virtual_list_scroller_events';
+import Ember from 'ember';
+import ListViewMixin from './list_view_mixin';
+import ListViewHelper from './list_view_helper';
+import VirtualListScrollerEvents from './virtual_list_scroller_events';
 
 var get = Ember.get;
 

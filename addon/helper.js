@@ -1,8 +1,9 @@
+import Ember from 'ember';
 import EmberListView from './list_view';
 import EmberVirtualListView from './virtual_list_view';
 
-var EmberVirtualList = createHelper(EmberVirtualListView);
-var EmberList = createHelper(EmberListView);
+export var EmberVirtualList = createHelper(EmberVirtualListView);
+export var EmberList = createHelper(EmberListView);
 
 function createHelper(view) {
   if (Ember.HTMLBars) {
@@ -59,5 +60,3 @@ function createHandlebarsHelper(view, options) {
   /*jshint validthis:true */
   return Ember.Handlebars.helpers.collection.call(this, view, options);
 }
-
-export { EmberList as default, EmberVirtualList};
