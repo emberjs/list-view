@@ -7,6 +7,7 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('basic-list');
+  this.route('mobile-list');
 });
 
 export default Router;
