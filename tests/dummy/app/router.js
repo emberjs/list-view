@@ -9,6 +9,7 @@ Router.map(function() {
   this.route('basic-list');
   this.route('mobile-list');
   this.route('mobile-large-images-list');
+  this.route('mobile-small-images-list');
 });
 
 export default Router;
