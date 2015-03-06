@@ -66,3 +66,31 @@ html {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
 }
+
+.mobile-large-images-list .ember-list-view {
+  background: white;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.mobile-large-images-list .photo-grid-list-item {
+  width: 154px;
+  height: 154px;
+  float: left;
+}
+
+.mobile-large-images-list .medium-frame {
+  background-color: white;
+  padding: 4px;
+  height: 133px;
+  width: 133px;
+  margin: 6px 7px 7px 6px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2px;
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2px;
+}

@@ -8,6 +8,7 @@ var Router = Ember.Router.extend({
 Router.map(function() {
   this.route('basic-list');
   this.route('mobile-list');
+  this.route('mobile-large-images-list');
 });
 
 export default Router;
