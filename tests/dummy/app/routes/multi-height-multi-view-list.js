@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import {types} from '../utils/make-model';
+import {types} from '../utils/fixtures';
 
 export default Ember.Route.extend({
   model: function() {
-    return types;
+    return types
   }
 });

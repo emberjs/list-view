@@ -1,0 +1,8 @@
+<h3>Virtual List - Strange Ratios</h3>
+
+<div class="virtual">
+  {{#collection 'virtual-list' content=model height=500 width=500 elementWidth=100 rowHeight=100}}
+      <img {{bind-attr src=imageSrc}}/>
+      <div class="text"> {{name}}</div>
+  {{/collection}}
+</div>
