@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('multi-height-multi-view-list');
   this.route('multi-height-virtual-list');
   this.route('pull-to-refresh-list');
+  this.route('virtual');
 });
 
 export default Router;
