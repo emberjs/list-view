@@ -104,10 +104,11 @@
   left: 0;
 }
 
-.pull-to-refresh {
+.pull-to-refresh-animation {
   background-color: yellow;
   height: 45px;
-  left:0; right: 0;
+  left:0;
+  right: 0;
   position: absolute;
   text-align: center;
   padding-top:30px;

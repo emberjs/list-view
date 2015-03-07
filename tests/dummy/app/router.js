@@ -6,14 +6,14 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('basic-list');
-  this.route('mobile-list');
-  this.route('mobile-large-images-list');
-  this.route('mobile-small-images-list');
-  this.route('multi-height-list');
-  this.route('multi-height-multi-view-list');
-  this.route('multi-height-virtual-list');
-  this.route('pull-to-refresh-list');
+  this.route('simple');
+  this.route('mobile');
+  this.route('mobile-large-images');
+  this.route('mobile-small-images');
+  this.route('multi-height');
+  this.route('multi-height-multi-view');
+  this.route('multi-height-virtual');
+  this.route('pull-to-refresh');
   this.route('virtual');
   this.route('virtual-strange-ratios');
 });
