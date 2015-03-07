@@ -9,7 +9,7 @@ export default function makeModel(small = false) {
   return model;
 }
 
-var images = [
+export var images = [
   'images/ebryn.jpg',
   'images/iterzic.jpg',
   'images/kselden.jpg',

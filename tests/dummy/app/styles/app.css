@@ -78,3 +78,41 @@
   height: 150px;
   background-color: purple;
 }
+
+.pull-to-refresh-list .ember-list-view {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.pull-to-refresh-list .ember-list-item-view {
+  color: white;
+  width: 100px;
+  height: 100px;
+}
+
+.pull-to-refresh-list .ember-list-item-view img{
+  width: 100px;
+  height: 100px;
+}
+
+.pull-to-refresh-list .ember-list-item-view .text {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pull-to-refresh {
+  background-color: yellow;
+  height: 45px;
+  left:0; right: 0;
+  position: absolute;
+  text-align: center;
+  padding-top:30px;
+}
+
+.pull-to-refresh-list .ember-list-container {
+  -webkit-transform: translate3d(0px, 0px, 0);
+}
