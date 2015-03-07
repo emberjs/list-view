@@ -11,6 +11,7 @@ Router.map(function() {
   this.route('mobile-large-images-list');
   this.route('mobile-small-images-list');
   this.route('multi-height-list');
+  this.route('multi-height-multi-view-list');
 });
 
 export default Router;
