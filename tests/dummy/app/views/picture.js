@@ -11,4 +11,4 @@ export default Ember.View.extend({
   willDestroyElement: function() {
     this.$().off('dragstart', 'img');
   }
-})
+});

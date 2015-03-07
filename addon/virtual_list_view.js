@@ -46,6 +46,7 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
   setupScroller: function(){
     var view = this;
 
+    /* global Scroller */
     view.scroller = new Scroller(function(left, top/*, zoom*/) {
       // Support old and new Ember versions
       var state = view._state || view.state;

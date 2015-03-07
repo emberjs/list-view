@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('mobile-list');
   this.route('mobile-large-images-list');
   this.route('mobile-small-images-list');
+  this.route('multi-height-list');
 });
 
 export default Router;
