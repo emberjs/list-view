@@ -1,6 +1,5 @@
 /* jshint node: true */
 /* global require, module */
-
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 var app = new EmberAddon();
@@ -18,7 +17,28 @@ var app = new EmberAddon();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
+app.import('bower_components/ember-template-compiler/index.js');
 app.import('vendor/zynga-scroller/Animate.js');
 app.import('vendor/zynga-scroller/Scroller.js');
+app.import('vendor/ember-test-helpers.amd.js', {
+  exports: {
+    'ember-test-helpers': [
+      'isolatedContainer',
+      'TestModule',
+      'TestModuleForComponent',
+      'TestModuleForModel',
+      'getContext',
+      'setContext',
+      'setResolver'
+    ]
+  }
+});
+app.import('vendor/ember-qunit-module.amd.js', {
+  exports: {
+    'ember-qunit-module': [
+      'createModule'
+    ]
+  }
+});
 
 module.exports = app.toTree();
