@@ -5,7 +5,7 @@ import EmberVirtualListView from './virtual_list_view';
 export var EmberVirtualList = createHelper(EmberVirtualListView);
 export var EmberList = createHelper(EmberListView);
 
-export function register() {
+export function registerListViewHelpers() {
   var registerHelper;
   if (Ember.HTMLBars) {
     // registerHelper was used for some 1.10-beta's and _registerHelper is for 1.10.0 final.

@@ -9,6 +9,17 @@ var TestModuleForView = TestModule.extend({
     this._super.call(this, 'view:' + viewName, description, callbacks);
     this.setupSteps.push(this.setupView);
   },
+  initNeeds: function() {
+    this.needs = [];
+    // toplevel refers to class extended from Ember.View
+    if (this.subjectName !== 'view:toplevel') {
+      this.needs.push(this.subjectName);
+    }
+    if (this.callbacks.needs) {
+      this.needs = this.needs.concat(this.callbacks.needs);
+      delete this.callbacks.needs;
+    }
+  },
   setupView: function() {
     var _this = this;
     var resolver = getResolver();
@@ -50,6 +61,9 @@ var TestModuleForView = TestModule.extend({
         return $view;
       }
     };
+  },
+  defaultSubject: function(options, factory) {
+    return factory.create(options);
   }
 });
 
