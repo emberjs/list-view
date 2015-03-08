@@ -4,10 +4,6 @@ import moduleForView from '../helpers/module-for-view';
 import {registerListViewHelpers} from 'list-view/helper';
 import {compile, generateContent, sortElementsByPosition, itemPositions} from '../helpers/helpers';
 
-import ListItemView from 'list-view/list_item_view';
-import ListView from 'list-view/list_view';
-import ReusableListItemView from 'list-view/reusable_list_item_view';
-
 moduleForView('list-view', 'numOfChildViewsForViewport', {});
 
 test("computing the number of child views to create with scrollTop zero", function(assert) {
