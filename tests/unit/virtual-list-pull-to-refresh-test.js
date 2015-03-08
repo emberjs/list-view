@@ -98,24 +98,3 @@ test("When pulling below zero, show the pull to refresh view", function(assert) 
 
   return promise;
 });
-
-function fireEvent(type, target) {
-  var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
-    events = hasTouch ? {
-      start: 'touchstart',
-      move: 'touchmove',
-      end: 'touchend'
-    } : {
-      start: 'mousedown',
-      move: 'mousemove',
-      end: 'mouseend'
-    },
-    e = document.createEvent('Event');
-  if (hasTouch) {
-    e.touches = [{target: target}];
-  } else {
-    e.which = 1;
-  }
-  e.initEvent(events[type], true, true);
-  target.dispatchEvent(e);
-}
