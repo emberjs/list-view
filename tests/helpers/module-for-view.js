@@ -33,8 +33,8 @@ var TestModuleForView = TestModule.extend({
     }
     context.dispatcher = Ember.EventDispatcher.create();
     context.dispatcher.setup({}, '#ember-testing');
-    this.callbacks.render = function() {
-      var containerView = Ember.ContainerView.create({container: container});
+    this.callbacks.render = function(options) {
+      var containerView = Ember.ContainerView.create(Ember.merge({container: container}, options));
       var view = Ember.run(function(){
         var subject = context.subject();
         containerView.pushObject(subject);
