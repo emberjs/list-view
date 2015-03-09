@@ -40,7 +40,7 @@ moduleForView('virtual-list', 'pull to refresh acceptance', {
 
 test("When pulling below zero, show the pull to refresh view", function(assert) {
   assert.expect(12);
-  var promise = new Ember.RSVP.Promise(function(resolve){
+  var promise = new Ember.RSVP.Promise((resolve)=>{
     Ember.run(this, function(){
       view = this.subject({
         content: generateContent(6),
@@ -59,18 +59,17 @@ test("When pulling below zero, show the pull to refresh view", function(assert) 
         },
         startRefresh: function(finishRefresh) {
           this.pullToRefreshStarted = true;
-          var view = this;
-          setTimeout(function(){
-            assert.ok(view.pullToRefreshView.get('refreshing'), 'sets refreshing property on refresh view');
+          Ember.run.later(this, function(){
+            assert.ok(this.pullToRefreshView.get('refreshing'), 'sets refreshing property on refresh view');
             finishRefresh();
-            assert.ok(view.scroller.finishPullToRefreshCalled, 'calls back to scroller');
-            assert.ok(!view.pullToRefreshView.get('refreshing'), 'unsets refreshing property on refresh view');
+            assert.ok(this.scroller.finishPullToRefreshCalled, 'calls back to scroller');
+            assert.ok(!this.pullToRefreshView.get('refreshing'), 'unsets refreshing property on refresh view');
             resolve();
           }, 0);
         }
       });
     });
-  }.bind(this));
+  });
 
   this.render();
 
