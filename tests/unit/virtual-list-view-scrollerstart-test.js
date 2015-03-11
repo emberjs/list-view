@@ -6,8 +6,7 @@ import {
   compile,
   generateContent,
   sortElementsByPosition,
-  itemPositions,
-  fireEvent
+  itemPositions
   } from '../helpers/helpers';
 
 import ListItemView from 'list-view/list_item_view';
@@ -17,6 +16,27 @@ import ReusableListItemView from 'list-view/reusable_list_item_view';
 var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch;
 
 var nextTopPosition = 0;
+
+function fireEvent(type, target) {
+  var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch,
+    events = hasTouch ? {
+      start: 'touchstart',
+      move: 'touchmove',
+      end: 'touchend'
+    } : {
+      start: 'mousedown',
+      move: 'mousemove',
+      end: 'mouseend'
+    },
+    e = document.createEvent('Event');
+  if (hasTouch) {
+    e.touches = [{target: target}];
+  } else {
+    e.which = 1;
+  }
+  e.initEvent(events[type], true, true);
+  target.dispatchEvent(e);
+}
 
 var view;
 moduleForView('virtual-list', 'scrollerstart acceptance', {
@@ -192,6 +212,27 @@ test("triggers a click event when no scroll happened", function(assert){
     assert.ok(hasTouch, "click event synthesized for touch device only");
   });
 
+  function fireEvent(type, target) {
+    var events = hasTouch ? {
+      start: 'touchstart',
+      move: 'touchmove',
+      end: 'touchend'
+    } : {
+      start: 'mousedown',
+      move: 'mousemove',
+      end: 'mouseend'
+    };
+    var e = document.createEvent('Event');
+    if (hasTouch) {
+      e.touches = [{target: target}];
+      e.changedTouches = [{target: target}];
+    } else {
+      e.which = 1;
+    }
+    e.initEvent(events[type], true, true);
+    target.dispatchEvent(e);
+  }
+
   Ember.run(function(){
     fireEvent('start', childElement);
     fireEvent('end', childElement);
@@ -201,3 +242,5 @@ test("triggers a click event when no scroll happened", function(assert){
     assert.ok(true, "click event not synthesized for non-touch device");
   }
 });
+
+
