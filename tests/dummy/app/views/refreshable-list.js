@@ -1,12 +1,12 @@
 import Ember from 'ember';
 import VirtualListView from 'list-view/virtual-list-view';
-import ListItemView from 'list-view/list-item-view';
-import images from '../utils/images';
 
 export default VirtualListView.extend({
   pullToRefreshViewClass: Ember.View.extend({
     classNames: ['pull-to-refresh-animation'],
-    templateName: 'pull-to-refresh-animation',
+    // TODO(taras): this should be done via container (currently template is being overwritten by ListItem template)
+    //templateName: 'pull-to-refresh-animation',
+    isRefreshing: true,
     label: function(){
       if (this.get('refreshing')) {
         return "Updating...";
@@ -23,7 +23,7 @@ export default VirtualListView.extend({
     Ember.run.later(function(){
       view.get('controller').insertAt(0, {
         name: 'New Item',
-        // TODO: fix this missing image
+        isNewItem: true,
         imageSrc: null
       });
       finishRefresh();
