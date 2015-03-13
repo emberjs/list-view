@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import ListView from 'list-view/list_view';
-import ListItemView from 'list-view/list_item_view';
+import ListView from 'list-view/list-view';
+import ListItemView from 'list-view/list-item-view';
 
 export default ListView.extend({
   height: 300,

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import listViewHelpers from 'list-view/list_view_helper';
+import listViewHelpers from 'list-view/list-view-helper';
 var compile = Ember.Handlebars.compile;
 
 function generateContent(n) {

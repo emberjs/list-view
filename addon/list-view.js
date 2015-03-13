@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import ListViewHelper from './list_view_helper';
-import ListViewMixin from './list_view_mixin';
+import ListViewHelper from './list-view-helper';
+import ListViewMixin from './list-view-mixin';
 
 var get = Ember.get;
 

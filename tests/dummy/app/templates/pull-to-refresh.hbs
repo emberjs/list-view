@@ -2,7 +2,9 @@
 
 <div class="pull-to-refresh-list">
   {{#collection 'refreshable-list' content=model height=500 width=500 elementWidth=100 rowHeight=100}}
-      <img {{bind-attr src=imageSrc}}/>
+    {{#if imageSrc}}
+        <img {{bind-attr src=imageSrc}}/>
+    {{/if}}
       <div class="text"> {{name}}</div>
   {{/collection}}
 </div>

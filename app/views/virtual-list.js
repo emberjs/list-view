@@ -1,3 +1,3 @@
-import VirtualListView from 'list-view/virtual_list_view';
+import VirtualListView from 'list-view/virtual-list-view';
 
 export default VirtualListView;

@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import EmberListView from './list_view';
-import EmberVirtualListView from './virtual_list_view';
+import EmberListView from './list-view';
+import EmberVirtualListView from './virtual-list-view';
 
 export var EmberVirtualList = createHelper(EmberVirtualListView);
 export var EmberList = createHelper(EmberListView);
