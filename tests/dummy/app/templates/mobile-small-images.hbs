@@ -1,0 +1,13 @@
+<h3>Mobile Small Images</h3>
+
+<div class="mobile-images-list mobile-small-images-list">
+  {{#collection 'virtual-list' content=model height=460 width=320 rowHeight=154 elementWidth=154}}
+      <div class="photo-grid-list-item">
+          <div class="medium-frame">
+            {{#view 'picture'}}
+                <img class="y-medium-thumbnail" width="133" height="133" {{bind-attr src="imageSrc"}}>
+            {{/view}}
+          </div>
+      </div>
+  {{/collection}}
+</div>

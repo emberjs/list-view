@@ -1,123 +1,44 @@
-var concat = require('broccoli-concat');
-var env = process.env.EMBER_ENV;
-var es6 = require('broccoli-es6-module-transpiler');
-var jshint = require('broccoli-jshint');
-var merge = require('broccoli-merge-trees');
-var moveFile = require('broccoli-file-mover');
-var wrap = require('broccoli-wrap');
-var uglify = require('broccoli-uglify-js');
-var es3SafeRecast = require('broccoli-es3-safe-recast');
-var pickFiles = require('broccoli-static-compiler');
-var version = require('./lib/calculate_version');
-var replace = require('broccoli-string-replace');
+/* jshint node: true */
+/* global require, module */
+var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
-function testTree(libTree, packageName) {
-  var test = pickFiles('packages/' + packageName + '/tests', {
-    srcDir: '/',
-    files: ['**/*.js'],
-    destDir: '/'
-  });
-  var jshinted = jshint(libTree);
-  jshinted = wrap(jshinted, {
-    wrapper: ["if (!QUnit.urlParams.nojshint) {\n", "\n}"]
-  });
-  return merge([jshinted, test]);
-}
+var app = new EmberAddon();
 
-var testRunner = pickFiles('tests', {
-  srcDir: '/',
-  inputFiles: ['**/*'],
-  destDir: '/'
+// Use `app.import` to add additional libraries to the generated
+// output files.
+//
+// If you need to use different assets in different
+// environments, specify an object as the first parameter. That
+// object's keys should be the environment name and the values
+// should be the asset to use in that environment.
+//
+// If the library that you are including contains AMD or ES6
+// modules that you would like to import into your application
+// please specify an object with the list of modules as keys
+// along with the exports of each module as its value.
+
+app.import('bower_components/ember-template-compiler/index.js');
+app.import('vendor/zynga-scroller/Animate.js');
+app.import('vendor/zynga-scroller/Scroller.js');
+app.import('vendor/ember-test-helpers.amd.js', {
+  exports: {
+    'ember-test-helpers': [
+      'isolatedContainer',
+      'TestModule',
+      'TestModuleForComponent',
+      'TestModuleForModel',
+      'getContext',
+      'setContext',
+      'setResolver'
+    ]
+  }
 });
-
-var bower = pickFiles('bower_components', {
-  srcDir: '/',
-  inputFiles: ['**/*'],
-  destDir: '/bower_components'
-});
-
-var listViewFiles = pickFiles('packages/list-view/lib', {
-  srcDir: '/',
-  files: ['**/*.js'],
-  destDir: '/list-view'
-});
-
-listViewFiles = es6(listViewFiles, {moduleName: true});
-
-if (env === 'production') {
-  listViewFiles = es3SafeRecast(listViewFiles);
-}
-
-var testFiles = testTree(listViewFiles, 'list-view');
-
-var loaderJS = pickFiles('bower_components/loader.js', {
-  srcDir: '/',
-  files: ['loader.js'],
-  destDir: '/'
-});
-
-var licenseJS = pickFiles('generators', {
-  srcDir: '/',
-  files: ['LICENSE'],
-  destDir: '/'
-});
-
-var amdBuild = concat(merge([licenseJS, listViewFiles]), {
-  inputFiles: ['LICENSE', '**/*.js'],
-  outputFile: '/list-view.amd.js'
-});
-
-var globalBuild = concat(merge([listViewFiles, loaderJS]), {
-  inputFiles: ['loader.js', '**/*.js'],
-  outputFile: '/list-view.js'
-});
-
-globalBuild = wrap(globalBuild, {
-  wrapper: ["(function(global){\n", "\n requireModule('list-view/main');\n})(this);"]
-});
-
-testFiles = concat(testFiles, {
-  inputFiles: ['test_helper.js', '**/*.js'],
-  wrapInEval: true,
-  wrapInFunction: true,
-  outputFile: '/tests.js'
-});
-
-globalBuild = concat(merge([globalBuild, licenseJS]), {
-  inputFiles: ['LICENSE', 'list-view.js'],
-  outputFile: '/list-view.js'
-});
-
-//var bowerShimFiles = pickFiles(__dirname, {
-//  srcDir: '/',
-//  files: ['bower.json', 'package.json'],
-//  destDir: '/'
-//});
-
-var distTree = merge([
-  globalBuild,
-  testFiles,
-  testRunner,
-  bower,
-  amdBuild
-  //bowerShimFiles
-]);
-
-if (env === 'production') {
-  var uglified = uglify(globalBuild, {mangle: true});
-  var uglified = concat(merge([uglified, licenseJS]), {
-    inputFiles: ['LICENSE', 'list-view.js'],
-    outputFile: '/list-view.min.js'
-  });
-  distTree = merge([uglified, distTree]);
-}
-
-distTree = replace(distTree, {
-  files: ['list-view.js', 'list-view.min.js', 'list-view.amd.js'],
-  pattern: {
-    match: /VERSION_STRING_PLACEHOLDER/g,
-    replacement: version()
+app.import('vendor/ember-qunit-module.amd.js', {
+  exports: {
+    'ember-qunit-module': [
+      'createModule'
+    ]
   }
 });
 
-module.exports = distTree;
+module.exports = app.toTree();
