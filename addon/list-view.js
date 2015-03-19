@@ -10,7 +10,7 @@ var get = Ember.get;
   with `ember-list-view` class.
 
   The context of each item element within the `Ember.ListView` are populated
-  from the objects in the `Element.ListView`'s `content` property.
+  from the objects in the `ListView`'s `content` property.
 
   ### `content` as an Array of Objects
 
@@ -22,8 +22,12 @@ var get = Ember.get;
 
   ```javascript
   App.ContributorsRoute = Ember.Route.extend({
-    model: function() {
-      return [{ name: 'Stefan Penner' }, { name: 'Alex Navasardyan' }, { name: 'Ray Cohen'}];
+    model: function () {
+      return [
+        { name: 'Stefan Penner' },
+        { name: 'Alex Navasardyan' },
+        { name: 'Ray Cohen'}
+      ];
     }
   });
   ```
@@ -39,16 +43,15 @@ var get = Ember.get;
   ```html
    <div id="ember181" class="ember-view ember-list-view" style="height:500px;width:500px;position:relative;overflow:scroll;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;">
     <div class="ember-list-container">
-      <div id="ember186" class="ember-view ember-list-item-view" style="-webkit-transform: translate3d(0px, 0px, 0);">
-        <script id="metamorph-0-start" type="text/x-placeholder"></script>Stefan Penner<script id="metamorph-0-end" type="text/x-placeholder"></script>
+      <div id="ember186" class="ember-view ember-list-item-view" style="transform: translate(0px, 0px)">
+        Stefan Penner
       </div>
-      <div id="ember187" class="ember-view ember-list-item-view" style="-webkit-transform: translate3d(0px, 50px, 0);">
-        <script id="metamorph-1-start" type="text/x-placeholder"></script>Alex Navasardyan<script id="metamorph-1-end" type="text/x-placeholder"></script>
+      <div id="ember187" class="ember-view ember-list-item-view" style="transform: translate(0px, 50px">
+        Alex Navasardyan
       </div>
-      <div id="ember188" class="ember-view ember-list-item-view" style="-webkit-transform: translate3d(0px, 100px, 0);">
-        <script id="metamorph-2-start" type="text/x-placeholder"></script>Rey Cohen<script id="metamorph-2-end" type="text/x-placeholder"></script>
+      <div id="ember188" class="ember-view ember-list-item-view" style="transform: translate(0px, 100px)">
+        Ray Cohen
       </div>
-      <div id="ember189" class="ember-view ember-list-scrolling-view" style="height: 150px"></div>
     </div>
   </div>
   ```
@@ -73,12 +76,12 @@ var get = Ember.get;
   {{/ember-list}}
   ```
 
-  ### extending `Ember.ListView`
+  ### Extending `Ember.ListView`
 
   Example:
 
   ```handlebars
-  {{view App.ListView contentBinding="content"}}
+  {{view 'list-view' content=content}}
 
   <script type="text/x-handlebars" data-template-name="row_item">
     {{name}}
