@@ -5,6 +5,11 @@ module.exports = {
   name: 'list-view',
   treeForVendor: function() {
 
+    if(!this.isDevelopingAddon()) {
+      return;
+    }
+
+
     var klassy = new this.Funnel('bower_components', {
       srcDir: '/klassy/lib',
       files: ['klassy.js'],
