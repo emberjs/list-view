@@ -34,7 +34,7 @@
     "ember-cli-uglify": "1.0.1",
     "ember-data": "1.0.0-beta.15",
     "ember-export-application-global": "^1.0.2",
-    "ember-try": "git://github.com/kategengler/ember-try"
+    "ember-try": "kategengler/ember-try"
   },
   "keywords": [
     "ember-addon"
