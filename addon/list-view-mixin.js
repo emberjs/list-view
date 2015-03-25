@@ -825,7 +825,10 @@ export default Ember.Mixin.create({
     @method getReusableChildViews
   */
   getReusableChildViews: function() {
-    return this._childViews;
+    return Ember.EnumerableUtils.filter(this._childViews, function(view) {
+      // Ember 1.11 has virtual views, such as AttrNodes that we don't want to reuse
+      return !('attrName' in view);
+    });
   },
 
   /**
