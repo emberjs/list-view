@@ -2,16 +2,9 @@
 
 An efficient incremental rendering list view for large lists.
 
-`Ember.ListView` works on major modern browsers and also on major mobile devices (iOS, Android).
-However, there are known issues with using `Ember.ListView` on mobile web (if you have a long list
-and you're touch-scrolling it very fast, you'll see that items in your list start to disappear
-and after some lag appear again). That happens because mobile browsers do not emit scroll events
-during the momentum scroll phase that `Ember.ListView` needs to capture.
+`Ember.ListView` works on major modern browsers and also on major mobile devices (iOS, Android). However, there are known issues with using `Ember.ListView` on mobile web (if you have a long list and you're touch-scrolling it very fast, you'll see that items in your list start to disappear and after some lag appear again). That happens because some mobile browsers do not emit scroll events during the momentum scroll phase that `Ember.ListView` needs to capture. Also, if the browser is under heavy load, it can just stop emitting some events.
 
-If you want to have something running on mobile, please make sure to use `Ember.VirtualListView`,
-which behaves exactly the same (in terms of configuration and working with it) as `Ember.ListView`.
-However, note that `Ember.VirtualListView` doesn't have a native scroll bar. This is something that
-we need to work on for future releases of `Ember.ListView`.
+If you do experience this problem. We offer an API compatible `Ember.VirtualListView` that does the momentum scroll entirely in JS. However, note that `Ember.VirtualListView` doesn't have a native scroll bar. This is something that we need to work on for future releases of `Ember.ListView`
 
 ### Downloads
 
