@@ -33,9 +33,20 @@
 
 <p>An efficient incremental rendering list view for large lists.</p>
 
-<p>Ember.ListView works on mobile phones that support web overflow touch css,
-doesn't work on iOS because iOS doesn't emit scroll events during the momentum
-phase of a scroll nor do the elements know their offset top during that scroll phase.</p>
+<p>
+  <code>Ember.ListView</code> works on major modern browsers and also on major mobile devices (iOS, Android).
+  However, there are known issues with using <code>Ember.ListView</code> on mobile web (if you have a long list
+  and you're touch-scrolling it very fast, you'll see that items in your list start to disappear
+  and after some lag appear again). That happens because some mobile browsers do not emit scroll events
+  during the momentum scroll phase that <code>Ember.ListView</code> needs to capture. Also, if the browser is
+  under heavy load, it can just stop emitting some events.
+</p>
+
+<p>
+  If you do experience this problem. We offer an API compatible <code>Ember.VirtualListView</code> that does the momentum scroll entirely in JS.
+  However, note that <code>Ember.VirtualListView</code> doesn't have a native scroll bar. This is something that
+  we need to work on for future releases of <code>Ember.ListView</code>.
+</p>
 
 <h2>Dependencies</h2>
 
