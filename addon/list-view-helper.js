@@ -60,9 +60,9 @@ function setStyle (optionalStyleString) {
       var style = Ember.String.fmt(optionalStyleString, x, y);
 
       if (isElement) {
-        obj.style[styleAttributeName] = (style).htmlSafe();
+        obj.style[styleAttributeName] = Ember.String.htmlSafe(style);
       } else {
-        set(obj, 'style', (transformProp + ': ' + style).htmlSafe());
+        set(obj, 'style', Ember.String.htmlSafe(transformProp + ': ' + style);
       }
     } else {
       if (isElement) {
