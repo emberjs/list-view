@@ -99,9 +99,7 @@ export default Ember.Mixin.create({
   paddingCount: 1,
   _cachedPos: 0,
 
-  _isGrid: Ember.computed('columnCount', function() {
-    return this.get('columnCount') > 1;
-  }).readOnly(),
+  _isGrid: Ember.computed.gt('columnCount', 1).readOnly(),
 
   /**
     @private
