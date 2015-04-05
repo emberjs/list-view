@@ -1,6 +1,6 @@
 {
   "name": "ember-list-view",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An efficient incremental rendering list view for large lists.",
   "directories": {
     "doc": "doc",
