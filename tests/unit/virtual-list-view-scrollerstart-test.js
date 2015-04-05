@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import moduleForView from '../helpers/module-for-view';
-import {registerListViewHelpers} from 'list-view/helper';
 import {
   compile,
   generateContent,
@@ -9,9 +8,9 @@ import {
   itemPositions
   } from '../helpers/helpers';
 
-import ListItemView from 'list-view/list-item-view';
-import ListView from 'list-view/list-view';
-import ReusableListItemView from 'list-view/reusable-list-item-view';
+import ListView from 'ember-list-view';
+import ListItemView from 'ember-list-view/list-item-view';
+import ReusableListItemView from 'ember-list-view/reusable-list-item-view';
 
 var hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch;
 

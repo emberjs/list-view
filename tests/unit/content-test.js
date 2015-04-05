@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import moduleForView from '../helpers/module-for-view';
-import {registerListViewHelpers} from 'list-view/helper';
-import ListItemView from 'list-view/list-item-view';
+import {registerListViewHelpers} from 'ember-list-view/helper';
+import ListItemView from 'ember-list-view/list-item-view';
 import {compile, generateContent, sortElementsByPosition} from '../helpers/helpers';
 
 registerListViewHelpers();

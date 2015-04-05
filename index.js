@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = {
-  name: 'list-view',
+  name: 'ember-list-view',
   treeForVendor: function() {
 
     if(!this.isDevelopingAddon()) {

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import {registerListViewHelpers} from 'list-view/helper';
+import {registerListViewHelpers} from 'ember-list-view/helper';
 
 export var initialize = registerListViewHelpers;
 

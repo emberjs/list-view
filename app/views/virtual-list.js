@@ -1,3 +1,3 @@
-import VirtualListView from 'list-view/virtual-list-view';
+import VirtualListView from 'ember-list-view/virtual-list-view';
 
 export default VirtualListView;
