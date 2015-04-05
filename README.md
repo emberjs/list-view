@@ -42,7 +42,7 @@ It would help us greatly to help you and to improve ember list view.
 Install *ListView* with EmberCLI using this command.
 
 ```bash
-ember install:addon ember-list
+ember install:addon ember-list-view
 ```
 
 ## Usage
@@ -79,8 +79,8 @@ Create a **my-list.js** in your project's **/views** directory.
 ```
 // in views/my-list.js
 
-import ListView from 'list-view/list-view';
-import ListItemView from 'list-view/list-item-view';
+import ListView from 'ember-list-view';
+import ListItemView from 'ember-list-view/list-item-view';
 
 // extending ListView
 // customize the row views by subclassing ListItemView
@@ -132,7 +132,7 @@ and create and position any new view items that might be needed.
 This is meant to make resizing as cheap as possible.
 
 ``` javascript
-import ListView from 'list-view/list-view';
+import ListView from 'ember-list-view';
 
 export default ListView.extend({
   height: 500,
@@ -151,8 +151,8 @@ to fill visible area with rows. If you would like to have multiple columns, then
 `element-width`, as well as `width`.
 
 ``` javascript
-import ListView from 'list-view/list-view';
-import ListItemView from 'list-view/list-item-view';
+import ListView from 'ember-list-view';
+import ListItemView from 'ember-list-view/list-item-view';
 
 export default ListView.extend({
   height: 500,
