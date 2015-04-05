@@ -195,7 +195,7 @@ export default Ember.Mixin.create({
       }
     }
 
-    return style;
+    return Ember.String.htmlSafe(style);
   }),
 
   /**

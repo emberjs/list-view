@@ -29,7 +29,7 @@ function positionElement() {
 
 export default Ember.Mixin.create({
   classNames: ['ember-list-item-view'],
-  style: '',
+  style: Ember.String.htmlSafe(''),
   attributeBindings: ['style'],
   _position: null,
   _positionElement: positionElement,
