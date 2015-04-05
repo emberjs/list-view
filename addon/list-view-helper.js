@@ -62,7 +62,7 @@ function setStyle (optionalStyleString) {
       if (isElement) {
         obj.style[styleAttributeName] = Ember.String.htmlSafe(style);
       } else {
-        set(obj, 'style', Ember.String.htmlSafe(transformProp + ': ' + style);
+        set(obj, 'style', Ember.String.htmlSafe(transformProp + ': ' + style));
       }
     } else {
       if (isElement) {
