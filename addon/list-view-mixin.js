@@ -140,7 +140,7 @@ export default Ember.Mixin.create({
     container.className  = 'ember-list-container';
     element.appendChild(container);
 
-    this._childViewsMorph = dom.createMorph(container, container, null);
+    this._childViewsMorph = dom.appendMorph(container, container, null);
 
     return container;
   },

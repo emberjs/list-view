@@ -122,11 +122,13 @@ export default Ember.ContainerView.extend(ListViewMixin, VirtualListScrollerEven
   },
 
   getReusableChildViews: function(){
-    var firstView = this._childViews[0];
+    var views = this._super.apply(this, arguments);
+    var firstView = views[0];
+
     if (firstView && firstView === this.pullToRefreshView) {
-      return this._childViews.slice(1);
+      return views.slice(1);
     } else {
-      return this._childViews;
+      return views;
     }
   },
 

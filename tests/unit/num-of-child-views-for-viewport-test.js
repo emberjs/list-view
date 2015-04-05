@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import moduleForView from '../helpers/module-for-view';
-import {registerListViewHelpers} from 'list-view/helper';
 import {compile, generateContent, sortElementsByPosition, itemPositions} from '../helpers/helpers';
 
 moduleForView('list-view', 'numOfChildViewsForViewport', {});

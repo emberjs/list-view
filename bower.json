@@ -1,8 +1,8 @@
 {
-  "name": "list-view",
+  "name": "ember-list-view",
   "dependencies": {
     "jquery": "^1.11.1",
-    "ember": "1.10.0",
+    "ember": "1.11.1",
     "ember-data": "1.0.0-beta.15",
     "ember-resolver": "~0.1.12",
     "loader.js": "ember-cli/loader.js#3.2.0",
@@ -14,6 +14,6 @@
     "ember-qunit-notifications": "0.0.7",
     "qunit": "~1.17.1",
     "ember-test-helpers": "~0.3.4",
-    "ember-template-compiler": "http://builds.emberjs.com/tags/v1.10.0/ember-template-compiler.js"
+    "ember-template-compiler": "http://builds.emberjs.com/tags/v1.11.1/ember-template-compiler.js"
   }
 }

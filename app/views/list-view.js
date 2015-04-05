@@ -1,3 +1,3 @@
-import ListView from 'list-view/list-view';
+import ListView from 'ember-list-view';
 
 export default ListView;

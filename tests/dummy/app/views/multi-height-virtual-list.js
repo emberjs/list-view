@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import VirtualListView from 'list-view/virtual-list-view';
-import ListItemView from 'list-view/list-item-view';
+import VirtualListView from 'ember-list-view/virtual-list-view';
+import ListItemView from 'ember-list-view/list-item-view';
 
 export default VirtualListView.extend({
   height: 300,
