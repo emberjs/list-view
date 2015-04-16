@@ -76,7 +76,7 @@ Here's an example of how to create your version of *ListView*.
 
 Create a **my-list.js** in your project's **/views** directory.
 
-```
+```javascript
 // in views/my-list.js
 
 import ListView from 'ember-list-view';
@@ -95,7 +95,7 @@ export default ListView.extend({
 Use the `{{view}}` helper in your template.
 
 ```handlebars
-{{view 'my-list' items=model}}
+{{view 'my-list' content=model}}
 ```
 
 Create a **my-list-item.hbs** in your project's **/templates** directory.
