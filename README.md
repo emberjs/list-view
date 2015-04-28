@@ -49,9 +49,9 @@ ember install ember-list-view
 
 First, let's create a template:
 ```handlebars
-{{#view 'list-view' items=model height=500 rowHeight=50 width=500}}
+{{#ember-list items=model height=500 rowHeight=50 width=500}}
   {{name}}
-{{/view}}
+{{/ember-list}}
 ```
 
 Next, let's feed our template with some data:
