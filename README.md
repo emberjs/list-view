@@ -42,7 +42,7 @@ It would help us greatly to help you and to improve ember list view.
 Install *ListView* with EmberCLI using this command.
 
 ```bash
-ember install:addon ember-list-view
+ember install ember-list-view
 ```
 
 ## Usage
