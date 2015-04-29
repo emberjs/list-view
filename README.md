@@ -165,6 +165,9 @@ export default ListView.extend({
 
 ### Required CSS
 
+You must manually add the following classes to your application's CSS file. Failure to 
+do so will lead to overlapping items.
+
 ``` css
 .ember-list-view {
   overflow: auto;
