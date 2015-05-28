@@ -119,8 +119,14 @@ export default Ember.Mixin.create({
     this._addContentArrayObserver();
   },
 
-  _addContentArrayObserver: Ember.beforeObserver(function() {
+  _addContentArrayObserver: Ember.observer(function () {
+    var content    = get(this, 'content');
+    var oldContent = get(this, 'oldContent');
+
+    if (oldContent === content) { return; }
+
     addContentArrayObserver.call(this);
+    set(this, 'oldContent', content);
   }, 'content'),
 
   /**
@@ -638,12 +644,15 @@ export default Ember.Mixin.create({
     @private
     @event contentWillChange
   */
-  contentWillChange: Ember.beforeObserver(function() {
-    var content = get(this, 'content');
+  contentWillChange: Ember.observer(function() {
+    var content  = get(this, 'content');
+    if (!content) { return; }
 
-    if (content) {
-      content.removeArrayObserver(this);
-    }
+    var oldContent = get(this, 'oldContent');
+    if (oldContent === content) { return; }
+
+    content.removeArrayObserver(this);
+    set(this, 'oldContent', content);
   }, 'content'),
 
   /**),
