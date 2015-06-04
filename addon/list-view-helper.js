@@ -76,7 +76,9 @@ function setStyle (optionalStyleString) {
 export default {
   transformProp: transformProp,
   applyTransform: (function () {
-    if (supports2D) {
+    if (supports3D) {
+      return setStyle('translate3d(%@px, %@px, 0)');
+    } else if (supports2D) {
       return setStyle('translate(%@px, %@px)');
     }
 
