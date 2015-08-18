@@ -1,5 +1,7 @@
 # ListView [![Build Status](https://secure.travis-ci.org/emberjs/list-view.png?branch=master)](http://travis-ci.org/emberjs/list-view)
 
+**Important** - *ListView* is compatable with Ember `<= 1.12.x`. If you need support for Ember `>= 1.13` please read the [Compatibility](#compatibility) section.
+
 An efficient incremental rendering list view for large lists.
 
 *ListView* works on major modern browsers and also on major mobile devices (iOS, Android). However, there are known issues with using *ListView* on mobile web (if you have a long list and you're touch-scrolling it very fast, you'll see that items in your list start to disappear and after some lag appear again). That happens because some mobile browsers do not emit scroll events during the momentum scroll phase that *ListView* needs to capture. Also, if the browser is under heavy load, it can just stop emitting some events.
@@ -13,6 +15,7 @@ Latest:
 
 ### Table of Contents
 
+1. [Compatibility] (#compatibility)
 1. [Usage](#usage)
 1. [Subclassing](#subclassing)
 1. [Build it](#build-it)
@@ -36,6 +39,10 @@ Please, take a look at our live [demo](http://emberjs.com/list-view) and [jsbin]
 
 Please, attach code samples or links to [jsbin](http://emberjs.jsbin.com/) or [jsfiddle](http://jsfiddle.net/).
 It would help us greatly to help you and to improve ember list view.
+
+## Compatibility
+
+*ListView* is compaitable with ember versions `<= 1.12.x`. It is important to note that *ListView* is not compaitable with the Glimmer rendering engine. [Ember Collection](https://github.com/emberjs/ember-collection) is ment to replace *ListView* as the ember solution to rendering large lists. If you need this functionality for your `>= 1.13.x` ember app, please checkout [Ember Collection](https://github.com/emberjs/ember-collection).
 
 ## Installation
 
@@ -165,7 +172,7 @@ export default ListView.extend({
 
 ### Required CSS
 
-You must manually add the following classes to your application's CSS file. Failure to 
+You must manually add the following classes to your application's CSS file. Failure to
 do so will lead to overlapping items.
 
 ``` css
