@@ -4,7 +4,7 @@ import ListItemViewMixin from './list-item-view-mixin';
 var get = Ember.get, set = Ember.set;
 
 export default Ember.View.extend(ListItemViewMixin, {
-  prepareForReuse: Ember.K,
+  prepareForReuse() {},
 
   init: function () {
     this._super();
