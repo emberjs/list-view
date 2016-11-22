@@ -222,7 +222,7 @@ export default Ember.Mixin.create({
 
     @method scrollTo
   */
-  _scrollTo: Ember.K,
+  _scrollTo() {},
 
   /**
     @private
@@ -843,7 +843,7 @@ export default Ember.Mixin.create({
     return this.getReusableChildViews().sort(sortByContentIndex);
   },
 
-  arrayWillChange: Ember.K,
+  arrayWillChange() {},
 
   /**
     @private
